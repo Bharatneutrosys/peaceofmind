@@ -1,0 +1,105 @@
+import { PortableText, PortableTextComponents } from '@portabletext/react';
+import { urlFor } from '@/sanity/lib/image';
+
+// Interface
+export interface Essay {
+  title: string;
+  slug: string;
+  date: string;
+  coverImage?: any;
+  body: any[];
+}
+
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="mb-8 first-of-type:first-letter:float-left first-of-type:first-letter:text-[5.5rem] first-of-type:first-letter:leading-[4.5rem] first-of-type:first-letter:pr-4 first-of-type:first-letter:pt-2 first-of-type:first-letter:font-serif first-of-type:first-letter:text-zinc-100">
+        {children}
+      </p>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className="my-20 py-10 border-y border-zinc-800/50 text-center relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-4">
+          <span className="text-zinc-700 text-3xl font-serif">"</span>
+        </div>
+        <div className="font-serif text-2xl md:text-3xl italic text-zinc-100 leading-relaxed max-w-xl mx-auto">
+          {children}
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-[#0a0a0a] px-4 transform rotate-180">
+          <span className="text-zinc-700 text-3xl font-serif">"</span>
+        </div>
+      </blockquote>
+    ),
+  },
+  types: {
+    image: ({ value }) => {
+      if (!value) return null;
+      return (
+        <figure className="my-16">
+          <img 
+            src={urlFor(value).url()} 
+            alt={value.alt || 'Essay Image'}
+            className="w-full h-auto aspect-[16/10] object-cover rounded-sm opacity-90 transition-opacity hover:opacity-100 duration-700"
+          />
+          {value.caption && (
+            <figcaption className="text-center text-zinc-600 text-[10px] mt-6 tracking-[0.2em] uppercase">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    }
+  }
+};
+
+export default function EditorialEssay({ essay }: { essay?: Essay | null }) {
+  if (!essay) {
+    return (
+      <article className="w-full bg-[#0a0a0a] py-32 px-5 md:px-8 z-20 relative flex items-center justify-center min-h-[50vh]">
+        <p className="text-zinc-500 font-sans tracking-[0.2em] uppercase text-sm md:text-base">Journal entries coming soon</p>
+      </article>
+    );
+  }
+
+  // Format the date if it's available
+  const formattedDate = essay.date 
+    ? new Date(essay.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    : '';
+
+  return (
+    <article className="w-full bg-[#0a0a0a] py-32 px-5 md:px-8 z-20 relative">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <header className="mb-16 text-center">
+          <span className="text-zinc-500 font-sans tracking-[0.2em] uppercase text-xs mb-6 block">Journal Entry</span>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-zinc-100 tracking-wide leading-tight mb-8">
+            {essay.title}
+          </h2>
+          <div className="flex items-center justify-center space-x-4">
+            {formattedDate && (
+              <>
+                <span className="text-zinc-500 text-xs md:text-sm font-light uppercase tracking-widest">{formattedDate}</span>
+                <div className="w-1 h-1 bg-zinc-700 rounded-full"></div>
+              </>
+            )}
+            <span className="text-zinc-500 text-xs md:text-sm font-light uppercase tracking-widest">5 min read</span>
+          </div>
+        </header>
+
+        {/* Body */}
+        <div className="text-zinc-300 font-sans text-lg font-light leading-[2.2] tracking-wide">
+          <PortableText value={essay.body} components={components} />
+        </div>
+        
+        {/* Footer Divider */}
+        <div className="mt-32 flex justify-center">
+          <div className="h-[1px] w-12 bg-zinc-700"></div>
+        </div>
+      </div>
+    </article>
+  );
+}
