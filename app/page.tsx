@@ -3,14 +3,17 @@ import EditorialEssay from "@/components/EditorialEssay";
 import MasonryGallery from "@/components/MasonryGallery";
 import AuthorProfile from "@/components/AuthorProfile";
 import { client } from "@/sanity/lib/client";
-import { getEssaysQuery } from "@/sanity/lib/queries";
+import { getEssaysQuery, getPhotoJournalsQuery } from "@/sanity/lib/queries";
 
-// Optional: Revalidate every 60 seconds so Sanity updates show up quickly
 export const revalidate = 60; 
 
 export default async function Home() {
-  // Fetch the latest essay from Sanity
-  const essays = await client.fetch(getEssaysQuery);
+  // Fetch BOTH the essays and the photos from Sanity in parallel
+  const [essays, fetchedPhotos] = await Promise.all([
+    client.fetch(getEssaysQuery),
+    client.fetch(getPhotoJournalsQuery)
+  ]);
+
   const latestEssay = essays?.length > 0 ? essays[0] : null;
 
   return (
@@ -19,16 +22,16 @@ export default async function Home() {
       {/* 1. Cinematic Header */}
       <Hero />
 
-      {/* 2. Sanity Rich-Text Essay (Graceful Fallback applied) */}
+      {/* 2. Sanity Rich-Text Essay */}
       {latestEssay && (
         <section className="py-16 md:py-24">
           <EditorialEssay essay={latestEssay} />
         </section>
       )}
 
-      {/* 3. Photo Gallery */}
+      {/* 3. Photo Gallery (Now receiving the fetched photos!) */}
       <section className="py-16">
-        <MasonryGallery />
+        <MasonryGallery photos={fetchedPhotos || []} />
       </section>
 
       {/* 4. Author Bio */}
