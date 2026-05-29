@@ -1,27 +1,41 @@
 ﻿import Hero from "@/components/Hero";
-import MasonryGallery from "@/components/MasonryGallery";
 import EditorialEssay from "@/components/EditorialEssay";
+import MasonryGallery from "@/components/MasonryGallery";
 import AuthorProfile from "@/components/AuthorProfile";
 import { client } from "@/sanity/lib/client";
-import { getPhotoJournalsQuery, getEssaysQuery } from "@/sanity/lib/queries";
-import { SanityPhoto } from "@/components/MasonryGallery";
+import { getEssaysQuery } from "@/sanity/lib/queries";
 
-export const revalidate = 60; // Revalidate the page every 60 seconds
+// Optional: Revalidate every 60 seconds so Sanity updates show up quickly
+export const revalidate = 60; 
 
 export default async function Home() {
-  const [journals, essays] = await Promise.all([
-    client.fetch(getPhotoJournalsQuery),
-    client.fetch(getEssaysQuery)
-  ]);
-  const fetchedPhotos: SanityPhoto[] = journals.flatMap((journal: any) => journal.gallery || []);
-  const latestEssay = essays && essays.length > 0 ? essays[0] : null;
+  // Fetch the latest essay from Sanity
+  const essays = await client.fetch(getEssaysQuery);
+  const latestEssay = essays?.length > 0 ? essays[0] : null;
 
   return (
-    <main className="w-full flex flex-col bg-[#0a0a0a]">
+    <main className="flex min-h-screen flex-col w-full bg-stone-900">
+      
+      {/* 1. Cinematic Header */}
       <Hero />
-      <MasonryGallery photos={fetchedPhotos} />
-      <EditorialEssay essay={latestEssay} />
-      <AuthorProfile />
+
+      {/* 2. Sanity Rich-Text Essay (Graceful Fallback applied) */}
+      {latestEssay && (
+        <section className="py-16 md:py-24">
+          <EditorialEssay essay={latestEssay} />
+        </section>
+      )}
+
+      {/* 3. Photo Gallery */}
+      <section className="py-16">
+        <MasonryGallery />
+      </section>
+
+      {/* 4. Author Bio */}
+      <section className="py-16">
+        <AuthorProfile />
+      </section>
+
     </main>
   );
 }
