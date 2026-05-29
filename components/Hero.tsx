@@ -6,29 +6,28 @@ export default function Hero() {
   return (
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-stone-900">
       
-      {/* Cinematic Ken Burns Background */}
+      {/* Cinematic Panoramic Drone Flight Background */}
       <motion.div
-        className="absolute inset-0 z-0"
+        className="absolute inset-y-0 left-0 w-[125%] h-full z-0"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2574&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=2670&auto=format&fit=crop")',
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-
         animate={{
-          scale: [1.05, 1.2, 1.05], // Zooms in further
-          x: ["0%", "-6%", "0%"],   // Pans much wider horizontally
-          y: ["0%", "-2%", "0%"],   // Adds a slight vertical tilt
+          // Slowly drifts horizontally while executing a luxurious, gentle zoom
+          x: ["0%", "-18%", "0%"],
+          scale: [1, 1.08, 1],
         }}
         transition={{
-          duration: 18,             // Sliced from 40s down to 18s for noticeable speed
-          ease: "easeInOut",        // Makes the turnaround at the edges smooth
+          duration: 24,            // Perfect speed: noticeable movement without feeling rushed
+          ease: "easeInOut",       // Mimics a drone pilot smoothly accelerating and braking
           repeat: Infinity,
         }}
       />
 
       {/* Dark Gradient Overlay for Text Readability */}
-      <div className="absolute inset-0 bg-black/40 z-10" />
+      <div className="absolute inset-0 bg-black/45 z-10" />
 
       {/* Hero Text Content */}
       <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
