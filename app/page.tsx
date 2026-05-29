@@ -1,6 +1,7 @@
 ﻿import Hero from "@/components/Hero";
 import MasonryGallery from "@/components/MasonryGallery";
 import EditorialEssay from "@/components/EditorialEssay";
+import AuthorProfile from "@/components/AuthorProfile";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <MasonryGallery />
       <EditorialEssay />
+      <AuthorProfile />
     </main>
   );
 }
