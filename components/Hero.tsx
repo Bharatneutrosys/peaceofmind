@@ -10,7 +10,7 @@ export default function Hero() {
       <motion.div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url("http://googleusercontent.com/image_collection/image_retrieval/13797363309233326217")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2574&auto=format&fit=crop")',
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
