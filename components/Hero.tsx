@@ -14,13 +14,15 @@ export default function Hero() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
+
         animate={{
-          scale: [1, 1.1, 1],
-          x: ["0%", "-2%", "0%"],
+          scale: [1.05, 1.2, 1.05], // Zooms in further
+          x: ["0%", "-6%", "0%"],   // Pans much wider horizontally
+          y: ["0%", "-2%", "0%"],   // Adds a slight vertical tilt
         }}
         transition={{
-          duration: 40,
-          ease: "linear",
+          duration: 18,             // Sliced from 40s down to 18s for noticeable speed
+          ease: "easeInOut",        // Makes the turnaround at the edges smooth
           repeat: Infinity,
         }}
       />
