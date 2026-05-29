@@ -1,44 +1,99 @@
-﻿export default function AuthorProfile() {
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Compass, MapPinned, Sparkles } from "lucide-react";
+
+const values = [
+  "Slow routes over loud itineraries",
+  "Small details over broad summaries",
+  "Quiet luxury over spectacle",
+];
+
+export default function AuthorProfile() {
   return (
-    <section id="philosophy" className="w-full bg-[#f4f4f0] text-zinc-900 py-32 px-6 md:px-12 z-20 relative">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
-        {/* Left Side: Editorial Image */}
+    <section
+      id="philosophy"
+      className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
+    >
+      <div className="grid items-center gap-10 rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur-sm md:p-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:p-10">
         <div className="relative">
-          {/* Subtle offset background block */}
-          <div className="absolute top-6 -left-6 w-full h-full bg-zinc-200/50 border border-zinc-300 z-0 hidden md:block"></div>
-          
-          <div className="relative z-10 aspect-[4/5] w-full overflow-hidden shadow-xl">
-            <img 
-              src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1000&auto=format&fit=crop" 
-              alt="A quiet traveler looking over a landscape"
-              className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+          <div className="absolute -inset-4 hidden rounded-[2rem] border border-white/8 bg-white/6 blur-0 md:block" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-white/10 bg-stone-950/50">
+            <Image
+              src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1800&auto=format&fit=crop"
+              alt="A traveler overlooking a quiet landscape"
+              fill
+              sizes="(min-width: 1280px) 40vw, 100vw"
+              className="object-cover object-center"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-stone-950/10 to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_30%)]" />
           </div>
         </div>
 
-        {/* Right Side: Text Content */}
-        <div className="flex flex-col justify-center">
-          <span className="text-zinc-500 font-sans tracking-[0.2em] uppercase text-xs mb-6 block">
-            About Sanu's Diary
-          </span>
-          
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-zinc-800 tracking-wide leading-tight mb-8">
-            Finding peace in the pulse of the earth.
+        <div className="max-w-3xl">
+          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-stone-300/55">
+            <Sparkles className="h-3.5 w-3.5 text-amber-100" />
+            Philosophy
+          </p>
+
+          <h2 className="mt-5 text-balance font-serif text-[clamp(2.7rem,5vw,4.9rem)] leading-[0.96] tracking-tight text-stone-50">
+            Travel becomes meaningful when the pace slows enough to notice what
+            a place is actually saying.
           </h2>
-          
-          <div className="space-y-6 text-zinc-600 font-sans text-base md:text-lg font-light leading-relaxed tracking-wide">
-            <p>
-              In a world that constantly demands our speed and attention, slow travel is an act of rebellion. It is the conscious choice to stop skimming the surface of destinations and instead let them seep into our bones. When we walk the ancient trails, we don't just observe nature—we remember that we are part of it.
-            </p>
-            <p>
-              This diary is a collection of quiet moments. A testament to the belief that the most profound discoveries happen when we leave our itineraries behind and simply allow the earth to guide us home. 
-            </p>
+
+          <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-stone-200/78 md:text-lg">
+            Sanu&apos;s Diary is built on the belief that the best journeys are
+            the ones that leave space for weather, silence, and the accidental
+            detours that become the real story.
+          </p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              { label: "Tone", value: "Quiet and observant" },
+              { label: "Focus", value: "Landscape and feeling" },
+              { label: "Tempo", value: "Intentionally slow" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[1.1rem] border border-white/10 bg-white/5 px-4 py-4"
+              >
+                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/55">
+                  {item.label}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-stone-100/88">
+                  {item.value}
+                </p>
+              </div>
+            ))}
           </div>
 
-          {/* Signature */}
-          <div className="mt-12 flex items-center space-x-4">
-            <div className="h-[1px] w-8 bg-zinc-400"></div>
-            <span className="font-serif italic text-2xl text-zinc-500">Sanu</span>
+          <div className="mt-8 space-y-3">
+            {values.map((value) => (
+              <div
+                key={value}
+                className="flex items-start gap-3 rounded-[1rem] border border-white/8 bg-stone-950/25 px-4 py-3 text-sm leading-7 text-stone-200/84"
+              >
+                <MapPinned className="mt-1 h-4 w-4 shrink-0 text-amber-100" />
+                <span>{value}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              href="#journal"
+              className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              Read the journal
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="#gallery"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
+            >
+              Open the visual archive
+              <Compass className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </div>

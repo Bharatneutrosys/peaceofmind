@@ -1,130 +1,209 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
-import { urlFor } from "@/sanity/lib/image";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, X } from "lucide-react";
 
 export interface SanityPhoto {
   _key?: string;
-  asset: {
-    _id: string;
-    url: string;
-  };
-  alt?: string;
-  caption?: string;
+  asset?: {
+    _id?: string | null;
+    url?: string | null;
+  } | null;
+  alt?: string | null;
+  caption?: string | null;
+}
+
+const aspectClasses = ["aspect-[4/5]", "aspect-[5/6]", "aspect-[3/4]", "aspect-[7/9]"];
+
+function getPhotoSrc(photo: SanityPhoto) {
+  return photo.asset?.url ?? "";
 }
 
 export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] }) {
   const [selectedImage, setSelectedImage] = useState<SanityPhoto | null>(null);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [loadedIds, setLoadedIds] = useState<Record<string, boolean>>({});
 
-  if (!photos || photos.length === 0) return null;
+  const keyedPhotos = useMemo(
+    () =>
+      photos.map((photo, index) => ({
+        ...photo,
+        id: photo._key || photo.asset?._id || `photo-${index}`,
+      })),
+    [photos],
+  );
+
+  useEffect(() => {
+    if (!selectedImage) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [selectedImage]);
+
+  if (!photos.length) {
+    return (
+      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm sm:px-8">
+          <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+            Gallery
+          </p>
+          <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
+            The visual archive is waiting for its next frame.
+          </h2>
+          <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
+            Once the journal fills out, this space will expand into a slow,
+            cinematic wall of images. For now it remains calm and intentional.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="relative w-full bg-[#0a0a0a] py-32 px-4 md:px-8 lg:px-12 z-20">
-      <div className="max-w-7xl mx-auto">
-        
-        <div className="mb-20 text-center flex flex-col items-center">
-          <span className="text-zinc-500 font-sans tracking-[0.3em] uppercase text-xs mb-4 block">The Collection</span>
-          <h2 className="font-serif text-4xl md:text-5xl text-zinc-100 tracking-wide">Visual Journeys</h2>
-          <div className="h-[1px] w-12 bg-zinc-700 mt-8"></div>
+    <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
+      <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+            Visual journal
+          </p>
+          <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
+            Gallery from the road
+          </h2>
         </div>
+        <p className="max-w-xl text-sm leading-7 text-stone-200/68">
+          A quiet grid of moments from the archive, tuned for fast scanning on
+          mobile and a wider, cinematic rhythm on larger screens.
+        </p>
+      </div>
 
-        {/* Masonry Grid */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          {photos.map((img, idx) => {
-            const id = img._key || img.asset?._id || String(idx);
-            const imageUrl = img.asset ? urlFor(img).width(1200).url() : "";
-            
-            return (
-              <motion.div
-                key={id}
-                className="relative overflow-hidden cursor-pointer group break-inside-avoid"
-                onMouseEnter={() => setHoveredId(id)}
-                onMouseLeave={() => setHoveredId(null)}
-                onClick={() => setSelectedImage(img)}
-                animate={{
-                  opacity: hoveredId && hoveredId !== id ? 0.35 : 1,
-                }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              >
-                <div className="w-full h-full transform transition-transform duration-[1.5s] ease-[0.16,1,0.3,1] group-hover:scale-[1.03]">
-                  <motion.img
-                    layoutId={`gallery-image-${id}`}
-                    src={imageUrl}
-                    alt={img.alt || img.caption || "Gallery image"}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-                
-                {/* Image Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                <div className="absolute inset-0 flex flex-col justify-end p-8 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 pointer-events-none">
-                  <span className="text-zinc-100 font-sans text-xs tracking-[0.25em] uppercase font-light">
-                    {img.caption || ""}
+      <div className="columns-1 gap-5 space-y-5 md:columns-2 xl:columns-3">
+        {keyedPhotos.map((photo, index) => {
+          const id = photo.id;
+          const src = getPhotoSrc(photo);
+          const aspect = aspectClasses[index % aspectClasses.length];
+          const isLoaded = loadedIds[id];
+
+          if (!src) {
+            return null;
+          }
+
+          return (
+            <motion.button
+              key={id}
+              type="button"
+              onClick={() => setSelectedImage(photo)}
+              className="group relative block w-full break-inside-avoid overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-950/40 text-left shadow-[0_16px_50px_rgba(0,0,0,0.18)]"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className={`relative w-full ${aspect}`}>
+                {!isLoaded ? (
+                  <div className="absolute inset-0 animate-pulse bg-white/5" />
+                ) : null}
+
+                <Image
+                  src={src}
+                  alt={photo.alt || photo.caption || "Gallery image"}
+                  fill
+                  sizes="(min-width: 1536px) 33vw, (min-width: 1024px) 34vw, (min-width: 768px) 48vw, 100vw"
+                  className={`object-cover transition duration-700 group-hover:scale-[1.03] ${
+                    isLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoadingComplete={() =>
+                    setLoadedIds((current) => ({ ...current, [id]: true }))
+                  }
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/82 via-stone-950/14 to-transparent opacity-75 transition-opacity duration-500 group-hover:opacity-100" />
+
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
+                  <div className="max-w-[80%]">
+                    <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/55">
+                      Frame {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-stone-50 transition-transform duration-500 group-hover:translate-y-[-2px]">
+                      {photo.caption || photo.alt || "Untitled study"}
+                    </p>
+                  </div>
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/8 text-stone-50/80 backdrop-blur-md transition-transform duration-500 group-hover:scale-105">
+                    <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Lightbox Overlay */}
-        <AnimatePresence>
-          {selectedImage && (() => {
-            const selectedId = selectedImage._key || selectedImage.asset?._id;
-            const fullUrl = selectedImage.asset ? urlFor(selectedImage).url() : "";
-
-            return (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-12"
-                onClick={() => setSelectedImage(null)}
-              >
-                {/* Close Button */}
-                <button
-                  className="absolute top-6 right-6 md:top-10 md:right-10 text-zinc-500 hover:text-white transition-colors z-[110]"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedImage(null);
-                  }}
-                >
-                  <X size={32} strokeWidth={1} />
-                </button>
-
-                <div 
-                  className="relative max-w-6xl w-full h-full flex flex-col items-center justify-center"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <motion.img
-                    layoutId={`gallery-image-${selectedId}`}
-                    src={fullUrl}
-                    alt={selectedImage.alt || selectedImage.caption || "Gallery image"}
-                    className="w-auto h-auto max-w-full max-h-[85vh] object-contain shadow-2xl cursor-default"
-                  />
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="absolute bottom-4 md:bottom-0 text-center pointer-events-none"
-                  >
-                    <span className="text-zinc-300 font-serif text-2xl md:text-3xl tracking-wider">
-                      {selectedImage.caption || ""}
-                    </span>
-                  </motion.div>
-                </div>
-              </motion.div>
-            );
-          })()}
-        </AnimatePresence>
-        
+              </div>
+            </motion.button>
+          );
+        })}
       </div>
+
+      <AnimatePresence>
+        {selectedImage ? (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedImage.caption || selectedImage.alt || "Gallery image"}
+            className="fixed inset-0 z-[250] flex items-center justify-center bg-stone-950/96 px-4 py-6 backdrop-blur-2xl sm:px-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setSelectedImage(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedImage(null)}
+              className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/6 text-stone-100 transition-colors duration-300 hover:bg-white/12 sm:right-6 sm:top-6"
+              aria-label="Close image viewer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <motion.div
+              className="relative flex w-full max-w-6xl flex-col items-center gap-4"
+              initial={{ scale: 0.98, y: 14 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.98, y: 14 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <Image
+                src={getPhotoSrc(selectedImage)}
+                alt={selectedImage.alt || selectedImage.caption || "Gallery image"}
+                width={2400}
+                height={1600}
+                sizes="100vw"
+                className="max-h-[82svh] w-auto max-w-full rounded-[1.5rem] border border-white/10 object-contain shadow-[0_24px_90px_rgba(0,0,0,0.48)]"
+              />
+
+              {(selectedImage.caption || selectedImage.alt) && (
+                <div className="max-w-3xl text-center">
+                  <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+                    Gallery note
+                  </p>
+                  <p className="mt-3 text-pretty font-serif text-2xl leading-tight text-stone-50 md:text-3xl">
+                    {selectedImage.caption || selectedImage.alt}
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </section>
   );
 }

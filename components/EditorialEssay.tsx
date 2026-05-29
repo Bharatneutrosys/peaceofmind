@@ -1,44 +1,262 @@
-import { PortableText } from '@portabletext/react';
+import Image from "next/image";
+import Link from "next/link";
+import {
+  PortableText,
+  toPlainText,
+  type PortableTextBlock,
+  type PortableTextComponents,
+} from "@portabletext/react";
+import { CalendarDays, Clock3, Quote, ArrowRight } from "lucide-react";
 
-interface EssayProp {
+type SanityImage = {
+  asset?: {
+    _id?: string | null;
+    url?: string | null;
+  } | null;
+  alt?: string | null;
+  caption?: string | null;
+};
+
+type EssayPortableTextImage = {
+  _type: "image";
+  asset?: {
+    _id?: string | null;
+    url?: string | null;
+  } | null;
+  alt?: string | null;
+  caption?: string | null;
+};
+
+type EssayPortableTextValue = PortableTextBlock | EssayPortableTextImage;
+
+export type EditorialEssayData = {
   title: string;
-  date: string;
-  body: any[];
+  date?: string | null;
+  destination?: string | null;
+  coverImage?: SanityImage | null;
+  body?: EssayPortableTextValue[] | null;
+};
+
+function formatDate(date?: string | null) {
+  if (!date) return "Undated dispatch";
+
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(new Date(date));
+  } catch {
+    return date;
+  }
 }
 
-export default function EditorialEssay({ essay }: { essay?: EssayProp | null }) {
-  if (!essay) return null;
+function estimateReadTime(body?: EssayPortableTextValue[] | null) {
+  if (!body?.length) {
+    return "4 min read";
+  }
+
+  const wordCount = toPlainText(body).trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(4, Math.round(wordCount / 190));
+
+  return `${minutes} min read`;
+}
+
+const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
+  block: {
+    normal: ({ children }) => (
+      <p className="max-w-3xl text-pretty text-[1.04rem] leading-8 text-stone-200/86 md:text-[1.08rem] md:leading-9">
+        {children}
+      </p>
+    ),
+    h2: ({ children }) => (
+      <h2 className="mt-14 max-w-3xl font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
+        {children}
+      </h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className="mt-10 max-w-3xl font-serif text-2xl leading-tight text-stone-50 md:text-[2.15rem]">
+        {children}
+      </h3>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className="my-12 max-w-3xl border-l border-amber-200/40 bg-white/4 px-6 py-5 text-stone-100/92 backdrop-blur-sm md:px-8">
+        <Quote className="mb-4 h-5 w-5 text-amber-100/80" />
+        <div className="font-serif text-2xl leading-tight tracking-tight md:text-[2.2rem]">
+          {children}
+        </div>
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="my-6 max-w-3xl space-y-3 pl-5 text-[1.04rem] leading-8 text-stone-200/84 marker:text-amber-100">
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol className="my-6 max-w-3xl space-y-3 pl-5 text-[1.04rem] leading-8 text-stone-200/84 marker:text-amber-100">
+        {children}
+      </ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => <li className="pl-1">{children}</li>,
+    number: ({ children }) => <li className="pl-1">{children}</li>,
+  },
+  types: {
+    image: ({ value }) => {
+      const src = value.asset?.url;
+
+      if (!src) {
+        return null;
+      }
+
+      return (
+        <figure className="my-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5">
+          <div className="relative aspect-[16/10] w-full">
+            <Image
+              src={src}
+              alt={value.alt || value.caption || "Essay image"}
+              fill
+              sizes="(min-width: 1024px) 780px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          {value.caption ? (
+            <figcaption className="border-t border-white/8 px-5 py-4 text-sm leading-6 text-stone-200/70">
+              {value.caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    },
+  },
+};
+
+export default function EditorialEssay({
+  essay,
+}: {
+  essay?: EditorialEssayData | null;
+}) {
+  if (!essay) {
+    return (
+      <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm sm:px-8">
+          <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+            Journal
+          </p>
+          <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
+            The next dispatch is still forming.
+          </h2>
+          <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
+            The archive is waiting for its next long-form story. Until then,
+            the gallery and the philosophy notes remain open.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="#gallery"
+              className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              Explore the gallery
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="#philosophy"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
+            >
+              Read the philosophy
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const formattedDate = formatDate(essay.date);
+  const readTime = estimateReadTime(essay.body);
 
   return (
-    <article className="w-full bg-[#0a0a0a] py-32 px-5 md:px-8 z-20 relative">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <header className="mb-16 text-center">
-          <span className="text-zinc-500 font-sans tracking-[0.2em] uppercase text-xs mb-6 block">Journal Entry</span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-zinc-100 tracking-wide leading-tight mb-8">
-            {essay.title}
-          </h2>
-          <div className="flex items-center justify-center space-x-4">
-            {essay.date && (
-              <span className="text-zinc-500 text-xs md:text-sm font-light uppercase tracking-widest">
-                {new Date(essay.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </span>
-            )}
-            {essay.date && <div className="w-1 h-1 bg-zinc-700 rounded-full"></div>}
-            <span className="text-zinc-500 text-xs md:text-sm font-light uppercase tracking-widest">5 min read</span>
+    <section
+      id="journal"
+      className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
+    >
+      <article className="overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-sm">
+        {essay.coverImage?.asset?.url ? (
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <Image
+              src={essay.coverImage.asset.url}
+              alt={essay.coverImage.alt || essay.title}
+              fill
+              priority
+              sizes="(min-width: 1280px) 1200px, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/12 to-transparent" />
           </div>
-        </header>
+        ) : null}
 
-        {/* Body */}
-        <div className="prose prose-invert prose-zinc prose-lg max-w-none text-zinc-300 font-sans font-light leading-[2.2] tracking-wide prose-headings:font-serif prose-headings:text-zinc-100 prose-a:text-zinc-100 prose-blockquote:font-serif prose-blockquote:text-zinc-100 prose-blockquote:italic prose-blockquote:border-l-zinc-700 prose-strong:text-zinc-100">
-          <PortableText value={essay.body} />
+        <div className="grid gap-12 px-6 py-8 md:px-10 md:py-12 lg:grid-cols-[minmax(0,1.6fr)_minmax(16rem,0.7fr)] lg:px-12">
+          <div>
+            <div className="flex flex-wrap items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-stone-300/60">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                <CalendarDays className="h-3.5 w-3.5 text-amber-100" />
+                {formattedDate}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                <Clock3 className="h-3.5 w-3.5 text-sky-100" />
+                {readTime}
+              </span>
+            </div>
+
+            <div className="mt-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+                Featured essay
+              </p>
+              <h2 className="mt-4 text-balance font-serif text-[clamp(2.7rem,5vw,4.8rem)] leading-[0.95] tracking-tight text-stone-50">
+                {essay.title}
+              </h2>
+              <p className="mt-5 max-w-2xl text-pretty text-base leading-8 text-stone-200/76 md:text-lg">
+                {essay.destination
+                  ? `Written from ${essay.destination}, this dispatch lingers on the details that turn movement into memory.`
+                  : "Written in the language of slow movement, this dispatch lingers on the details that turn travel into memory."}
+              </p>
+            </div>
+
+            <div className="mt-10 border-t border-white/10 pt-8">
+              <PortableText
+                value={(essay.body ?? []) as EssayPortableTextValue[]}
+                components={portableTextComponents}
+              />
+            </div>
+          </div>
+
+          <aside className="space-y-4 self-start rounded-[1.75rem] border border-white/10 bg-stone-950/35 p-5">
+            <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+              Editorial notes
+            </p>
+            <div className="space-y-4 text-sm leading-7 text-stone-200/78">
+              <p>
+                A quiet record of place, weather, and the small decisions that
+                make a journey feel personal.
+              </p>
+              <p>
+                The full archive stays light and easy to scan, with generous
+                spacing and restrained motion for reading on any screen.
+              </p>
+            </div>
+
+            <div className="rounded-[1.25rem] border border-white/10 bg-white/5 p-4">
+              <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/55">
+                Reading tone
+              </p>
+              <p className="mt-3 font-serif text-2xl text-stone-50">
+                Measured, immersive, and unhurried.
+              </p>
+            </div>
+          </aside>
         </div>
-        
-        {/* Footer Divider */}
-        <div className="mt-32 flex justify-center">
-          <div className="h-[1px] w-12 bg-zinc-700"></div>
-        </div>
-      </div>
-    </article>
+      </article>
+    </section>
   );
 }

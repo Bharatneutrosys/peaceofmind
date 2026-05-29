@@ -16,8 +16,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Sanu's Diary - The World is Quiet Here",
-  description: "A mindful exploration of slow travel, where the journey itself becomes the sanctuary.",
+  title: "Life of a Traveller | Sanu's Diary",
+  description:
+    "A cinematic travel diary of slow journeys, quiet landscapes, and editorial storytelling.",
 };
 
 export default function RootLayout({
@@ -30,7 +31,7 @@ export default function RootLayout({
       lang="en"
       className={inter.variable + " " + playfair.variable + " h-full antialiased"}
     >
-      <body className="font-sans min-h-full flex flex-col bg-[#0a0a0a]">
+      <body className="font-sans min-h-full flex flex-col bg-transparent text-stone-100">
         <SmoothScrollProvider>
           <Navbar />
           <div className="flex-grow flex flex-col">

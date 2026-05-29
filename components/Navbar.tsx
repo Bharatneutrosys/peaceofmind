@@ -4,88 +4,128 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+const navItems = [
+  { label: "Destinations", href: "#destinations" },
+  { label: "Journal", href: "#journal" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Philosophy", href: "#philosophy" },
+];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 18);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Prevent scrolling when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMobileMenuOpen]);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = menuOpen ? "hidden" : previousOverflow;
 
-  const navItems = ["Destinations", "Journal", "Philosophy"];
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   return (
     <>
       <header
-        className={"fixed top-0 left-0 w-full z-[200] transition-all duration-500 border-b " + (
-          scrolled
-            ? "bg-[#0a0a0a]/80 backdrop-blur-xl border-zinc-800/50 py-4"
-            : "bg-transparent border-transparent py-6"
-        )}
+        className={
+          "fixed left-0 top-0 z-[200] w-full border-b transition-[background-color,border-color,box-shadow] duration-500 " +
+          (scrolled
+            ? "border-white/10 bg-stone-950/78 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+            : "border-transparent bg-transparent")
+        }
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link href="/" className="group flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="font-serif text-2xl text-zinc-100 tracking-wider">
-              Sanu's Diary
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
+          <Link
+            href="/"
+            className="group inline-flex items-center gap-3"
+            onClick={() => setMenuOpen(false)}
+          >
+            <span className="font-serif text-xl tracking-[0.18em] text-stone-50 transition-colors group-hover:text-amber-100 sm:text-2xl">
+              Sanu&apos;s Diary
+            </span>
+            <span className="hidden rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-stone-200/75 md:inline-flex">
+              Life of a Traveller
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-10">
+          <nav className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => (
               <Link
-                key={item}
-                href={"#" + item.toLowerCase()}
-                className="relative group py-2"
+                key={item.href}
+                href={item.href}
+                className="group relative py-2 text-[0.72rem] uppercase tracking-[0.24em] text-stone-200/72 transition-colors duration-300 hover:text-stone-50"
               >
-                <span className="text-zinc-300 font-sans text-xs uppercase tracking-[0.2em] font-light group-hover:text-white transition-colors duration-300">
-                  {item}
-                </span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-out group-hover:w-full"></span>
+                {item.label}
+                <span className="absolute inset-x-0 -bottom-0.5 h-px scale-x-0 bg-stone-50 transition-transform duration-300 group-hover:scale-x-100" />
               </Link>
             ))}
           </nav>
 
-          <button 
-            className="md:hidden text-zinc-300 hover:text-white transition-colors z-[210] relative"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+          <button
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/6 text-stone-100 transition-colors duration-300 hover:bg-white/12 md:hidden"
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
-            {isMobileMenuOpen ? <X size={28} strokeWidth={1.5} /> : <Menu size={28} strokeWidth={1.5} />}
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 z-[190] bg-black/90 backdrop-blur-xl transition-opacity duration-300 md:hidden flex flex-col justify-center items-center ${
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+      <div
+        id="mobile-navigation"
+        className={
+          "fixed inset-0 z-[190] flex flex-col justify-end bg-stone-950/92 px-6 pb-8 pt-24 backdrop-blur-2xl transition-opacity duration-300 md:hidden " +
+          (menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0")
+        }
+        aria-hidden={!menuOpen}
       >
-        <nav className="flex flex-col items-center space-y-8">
-          {navItems.map((item) => (
+        <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/6 p-5">
+          <p className="text-xs uppercase tracking-[0.3em] text-stone-200/55">
+            Life of a Traveller
+          </p>
+          <p className="mt-3 max-w-sm text-sm leading-7 text-stone-200/82">
+            Slow routes, measured light, and the places that stay with you long
+            after the road ends.
+          </p>
+        </div>
+
+        <nav className="space-y-3">
+          {navItems.map((item, index) => (
             <Link
-              key={item}
-              href={"#" + item.toLowerCase()}
-              className="text-2xl font-sans tracking-[0.2em] uppercase font-light text-zinc-300 hover:text-white transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
+              key={item.href}
+              href={item.href}
+              className="flex items-center justify-between rounded-[1.25rem] border border-white/10 bg-white/6 px-4 py-4 text-2xl font-light tracking-[0.08em] text-stone-50 transition-colors duration-300 hover:bg-white/12"
+              onClick={() => setMenuOpen(false)}
             >
-              {item}
+              {item.label}
+              <span className="text-sm text-stone-300/60">0{index + 1}</span>
             </Link>
           ))}
         </nav>

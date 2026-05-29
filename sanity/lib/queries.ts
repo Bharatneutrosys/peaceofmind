@@ -22,6 +22,7 @@ export const getPhotoJournalsQuery = groq`
       crop
     },
     gallery[] {
+      _key,
       asset->{
         _id,
         url

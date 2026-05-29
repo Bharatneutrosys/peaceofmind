@@ -1,33 +1,76 @@
-﻿export default function Footer() {
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
+const footerLinks = [
+  { label: "Destinations", href: "#destinations" },
+  { label: "Journal", href: "#journal" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Philosophy", href: "#philosophy" },
+];
+
+const socialLinks = [
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "Pinterest", href: "https://pinterest.com" },
+  { label: "Newsletter", href: "mailto:hello@lifeofatraveller.com" },
+];
+
+export default function Footer() {
   return (
-    <footer className="w-full bg-[#050505] py-24 px-6 md:px-12 border-t border-zinc-900 z-20 relative">
-      <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
-        
-        <h3 className="font-serif text-2xl md:text-3xl text-zinc-100 tracking-wide mb-6">
-          Travel for peace of mind.<br/>Nature is home.
-        </h3>
-        
-        <div className="h-[1px] w-12 bg-zinc-800 my-10"></div>
-        
-        <div className="flex flex-col md:flex-row items-center justify-between w-full">
-          <span className="font-serif text-xl text-zinc-500 tracking-widest mb-4 md:mb-0">
-            Sanu's Diary
-          </span>
-          
-          <div className="flex space-x-6">
-            {["Instagram", "Twitter", "Email"].map((link) => (
-              <a key={link} href="#" className="text-zinc-600 hover:text-zinc-300 font-sans text-xs uppercase tracking-widest transition-colors duration-300">
-                {link}
-              </a>
-            ))}
+    <footer className="relative border-t border-white/8 bg-stone-950 px-6 py-16 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(14rem,0.65fr)_minmax(14rem,0.65fr)]">
+          <div>
+            <p className="text-xs uppercase tracking-[0.34em] text-stone-300/55">
+              Life of a Traveller
+            </p>
+            <h3 className="mt-4 max-w-2xl font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
+              Travel softly. Keep the light. Let the quiet places speak.
+            </h3>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-[0.34em] text-stone-300/55">
+              Explore
+            </p>
+            <div className="mt-4 space-y-3">
+              {footerLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center justify-between border-b border-white/8 pb-3 text-sm text-stone-200/78 transition-colors duration-300 hover:text-stone-50"
+                >
+                  {link.label}
+                  <ArrowUpRight className="h-4 w-4 text-stone-300/50" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase tracking-[0.34em] text-stone-300/55">
+              Follow
+            </p>
+            <div className="mt-4 space-y-3">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="flex items-center justify-between border-b border-white/8 pb-3 text-sm text-stone-200/78 transition-colors duration-300 hover:text-stone-50"
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                >
+                  {link.label}
+                  <ArrowUpRight className="h-4 w-4 text-stone-300/50" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="mt-16 w-full flex flex-col md:flex-row items-center justify-between text-zinc-700 font-sans text-[10px] uppercase tracking-[0.2em]">
-          <span>&copy; {new Date().getFullYear()} Sanu's Diary. All rights reserved.</span>
-          <span className="mt-2 md:mt-0">Designed thoughtfully.</span>
+        <div className="mt-14 flex flex-col gap-4 border-t border-white/8 pt-6 text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/50 sm:flex-row sm:items-center sm:justify-between">
+          <span>&copy; {new Date().getFullYear()} Life of a Traveller</span>
+          <span>Sanu&apos;s Diary, shaped with restraint.</span>
         </div>
-
       </div>
     </footer>
   );
