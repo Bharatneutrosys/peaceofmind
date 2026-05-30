@@ -4,11 +4,13 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
+import { urlFor } from "@/sanity/lib/image";
 
 export interface SanityPhoto {
   _key?: string;
   asset?: {
-    _id?: string | null;
+    _ref?: string;
+    _id?: string;
     url?: string | null;
   } | null;
   alt?: string | null;
@@ -17,7 +19,15 @@ export interface SanityPhoto {
 
 const aspectClasses = ["aspect-[4/5]", "aspect-[5/6]", "aspect-[3/4]", "aspect-[7/9]"];
 
-function getPhotoSrc(photo: SanityPhoto) {
+function resolveImageUrl(photo: SanityPhoto, width = 1200) {
+  if (photo.asset?._ref || photo.asset?._id) {
+    try {
+      return urlFor(photo).width(width).quality(90).url();
+    } catch {
+      return photo.asset?.url ?? "";
+    }
+  }
+
   return photo.asset?.url ?? "";
 }
 
@@ -65,8 +75,8 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
             The visual archive is waiting for its next frame.
           </h2>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
-            Once the journal fills out, this space will expand into a slow,
-            cinematic wall of images. For now it remains calm and intentional.
+            Once the journal fills out, this section becomes a cinematic wall of
+            images. For now it stays composed and intentionally quiet.
           </p>
         </div>
       </section>
@@ -86,20 +96,18 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
         </div>
         <p className="max-w-xl text-sm leading-7 text-stone-200/68">
           A quiet grid of moments from the archive, tuned for fast scanning on
-          mobile and a wider, cinematic rhythm on larger screens.
+          mobile and a cinematic rhythm on larger screens.
         </p>
       </div>
 
       <div className="columns-1 gap-5 space-y-5 md:columns-2 xl:columns-3">
         {keyedPhotos.map((photo, index) => {
           const id = photo.id;
-          const src = getPhotoSrc(photo);
+          const src = resolveImageUrl(photo);
           const aspect = aspectClasses[index % aspectClasses.length];
           const isLoaded = loadedIds[id];
 
-          if (!src) {
-            return null;
-          }
+          if (!src) return null;
 
           return (
             <motion.button
@@ -113,9 +121,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className={`relative w-full ${aspect}`}>
-                {!isLoaded ? (
-                  <div className="absolute inset-0 animate-pulse bg-white/5" />
-                ) : null}
+                {!isLoaded ? <div className="absolute inset-0 animate-pulse bg-white/5" /> : null}
 
                 <Image
                   src={src}
@@ -182,7 +188,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
               onClick={(event) => event.stopPropagation()}
             >
               <Image
-                src={getPhotoSrc(selectedImage)}
+                src={resolveImageUrl(selectedImage, 2400)}
                 alt={selectedImage.alt || selectedImage.caption || "Gallery image"}
                 width={2400}
                 height={1600}

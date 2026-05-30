@@ -52,5 +52,11 @@ export const photoJournal = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'featuredVideoUrl',
+      title: 'Featured Video URL',
+      type: 'url',
+      description: 'Optional YouTube or video URL for future homepage embedding.',
+    }),
   ],
 });

@@ -1,17 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  PortableText,
-  toPlainText,
-  type PortableTextBlock,
-  type PortableTextComponents,
-} from "@portabletext/react";
-import { CalendarDays, Clock3, Quote, ArrowRight } from "lucide-react";
+import { PortableText, toPlainText, type PortableTextBlock, type PortableTextComponents } from "@portabletext/react";
+import { ArrowRight, CalendarDays, Clock3, Quote } from "lucide-react";
+import { urlFor } from "@/sanity/lib/image";
 
-type SanityImage = {
+type SanityImageSource = {
   asset?: {
-    _id?: string | null;
-    url?: string | null;
+    _ref?: string;
+    _id?: string;
+    url?: string;
   } | null;
   alt?: string | null;
   caption?: string | null;
@@ -20,8 +17,9 @@ type SanityImage = {
 type EssayPortableTextImage = {
   _type: "image";
   asset?: {
-    _id?: string | null;
-    url?: string | null;
+    _ref?: string;
+    _id?: string;
+    url?: string;
   } | null;
   alt?: string | null;
   caption?: string | null;
@@ -33,7 +31,7 @@ export type EditorialEssayData = {
   title: string;
   date?: string | null;
   destination?: string | null;
-  coverImage?: SanityImage | null;
+  coverImage?: SanityImageSource | null;
   body?: EssayPortableTextValue[] | null;
 };
 
@@ -60,6 +58,20 @@ function estimateReadTime(body?: EssayPortableTextValue[] | null) {
   const minutes = Math.max(4, Math.round(wordCount / 190));
 
   return `${minutes} min read`;
+}
+
+function resolveImageUrl(source?: SanityImageSource | null, width = 1600) {
+  if (!source) return "";
+
+  if (source.asset?._ref || source.asset?._id) {
+    try {
+      return urlFor(source).width(width).quality(92).url();
+    } catch {
+      return source.asset?.url ?? "";
+    }
+  }
+
+  return source.asset?.url ?? "";
 }
 
 const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
@@ -106,7 +118,7 @@ const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
   },
   types: {
     image: ({ value }) => {
-      const src = value.asset?.url;
+      const src = resolveImageUrl(value, 1600);
 
       if (!src) {
         return null;
@@ -151,7 +163,7 @@ export default function EditorialEssay({
           </h2>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
             The archive is waiting for its next long-form story. Until then,
-            the gallery and the philosophy notes remain open.
+            the gallery, destination notes, and video frame remain open.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -162,10 +174,10 @@ export default function EditorialEssay({
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="#philosophy"
+              href="#videos"
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
             >
-              Read the philosophy
+              Watch featured video
             </Link>
           </div>
         </div>
@@ -175,6 +187,7 @@ export default function EditorialEssay({
 
   const formattedDate = formatDate(essay.date);
   const readTime = estimateReadTime(essay.body);
+  const coverSrc = resolveImageUrl(essay.coverImage, 1800);
 
   return (
     <section
@@ -182,11 +195,11 @@ export default function EditorialEssay({
       className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
     >
       <article className="overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-sm">
-        {essay.coverImage?.asset?.url ? (
+        {coverSrc ? (
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
-              src={essay.coverImage.asset.url}
-              alt={essay.coverImage.alt || essay.title}
+              src={coverSrc}
+              alt={essay.coverImage?.alt || essay.title}
               fill
               priority
               sizes="(min-width: 1280px) 1200px, 100vw"

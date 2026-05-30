@@ -4,7 +4,15 @@ export const getDestinationsQuery = groq`
   *[_type == "destination"] | order(title asc) {
     _id,
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    region,
+    description,
+    coverImage {
+      asset,
+      "url": asset->url,
+      hotspot,
+      crop
+    }
   }
 `;
 
@@ -14,24 +22,21 @@ export const getPhotoJournalsQuery = groq`
     title,
     "destination": destination->title,
     coverImage {
-      asset->{
-        _id,
-        url
-      },
+      asset,
+      "url": asset->url,
       hotspot,
       crop
     },
     gallery[] {
       _key,
-      asset->{
-        _id,
-        url
-      },
+      asset,
+      "url": asset->url,
       alt,
       caption,
       hotspot,
       crop
-    }
+    },
+    featuredVideoUrl
   }
 `;
 
@@ -41,10 +46,8 @@ export const getEssaysQuery = groq`
     title,
     "slug": slug.current,
     coverImage {
-      asset->{
-        _id,
-        url
-      },
+      asset,
+      "url": asset->url,
       hotspot,
       crop
     },

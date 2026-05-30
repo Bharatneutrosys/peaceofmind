@@ -5,13 +5,14 @@ const footerLinks = [
   { label: "Destinations", href: "#destinations" },
   { label: "Journal", href: "#journal" },
   { label: "Gallery", href: "#gallery" },
+  { label: "Videos", href: "#videos" },
   { label: "Philosophy", href: "#philosophy" },
 ];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "Pinterest", href: "https://pinterest.com" },
-  { label: "Newsletter", href: "mailto:hello@lifeofatraveller.com" },
+  { label: "Facebook", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "YouTube", href: "#" },
 ];
 
 export default function Footer() {
@@ -21,10 +22,10 @@ export default function Footer() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(14rem,0.65fr)_minmax(14rem,0.65fr)]">
           <div>
             <p className="text-xs uppercase tracking-[0.34em] text-stone-300/55">
-              Life of a Traveller
+              Traveller&apos;s Diary
             </p>
             <h3 className="mt-4 max-w-2xl font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
-              Travel softly. Keep the light. Let the quiet places speak.
+              Stories from mountain country, written with calm and intention.
             </h3>
           </div>
 
@@ -56,8 +57,6 @@ export default function Footer() {
                   key={link.label}
                   href={link.href}
                   className="flex items-center justify-between border-b border-white/8 pb-3 text-sm text-stone-200/78 transition-colors duration-300 hover:text-stone-50"
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                 >
                   {link.label}
                   <ArrowUpRight className="h-4 w-4 text-stone-300/50" />
@@ -68,8 +67,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/8 pt-6 text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/50 sm:flex-row sm:items-center sm:justify-between">
-          <span>&copy; {new Date().getFullYear()} Life of a Traveller</span>
-          <span>Sanu&apos;s Diary, shaped with restraint.</span>
+          <span>&copy; {new Date().getFullYear()} Traveller&apos;s Diary</span>
+          <span>Built for journeys that deserve their own light.</span>
         </div>
       </div>
     </footer>

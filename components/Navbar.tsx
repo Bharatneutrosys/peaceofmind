@@ -8,6 +8,7 @@ const navItems = [
   { label: "Destinations", href: "#destinations" },
   { label: "Journal", href: "#journal" },
   { label: "Gallery", href: "#gallery" },
+  { label: "Videos", href: "#videos" },
   { label: "Philosophy", href: "#philosophy" },
 ];
 
@@ -28,7 +29,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = menuOpen ? "hidden" : previousOverflow;
+    document.body.style.overflow = menuOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -54,7 +55,7 @@ export default function Navbar() {
         className={
           "fixed left-0 top-0 z-[200] w-full border-b transition-[background-color,border-color,box-shadow] duration-500 " +
           (scrolled
-            ? "border-white/10 bg-stone-950/78 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+            ? "border-white/10 bg-stone-950/80 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl"
             : "border-transparent bg-transparent")
         }
       >
@@ -65,10 +66,10 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             <span className="font-serif text-xl tracking-[0.18em] text-stone-50 transition-colors group-hover:text-amber-100 sm:text-2xl">
-              Sanu&apos;s Diary
+              Traveller&apos;s Diary
             </span>
-            <span className="hidden rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-stone-200/75 md:inline-flex">
-              Life of a Traveller
+            <span className="hidden rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-stone-200/72 md:inline-flex">
+              Slow travel journal
             </span>
           </Link>
 
@@ -108,7 +109,7 @@ export default function Navbar() {
       >
         <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/6 p-5">
           <p className="text-xs uppercase tracking-[0.3em] text-stone-200/55">
-            Life of a Traveller
+            Traveller&apos;s Diary
           </p>
           <p className="mt-3 max-w-sm text-sm leading-7 text-stone-200/82">
             Slow routes, measured light, and the places that stay with you long

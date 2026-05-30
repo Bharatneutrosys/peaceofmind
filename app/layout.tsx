@@ -16,9 +16,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Life of a Traveller | Sanu's Diary",
+  title: "Traveller's Diary | Premium Nepal Travel Stories",
   description:
-    "A cinematic travel diary of slow journeys, quiet landscapes, and editorial storytelling.",
+    "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
 };
 
 export default function RootLayout({

@@ -8,6 +8,12 @@ const values = [
   "Quiet luxury over spectacle",
 ];
 
+const socialLinks = [
+  { label: "Facebook", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "YouTube", href: "#" },
+];
+
 export default function AuthorProfile() {
   return (
     <section
@@ -26,7 +32,7 @@ export default function AuthorProfile() {
               className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-stone-950/10 to-transparent" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_30%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_30%)]" />
           </div>
         </div>
 
@@ -37,21 +43,23 @@ export default function AuthorProfile() {
           </p>
 
           <h2 className="mt-5 text-balance font-serif text-[clamp(2.7rem,5vw,4.9rem)] leading-[0.96] tracking-tight text-stone-50">
-            Travel becomes meaningful when the pace slows enough to notice what
-            a place is actually saying.
+            Raised close to the hills of Far Western Nepal, Traveller&apos;s
+            Diary studies the world through roads, weather, food, silence, and
+            movement.
           </h2>
 
           <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-stone-200/78 md:text-lg">
-            Sanu&apos;s Diary is built on the belief that the best journeys are
-            the ones that leave space for weather, silence, and the accidental
-            detours that become the real story.
+            This is the beginning of a serious travel creator brand: a place
+            for stories, photo journals, and destination notes shaped by a
+            young woman who grew up around mountains and is studying travel and
+            tourism with a storyteller&apos;s eye.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {[
-              { label: "Tone", value: "Quiet and observant" },
-              { label: "Focus", value: "Landscape and feeling" },
-              { label: "Tempo", value: "Intentionally slow" },
+              { label: "Perspective", value: "Mountain-born and observant" },
+              { label: "Focus", value: "People, places, culture" },
+              { label: "Voice", value: "Elegant and grounded" },
             ].map((item) => (
               <div
                 key={item.label}
@@ -88,12 +96,24 @@ export default function AuthorProfile() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="#gallery"
+              href="#videos"
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
             >
-              Open the visual archive
+              Watch featured video
               <Compass className="h-4 w-4" />
             </Link>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-stone-100/78 transition-colors duration-300 hover:bg-white/10"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

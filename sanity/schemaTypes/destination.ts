@@ -21,5 +21,26 @@ export const destination = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'region',
+      title: 'Region / Category',
+      type: 'string',
+      description: 'Optional label for grouping destinations, such as Nepal, South Asia, or Europe.',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      rows: 4,
+      description: 'Optional short descriptor for the destination card.',
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
   ],
 });
