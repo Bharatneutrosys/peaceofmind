@@ -443,13 +443,13 @@ export default async function Home() {
             <div>
               <p className="flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-stone-300/55">
                 <Sparkles className="h-3.5 w-3.5 text-amber-100" />
-                Follow the journey
+                Follow the diary
               </p>
               <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
                 Stay close to the next story, the next route, and the next frame.
               </h2>
               <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/76">
-                Built for visitors who want the travel diary, the photos, and the
+                Built for readers who want the travel diary, the photos, and the
                 future video stories in one elegant place.
               </p>
             </div>
