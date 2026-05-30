@@ -1,8 +1,8 @@
-﻿import { defineField, defineType } from 'sanity';
+import { defineField, defineType } from 'sanity';
 
-export const destination = defineType({
-  name: 'destination',
-  title: 'Destination',
+export const category = defineType({
+  name: 'category',
+  title: 'Category',
   type: 'document',
   fields: [
     defineField({
@@ -22,35 +22,10 @@ export const destination = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'region',
-      title: 'Region / Category',
-      type: 'string',
-      description: 'Optional label for grouping destinations, such as Nepal, South Asia, or Europe.',
-    }),
-    defineField({
-      name: 'category',
-      title: 'Category',
-      type: 'reference',
-      to: [{ type: 'category' }],
-      description: 'Optional reusable category reference for site-wide grouping.',
-    }),
-    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
       rows: 4,
-      description: 'Optional short descriptor for the destination card.',
-    }),
-    defineField({
-      name: 'shortIntro',
-      title: 'Short Intro',
-      type: 'text',
-      rows: 3,
-    }),
-    defineField({
-      name: 'country',
-      title: 'Country',
-      type: 'string',
     }),
     defineField({
       name: 'coverImage',

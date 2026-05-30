@@ -2,19 +2,46 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Compass, MapPinned, Sparkles } from "lucide-react";
 
+type SocialLinks = {
+  facebookUrl?: string | null;
+  instagramUrl?: string | null;
+  youtubeUrl?: string | null;
+};
+
 const values = [
   "Slow routes over loud itineraries",
   "Small details over broad summaries",
   "Quiet luxury over spectacle",
 ];
 
-const socialLinks = [
-  { label: "Facebook", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "YouTube", href: "#" },
-];
+function socialItems(socialLinks?: SocialLinks) {
+  return [
+    socialLinks?.facebookUrl
+      ? { label: "Facebook", href: socialLinks.facebookUrl }
+      : null,
+    socialLinks?.instagramUrl
+      ? { label: "Instagram", href: socialLinks.instagramUrl }
+      : null,
+    socialLinks?.youtubeUrl ? { label: "YouTube", href: socialLinks.youtubeUrl } : null,
+  ].filter(Boolean) as Array<{ label: string; href: string }>;
+}
 
-export default function AuthorProfile() {
+export default function AuthorProfile({
+  authorDisplayName,
+  authorBio,
+  authorImage,
+  socialLinks,
+}: {
+  authorDisplayName?: string | null;
+  authorBio?: string | null;
+  authorImage?: {
+    src?: string | null;
+    alt?: string | null;
+  } | null;
+  socialLinks?: SocialLinks;
+}) {
+  const socials = socialItems(socialLinks);
+
   return (
     <section
       id="philosophy"
@@ -25,8 +52,11 @@ export default function AuthorProfile() {
           <div className="absolute -inset-4 hidden rounded-[2rem] border border-white/8 bg-white/6 blur-0 md:block" />
           <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-white/10 bg-stone-950/50">
             <Image
-              src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1800&auto=format&fit=crop"
-              alt="A traveler overlooking a quiet landscape"
+              src={
+                authorImage?.src ||
+                "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1800&auto=format&fit=crop"
+              }
+              alt={authorImage?.alt || "A traveler overlooking a quiet landscape"}
               fill
               sizes="(min-width: 1280px) 40vw, 100vw"
               className="object-cover object-center"
@@ -43,16 +73,14 @@ export default function AuthorProfile() {
           </p>
 
           <h2 className="mt-5 text-balance font-serif text-[clamp(2.7rem,5vw,4.9rem)] leading-[0.96] tracking-tight text-stone-50">
-            Raised close to the hills of Far Western Nepal, Traveller&apos;s
-            Diary studies the world through roads, weather, food, silence, and
-            movement.
+            {authorDisplayName
+              ? `${authorDisplayName} is building Traveller's Diary from the hills of Far Western Nepal.`
+              : "Raised close to the hills of Far Western Nepal, Traveller's Diary studies the world through roads, weather, food, silence, and movement."}
           </h2>
 
           <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-stone-200/78 md:text-lg">
-            This is the beginning of a serious travel creator brand: a place
-            for stories, photo journals, and destination notes shaped by a
-            young woman who grew up around mountains and is studying travel and
-            tourism with a storyteller&apos;s eye.
+            {authorBio ||
+              "This is the beginning of a serious travel creator brand: a place for stories, photo journals, and destination notes shaped by a young woman who grew up around mountains and is studying travel and tourism with a storyteller's eye."}
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -104,17 +132,19 @@ export default function AuthorProfile() {
             </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-stone-100/78 transition-colors duration-300 hover:bg-white/10"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+          {socials.length > 0 ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {socials.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-stone-100/78 transition-colors duration-300 hover:bg-white/10"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

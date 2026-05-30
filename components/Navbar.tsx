@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
@@ -12,9 +12,34 @@ const navItems = [
   { label: "Philosophy", href: "#philosophy" },
 ];
 
-export default function Navbar() {
+type SocialLinks = {
+  facebookUrl?: string | null;
+  instagramUrl?: string | null;
+  youtubeUrl?: string | null;
+};
+
+function socialItems(socialLinks?: SocialLinks) {
+  return [
+    socialLinks?.facebookUrl
+      ? { label: "Facebook", href: socialLinks.facebookUrl }
+      : null,
+    socialLinks?.instagramUrl
+      ? { label: "Instagram", href: socialLinks.instagramUrl }
+      : null,
+    socialLinks?.youtubeUrl ? { label: "YouTube", href: socialLinks.youtubeUrl } : null,
+  ].filter(Boolean) as Array<{ label: string; href: string }>;
+}
+
+export default function Navbar({
+  brandName = "Traveller's Diary",
+  socialLinks,
+}: {
+  brandName?: string;
+  socialLinks?: SocialLinks;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const socials = useMemo(() => socialItems(socialLinks), [socialLinks]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -66,7 +91,7 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             <span className="font-serif text-xl tracking-[0.18em] text-stone-50 transition-colors group-hover:text-amber-100 sm:text-2xl">
-              Traveller&apos;s Diary
+              {brandName}
             </span>
             <span className="hidden rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-stone-200/72 md:inline-flex">
               Slow travel journal
@@ -85,6 +110,18 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {socials.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="rounded-full border border-white/10 bg-white/6 px-3 py-2 text-[0.68rem] uppercase tracking-[0.2em] text-stone-100/72 transition-colors duration-300 hover:bg-white/12"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
 
           <button
             type="button"
@@ -109,7 +146,7 @@ export default function Navbar() {
       >
         <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/6 p-5">
           <p className="text-xs uppercase tracking-[0.3em] text-stone-200/55">
-            Traveller&apos;s Diary
+            {brandName}
           </p>
           <p className="mt-3 max-w-sm text-sm leading-7 text-stone-200/82">
             Slow routes, measured light, and the places that stay with you long
@@ -130,6 +167,21 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
+
+        {socials.length > 0 ? (
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            {socials.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="rounded-full border border-white/10 bg-white/6 px-3 py-3 text-center text-[0.7rem] uppercase tracking-[0.2em] text-stone-100/72"
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
     </>
   );

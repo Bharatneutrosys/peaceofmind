@@ -12,11 +12,19 @@ type HeroMetric = {
 
 export default function Hero({
   image,
+  brandName = "Traveller's Diary",
+  eyebrow = "Born in the hills of Far Western Nepal",
+  headline = "A cinematic travel diary shaped by mountain roads, long horizons, and quiet discovery.",
+  subheading = "Stories from Nepal and beyond, told with the patience of a travel notebook and the polish of an editorial brand.",
   location = "Far Western Nepal",
   season = "Nepal • South Asia • Beyond",
   metrics = [],
 }: {
   image?: { src: string; alt: string } | null;
+  brandName?: string;
+  eyebrow?: string;
+  headline?: string;
+  subheading?: string;
   location?: string;
   season?: string;
   metrics?: HeroMetric[];
@@ -81,22 +89,20 @@ export default function Hero({
           <div className="max-w-4xl">
             <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-[0.68rem] uppercase tracking-[0.32em] text-stone-100/78 backdrop-blur-md">
               <Sparkles className="h-3.5 w-3.5 text-amber-100" />
-              Traveller&apos;s Diary
+              {brandName}
             </p>
 
             <p className="mb-5 flex items-center gap-2 text-xs uppercase tracking-[0.34em] text-stone-200/68">
               <span className="h-px w-8 bg-white/30" />
-              Born in the hills of Far Western Nepal
+              {eyebrow}
             </p>
 
             <h1 className="font-serif text-[clamp(3.4rem,8.2vw,8rem)] leading-[0.9] tracking-tight text-balance text-stone-50 drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
-              A cinematic travel diary shaped by mountain roads, long horizons,
-              and quiet discovery.
+              {headline}
             </h1>
 
             <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-stone-100/82 sm:text-lg">
-              Stories from Nepal and beyond, told with the patience of a travel
-              notebook and the polish of an editorial brand.
+              {subheading}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
