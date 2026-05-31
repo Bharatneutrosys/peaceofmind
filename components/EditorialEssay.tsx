@@ -74,7 +74,7 @@ function resolveImageUrl(source?: SanityImageSource | null, width = 1600) {
   return source.asset?.url ?? "";
 }
 
-const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
+export const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
   block: {
     normal: ({ children }) => (
       <p className="max-w-3xl text-pretty text-[1.04rem] leading-8 text-stone-200/86 md:text-[1.08rem] md:leading-9">

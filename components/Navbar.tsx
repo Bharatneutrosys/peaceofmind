@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "Destinations", href: "#destinations" },
-  { label: "Journal", href: "#journal" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Videos", href: "#videos" },
-  { label: "Philosophy", href: "#philosophy" },
+  { label: "Home", href: "/" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Journal", href: "/journal" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Videos", href: "/videos" },
+  { label: "About", href: "/about" },
 ];
 
 type SocialLinks = {
@@ -37,9 +39,12 @@ export default function Navbar({
   brandName?: string;
   socialLinks?: SocialLinks;
 }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const socials = useMemo(() => socialItems(socialLinks), [socialLinks]);
+  const isActiveRoute = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   useEffect(() => {
     const onScroll = () => {
@@ -103,10 +108,23 @@ export default function Navbar({
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative py-2 text-[0.72rem] uppercase tracking-[0.24em] text-stone-200/72 transition-colors duration-300 hover:text-stone-50"
+                aria-current={isActiveRoute(item.href) ? "page" : undefined}
+                className={
+                  "group relative py-2 text-[0.72rem] uppercase tracking-[0.24em] transition-colors duration-300 " +
+                  (isActiveRoute(item.href)
+                    ? "text-stone-50"
+                    : "text-stone-200/72 hover:text-stone-50")
+                }
               >
                 {item.label}
-                <span className="absolute inset-x-0 -bottom-0.5 h-px scale-x-0 bg-stone-50 transition-transform duration-300 group-hover:scale-x-100" />
+                <span
+                  className={
+                    "absolute inset-x-0 -bottom-0.5 h-px bg-stone-50 transition-transform duration-300 " +
+                    (isActiveRoute(item.href)
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100")
+                  }
+                />
               </Link>
             ))}
           </nav>

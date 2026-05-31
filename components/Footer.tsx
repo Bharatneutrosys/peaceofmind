@@ -34,11 +34,11 @@ export default function Footer({
   const closingLine = tagline || shortDescription || "Built for journeys that deserve their own light.";
 
   const footerLinks = [
-    { label: "Destinations", href: "#destinations" },
-    { label: "Journal", href: "#journal" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "Videos", href: "#videos" },
-    { label: "Philosophy", href: "#philosophy" },
+    { label: "Destinations", href: "/destinations" },
+    { label: "Journal", href: "/journal" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "Videos", href: "/videos" },
+    { label: "About", href: "/about" },
   ];
 
   return (

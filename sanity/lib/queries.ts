@@ -43,6 +43,8 @@ export const getCategoriesQuery = groq`
   }
 `;
 
+export const getAllCategoriesQuery = getCategoriesQuery;
+
 export const getFeaturedCategoriesQuery = groq`
   *[_type == "category" && featured == true] | order(coalesce(order, 9999) asc, title asc) {
     _id,
@@ -72,6 +74,33 @@ export const getDestinationsQuery = groq`
       title,
       "slug": slug.current,
       description,
+      featured,
+      order,
+      coverImage { ${imageFields} }
+    },
+    coverImage { ${imageFields} }
+  }
+`;
+
+export const getAllDestinationsQuery = getDestinationsQuery;
+
+export const getDestinationBySlugQuery = groq`
+  *[_type == "destination" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    region,
+    description,
+    shortIntro,
+    country,
+    featured,
+    order,
+    category->{
+      _id,
+      title,
+      "slug": slug.current,
+      description,
+      regionLabel,
       featured,
       order,
       coverImage { ${imageFields} }
@@ -182,6 +211,69 @@ export const getEssaysQuery = groq`
   }
 `;
 
+export const getAllEssaysQuery = getEssaysQuery;
+
+export const getEssayBySlugQuery = groq`
+  *[_type == "essay" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    featured,
+    estimatedReadTime,
+    tags,
+    publishedAt,
+    coverImage { ${imageFields} },
+    date,
+    "destination": destination->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    "category": category->{
+      _id,
+      title,
+      "slug": slug.current,
+      description,
+      regionLabel,
+      featured,
+      order,
+      coverImage { ${imageFields} }
+    },
+    body
+  }
+`;
+
+export const getRelatedEssaysByDestinationQuery = groq`
+  *[_type == "essay" && destination._ref == $destinationId] | order(featured desc, coalesce(publishedAt, date) desc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    featured,
+    estimatedReadTime,
+    tags,
+    publishedAt,
+    coverImage { ${imageFields} },
+    date,
+    "destination": destination->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    "category": category->{
+      _id,
+      title,
+      "slug": slug.current,
+      description,
+      regionLabel,
+      featured,
+      order,
+      coverImage { ${imageFields} }
+    }
+  }
+`;
+
 export const getLatestPhotoJournalsQuery = groq`
   *[_type == "photoJournal"] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) [0...4] {
     _id,
@@ -278,6 +370,45 @@ export const getPhotoJournalsQuery = groq`
   }
 `;
 
+export const getAllPhotoJournalsQuery = getPhotoJournalsQuery;
+
+export const getRelatedPhotoJournalsByDestinationQuery = groq`
+  *[_type == "photoJournal" && destination._ref == $destinationId] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
+    _id,
+    title,
+    excerpt,
+    featured,
+    tags,
+    publishedAt,
+    "destination": destination->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    "category": category->{
+      _id,
+      title,
+      "slug": slug.current,
+      description,
+      regionLabel,
+      featured,
+      order,
+      coverImage { ${imageFields} }
+    },
+    coverImage { ${imageFields} },
+    gallery[] {
+      _key,
+      asset,
+      "url": asset->url,
+      alt,
+      caption,
+      hotspot,
+      crop
+    },
+    featuredVideoUrl
+  }
+`;
+
 export const getGalleryImagesQuery = groq`
   *[_type == "photoJournal"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
@@ -297,6 +428,29 @@ export const getGalleryImagesQuery = groq`
 
 export const getFeaturedVideoQuery = groq`
   *[_type == "video" && featured == true] | order(coalesce(publishedAt, _createdAt) desc, title asc) [0] {
+    _id,
+    title,
+    description,
+    youtubeUrl,
+    featured,
+    publishedAt,
+    "slug": slug.current,
+    thumbnail { ${imageFields} },
+    destination->{
+      _id,
+      title,
+      "slug": slug.current
+    },
+    category->{
+      _id,
+      title,
+      "slug": slug.current
+    }
+  }
+`;
+
+export const getAllVideosQuery = groq`
+  *[_type == "video"] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     description,

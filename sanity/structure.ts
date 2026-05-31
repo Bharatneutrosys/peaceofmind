@@ -5,12 +5,20 @@ export const structure: StructureResolver = (S) =>
     .title("Traveller's Diary")
     .items([
       S.listItem()
-        .title('Site Settings')
+        .title('Site Setup')
         .child(
-          S.document()
-            .schemaType('siteSettings')
-            .documentId('siteSettings')
-            .title('Site Settings'),
+          S.list()
+            .title('Site Setup')
+            .items([
+              S.listItem()
+                .title('Site Settings')
+                .child(
+                  S.document()
+                    .schemaType('siteSettings')
+                    .documentId('siteSettings')
+                    .title('Site Settings'),
+                ),
+            ]),
         ),
       S.divider(),
       S.listItem()
