@@ -4,6 +4,43 @@ export const essay = defineType({
   name: 'essay',
   title: 'Essay',
   type: 'document',
+  preview: {
+    select: {
+      title: 'title',
+      destination: 'destination.title',
+      category: 'category.title',
+      date: 'date',
+      publishedAt: 'publishedAt',
+      media: 'coverImage',
+      featured: 'featured',
+    },
+    prepare(selection) {
+      const {
+        title,
+        destination,
+        category,
+        date,
+        publishedAt,
+        featured,
+      } = selection as {
+        title?: string;
+        destination?: string;
+        category?: string;
+        date?: string;
+        publishedAt?: string;
+        featured?: boolean;
+      };
+
+      const when = publishedAt || date;
+
+      return {
+        title: title || 'Untitled essay',
+        subtitle:
+          [destination, category, when && new Date(when).getFullYear()].filter(Boolean).join(' • ') ||
+          (featured ? 'Featured travel story' : 'Travel story'),
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'title',

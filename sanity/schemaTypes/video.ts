@@ -4,6 +4,39 @@ export const video = defineType({
   name: 'video',
   title: 'Video',
   type: 'document',
+  preview: {
+    select: {
+      title: 'title',
+      destination: 'destination.title',
+      category: 'category.title',
+      publishedAt: 'publishedAt',
+      media: 'thumbnail',
+      featured: 'featured',
+    },
+    prepare(selection) {
+      const {
+        title,
+        destination,
+        category,
+        publishedAt,
+        featured,
+      } = selection as {
+        title?: string;
+        destination?: string;
+        category?: string;
+        publishedAt?: string;
+        featured?: boolean;
+      };
+
+      return {
+        title: title || 'Untitled video',
+        subtitle:
+          [destination, category, publishedAt && new Date(publishedAt).getFullYear()]
+            .filter(Boolean)
+            .join(' • ') || (featured ? 'Featured video' : 'Video'),
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'title',

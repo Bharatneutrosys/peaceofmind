@@ -4,6 +4,27 @@ export const category = defineType({
   name: 'category',
   title: 'Category',
   type: 'document',
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'regionLabel',
+      media: 'coverImage',
+      featured: 'featured',
+    },
+    prepare(selection) {
+      const { title, subtitle, featured } = selection as {
+        title?: string;
+        subtitle?: string;
+        featured?: boolean;
+      };
+
+      return {
+        title: title || 'Untitled category',
+        subtitle:
+          subtitle || (featured ? 'Featured on homepage' : 'Travel category'),
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'title',

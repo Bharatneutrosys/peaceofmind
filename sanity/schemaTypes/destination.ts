@@ -4,6 +4,40 @@ export const destination = defineType({
   name: 'destination',
   title: 'Destination',
   type: 'document',
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'country',
+      region: 'region',
+      category: 'category.title',
+      media: 'coverImage',
+      featured: 'featured',
+    },
+    prepare(selection) {
+      const {
+        title,
+        subtitle,
+        region,
+        category,
+        featured,
+      } = selection as {
+        title?: string;
+        subtitle?: string;
+        region?: string;
+        category?: string;
+        featured?: boolean;
+      };
+
+      return {
+        title: title || 'Untitled destination',
+        subtitle:
+          subtitle ||
+          region ||
+          category ||
+          (featured ? 'Featured destination' : 'Destination'),
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'title',

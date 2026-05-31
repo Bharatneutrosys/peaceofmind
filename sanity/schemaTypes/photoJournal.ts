@@ -4,6 +4,39 @@ export const photoJournal = defineType({
   name: 'photoJournal',
   title: 'Photo Journal',
   type: 'document',
+  preview: {
+    select: {
+      title: 'title',
+      destination: 'destination.title',
+      category: 'category.title',
+      publishedAt: 'publishedAt',
+      media: 'coverImage',
+      featured: 'featured',
+    },
+    prepare(selection) {
+      const {
+        title,
+        destination,
+        category,
+        publishedAt,
+        featured,
+      } = selection as {
+        title?: string;
+        destination?: string;
+        category?: string;
+        publishedAt?: string;
+        featured?: boolean;
+      };
+
+      return {
+        title: title || 'Untitled photo journal',
+        subtitle:
+          [destination, category, publishedAt && new Date(publishedAt).getFullYear()]
+            .filter(Boolean)
+            .join(' • ') || (featured ? 'Featured photo journal' : 'Photo journal'),
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'title',
