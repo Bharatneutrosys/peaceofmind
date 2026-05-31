@@ -25,11 +25,15 @@ export const metadata: Metadata = {
 
 type SiteSettings = {
   brandName?: string | null;
+  subtitle?: string | null;
   tagline?: string | null;
   shortDescription?: string | null;
   facebookUrl?: string | null;
   instagramUrl?: string | null;
   youtubeUrl?: string | null;
+  youtubeFeatureTitle?: string | null;
+  youtubeFeatureDescription?: string | null;
+  youtubeFeatureUrl?: string | null;
 };
 
 export default async function RootLayout({

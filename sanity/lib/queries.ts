@@ -11,6 +11,7 @@ export const getSiteSettingsQuery = groq`
   *[_type == "siteSettings"][0]{
     _id,
     brandName,
+    subtitle,
     tagline,
     shortDescription,
     facebookUrl,
@@ -22,16 +23,20 @@ export const getSiteSettingsQuery = groq`
     authorImage { ${imageFields} },
     heroImage { ${imageFields} },
     heroHeadline,
-    heroSubheading
+    heroSubheading,
+    youtubeFeatureTitle,
+    youtubeFeatureDescription,
+    youtubeFeatureUrl
   }
 `;
 
 export const getCategoriesQuery = groq`
-  *[_type == "category"] | order(coalesce(order, 9999) asc, title asc) {
+  *[_type == "category"] | order(featured desc, coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
     description,
+    regionLabel,
     featured,
     order,
     coverImage { ${imageFields} }
@@ -44,6 +49,7 @@ export const getFeaturedCategoriesQuery = groq`
     title,
     "slug": slug.current,
     description,
+    regionLabel,
     featured,
     order,
     coverImage { ${imageFields} }
@@ -51,7 +57,7 @@ export const getFeaturedCategoriesQuery = groq`
 `;
 
 export const getDestinationsQuery = groq`
-  *[_type == "destination"] | order(coalesce(order, 9999) asc, title asc) {
+  *[_type == "destination"] | order(featured desc, coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -99,7 +105,7 @@ export const getFeaturedDestinationsQuery = groq`
 `;
 
 export const getLatestEssaysQuery = groq`
-  *[_type == "essay"] | order(date desc) [0...3] {
+  *[_type == "essay"] | order(featured desc, coalesce(publishedAt, date) desc, title asc) [0...3] {
     _id,
     title,
     "slug": slug.current,
@@ -125,7 +131,7 @@ export const getLatestEssaysQuery = groq`
 `;
 
 export const getFeaturedEssaysQuery = groq`
-  *[_type == "essay" && featured == true] | order(date desc) {
+  *[_type == "essay" && featured == true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -151,7 +157,7 @@ export const getFeaturedEssaysQuery = groq`
 `;
 
 export const getEssaysQuery = groq`
-  *[_type == "essay"] | order(date desc) {
+  *[_type == "essay"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -177,7 +183,7 @@ export const getEssaysQuery = groq`
 `;
 
 export const getLatestPhotoJournalsQuery = groq`
-  *[_type == "photoJournal"] | order(coalesce(publishedAt, _createdAt) desc) [0...4] {
+  *[_type == "photoJournal"] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) [0...4] {
     _id,
     title,
     excerpt,
@@ -209,7 +215,7 @@ export const getLatestPhotoJournalsQuery = groq`
 `;
 
 export const getFeaturedPhotoJournalsQuery = groq`
-  *[_type == "photoJournal" && featured == true] | order(coalesce(publishedAt, _createdAt) desc) {
+  *[_type == "photoJournal" && featured == true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     excerpt,
@@ -241,7 +247,7 @@ export const getFeaturedPhotoJournalsQuery = groq`
 `;
 
 export const getPhotoJournalsQuery = groq`
-  *[_type == "photoJournal"] | order(coalesce(publishedAt, _createdAt) desc) {
+  *[_type == "photoJournal"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     excerpt,
@@ -273,7 +279,7 @@ export const getPhotoJournalsQuery = groq`
 `;
 
 export const getGalleryImagesQuery = groq`
-  *[_type == "photoJournal"] | order(coalesce(publishedAt, _createdAt) desc) {
+  *[_type == "photoJournal"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     gallery[] {
@@ -290,13 +296,14 @@ export const getGalleryImagesQuery = groq`
 `;
 
 export const getFeaturedVideoQuery = groq`
-  *[_type == "video" && featured == true] | order(coalesce(publishedAt, _createdAt) desc) [0] {
+  *[_type == "video" && featured == true] | order(coalesce(publishedAt, _createdAt) desc, title asc) [0] {
     _id,
     title,
     description,
     youtubeUrl,
     featured,
     publishedAt,
+    "slug": slug.current,
     thumbnail { ${imageFields} },
     destination->{
       _id,

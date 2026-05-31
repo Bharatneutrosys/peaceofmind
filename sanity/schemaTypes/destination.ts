@@ -9,6 +9,7 @@ export const destination = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      description: 'Destination name shown on the website.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -19,6 +20,7 @@ export const destination = defineType({
         source: 'title',
         maxLength: 96,
       },
+      description: 'Auto-generated URL identifier for the destination.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -39,18 +41,20 @@ export const destination = defineType({
       title: 'Description',
       type: 'text',
       rows: 4,
-      description: 'Optional short descriptor for the destination card.',
+      description: 'Optional short description for the destination card.',
     }),
     defineField({
       name: 'shortIntro',
       title: 'Short Intro',
       type: 'text',
       rows: 3,
+      description: 'A brief introduction for the destination section.',
     }),
     defineField({
       name: 'country',
       title: 'Country',
       type: 'string',
+      description: 'Optional country name for this destination.',
     }),
     defineField({
       name: 'coverImage',
@@ -59,17 +63,20 @@ export const destination = defineType({
       options: {
         hotspot: true,
       },
+      description: 'Optional image used on destination cards.',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured',
+      title: 'Featured on Homepage',
       type: 'boolean',
       initialValue: false,
+      description: 'Turn this on if the destination should appear higher in lists.',
     }),
     defineField({
       name: 'order',
-      title: 'Order',
+      title: 'Display Order',
       type: 'number',
+      description: 'Lower numbers appear earlier in lists and sections.',
     }),
   ],
 });

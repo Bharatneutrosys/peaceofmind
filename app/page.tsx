@@ -39,6 +39,7 @@ type ImageField = {
 
 type SiteSettings = {
   brandName?: string | null;
+  subtitle?: string | null;
   tagline?: string | null;
   shortDescription?: string | null;
   facebookUrl?: string | null;
@@ -51,6 +52,9 @@ type SiteSettings = {
   heroImage?: ImageField | null;
   heroHeadline?: string | null;
   heroSubheading?: string | null;
+  youtubeFeatureTitle?: string | null;
+  youtubeFeatureDescription?: string | null;
+  youtubeFeatureUrl?: string | null;
 };
 
 type CategoryRecord = {
@@ -58,6 +62,7 @@ type CategoryRecord = {
   title: string;
   slug?: string | null;
   description?: string | null;
+  regionLabel?: string | null;
   featured?: boolean | null;
   order?: number | null;
   coverImage?: ImageField | null;
@@ -108,6 +113,7 @@ type VideoRecord = {
   title: string;
   description?: string | null;
   youtubeUrl?: string | null;
+  slug?: string | null;
   thumbnail?: ImageField | null;
   destination?: { _id: string; title: string; slug?: string | null } | null;
   category?: { _id: string; title: string; slug?: string | null } | null;
@@ -227,7 +233,26 @@ export default async function Home() {
   const storyCount = allEssays.length + allJournals.length;
   const featuredMonth = formatMonth(latestEssay?.date);
   const socialLinks = socialItems(siteSettings);
-  const featuredVideoSource = featuredVideo || (latestJournal?.featuredVideoUrl
+  const siteFeaturedVideo = siteSettings?.youtubeFeatureUrl
+    ? {
+        _id: "site-settings-featured-video",
+        title:
+          siteSettings.youtubeFeatureTitle ||
+          "A cinematic frame reserved for future travel films.",
+        description:
+          siteSettings.youtubeFeatureDescription ||
+          "A space reserved for future travel films and route stories from the official channel.",
+        youtubeUrl: siteSettings.youtubeFeatureUrl,
+        thumbnail:
+          siteSettings.heroImage ||
+          featuredJournals[0]?.coverImage ||
+          latestJournal?.coverImage ||
+          null,
+        destination: null,
+        category: null,
+      }
+    : null;
+  const featuredVideoSource = featuredVideo || siteFeaturedVideo || (latestJournal?.featuredVideoUrl
     ? {
         _id: latestJournal._id,
         title: latestJournal.title,
@@ -301,7 +326,11 @@ export default async function Home() {
             latestJournal?.title ||
             "A panoramic Himalayan landscape in Nepal",
         }}
-        eyebrow={siteSettings?.tagline || "Born in the hills of Far Western Nepal"}
+        eyebrow={
+          siteSettings?.subtitle ||
+          siteSettings?.tagline ||
+          "Born in the hills of Far Western Nepal"
+        }
         headline={
           siteSettings?.heroHeadline ||
           "A cinematic travel diary shaped by mountain roads, long horizons, and quiet discovery."
@@ -347,7 +376,7 @@ export default async function Home() {
               className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_16px_40px_rgba(0,0,0,0.16)] backdrop-blur-sm"
             >
               <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/55">
-                Category
+                {category.regionLabel || category.title}
               </p>
               <h3 className="mt-3 font-serif text-2xl text-stone-50">
                 {category.title}
@@ -359,7 +388,7 @@ export default async function Home() {
               </p>
               <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-stone-200/70">
                 <Sparkles className="h-3.5 w-3.5 text-amber-100" />
-                Admin expandable
+                Future routes
               </div>
             </article>
           ))}
@@ -472,12 +501,13 @@ export default async function Home() {
               YouTube feature
             </p>
             <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-              A cinematic frame reserved for future travel films.
+              {siteSettings?.youtubeFeatureTitle ||
+                "A cinematic frame reserved for future travel films."}
             </h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
-            This space is ready for an embedded YouTube player later, without
-            changing the structure of the homepage.
+            {siteSettings?.youtubeFeatureDescription ||
+              "This space is ready for an embedded YouTube player later, without changing the structure of the homepage."}
           </p>
         </div>
 
@@ -504,7 +534,8 @@ export default async function Home() {
                       YouTube ready
                     </p>
                     <p className="mt-3 font-serif text-2xl text-stone-50">
-                      {featuredVideoSource?.title || "Travel films, soon."}
+                      {featuredVideoSource?.title ||
+                        "Travel films, soon."}
                     </p>
                   </div>
                 </div>
@@ -518,6 +549,7 @@ export default async function Home() {
             </p>
             <p className="mt-4 text-sm leading-7 text-stone-200/76">
               {featuredVideoSource?.description ||
+                siteFeaturedVideo?.description ||
                 "A YouTube URL can be connected here later from the Sanity admin or replaced with a live iframe when the channel is ready."}
             </p>
             {featuredVideoSource?.youtubeUrl ? (
