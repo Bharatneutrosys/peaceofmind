@@ -260,7 +260,7 @@ export default async function Home() {
     {
       _id: "more-coming-soon",
       title: "More coming soon",
-      description: "Expandable from the Sanity admin panel as the archive grows.",
+      description: "Ready to expand from the Sanity admin panel as the archive grows.",
     },
   ];
 
@@ -331,7 +331,7 @@ export default async function Home() {
               Destination categories
             </p>
             <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-              The archive is being built as a map, not just a feed.
+              The archive is being built as a map of places, not just a feed.
             </h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
@@ -355,7 +355,7 @@ export default async function Home() {
               <p className="mt-3 text-sm leading-7 text-stone-200/74">
                 {"description" in category && category.description
                   ? category.description
-                  : "A category ready to expand as the archive grows."}
+                  : "A category ready to grow with the archive."}
               </p>
               <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-stone-200/70">
                 <Sparkles className="h-3.5 w-3.5 text-amber-100" />
@@ -395,7 +395,7 @@ export default async function Home() {
                   <p className="text-sm leading-7 text-stone-200/76">
                     {destination.shortIntro ||
                       destination.description ||
-                      "A destination note ready to expand as the archive grows."}
+                      "A destination note ready to deepen as more stories are added."}
                   </p>
                   <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
                     <div className="rounded-[1rem] border border-white/8 bg-stone-950/30 px-4 py-3">
@@ -427,7 +427,7 @@ export default async function Home() {
             <p className="mt-4 max-w-2xl text-base leading-8 text-stone-200/76">
               The category system is ready for future routes from the Sanity
               admin, and the homepage still reads as a finished editorial page
-              even before the archive fills in.
+              even before the archive fills out.
             </p>
           </div>
         )}
@@ -447,7 +447,7 @@ export default async function Home() {
             <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
               {storyCount > 0
                 ? `${storyCount} live pieces currently published across essays and photo journals.`
-                : "The journal is empty for now, but the layout is already ready for the next story."}
+                : "The journal is waiting for its first long-form story, and the layout is ready for it."}
             </p>
           </div>
 
@@ -572,13 +572,12 @@ export default async function Home() {
       </section>
 
       <AuthorProfile
-        authorDisplayName={siteSettings?.authorDisplayName || null}
         authorBio={siteSettings?.authorBio || null}
         authorImage={
           siteSettings?.authorImage?.asset
             ? {
                 src: resolveImageUrl(siteSettings.authorImage, 1200),
-                alt: siteSettings.authorDisplayName || "Traveller's Diary author portrait",
+                alt: "Traveller's Diary author portrait",
               }
             : null
         }

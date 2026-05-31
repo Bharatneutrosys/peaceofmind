@@ -36,7 +36,7 @@ export type EditorialEssayData = {
 };
 
 function formatDate(date?: string | null) {
-  if (!date) return "Undated dispatch";
+  if (!date) return "Undated story";
 
   try {
     return new Intl.DateTimeFormat("en-US", {
@@ -159,7 +159,7 @@ export default function EditorialEssay({
             Journal
           </p>
           <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-            The next dispatch is still forming.
+            The next story is still forming.
           </h2>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
             The archive is waiting for its next long-form story. Until then,
@@ -231,8 +231,8 @@ export default function EditorialEssay({
               </h2>
               <p className="mt-5 max-w-2xl text-pretty text-base leading-8 text-stone-200/76 md:text-lg">
                 {essay.destination
-                  ? `Written from ${essay.destination}, this dispatch lingers on the details that turn movement into memory.`
-                  : "Written in the language of slow movement, this dispatch lingers on the details that turn travel into memory."}
+                  ? `Written from ${essay.destination}, this story lingers on the details that turn movement into memory.`
+                  : "Written in the language of slow movement, this story lingers on the details that turn travel into memory."}
               </p>
             </div>
 
@@ -254,8 +254,8 @@ export default function EditorialEssay({
                 make a journey feel personal.
               </p>
               <p>
-                The full archive stays light and easy to scan, with generous
-                spacing and restrained motion for reading on any screen.
+                The full archive stays easy to scan, with generous spacing and
+                restrained motion for reading on any screen.
               </p>
             </div>
 

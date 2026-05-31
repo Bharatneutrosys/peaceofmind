@@ -72,7 +72,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
             Gallery
           </p>
           <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-            The visual archive is waiting for its next frame.
+            The visual archive is waiting for its next chapter.
           </h2>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
             Once the journal fills out, this section becomes a cinematic wall of
@@ -95,7 +95,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
           </h2>
         </div>
         <p className="max-w-xl text-sm leading-7 text-stone-200/68">
-          A quiet grid of moments from the archive, tuned for fast scanning on
+          A quiet grid of moments from the archive, tuned for quick scanning on
           mobile and a cinematic rhythm on larger screens.
         </p>
       </div>

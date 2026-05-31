@@ -57,12 +57,12 @@ export default function Hero({
             reduceMotion
               ? undefined
               : {
-                  x: ["-3.5%", "3.5%", "-3.5%"],
-                  scale: [1.04, 1.1, 1.04],
+                  x: ["-8%", "5%", "-8%"],
+                  scale: [1.03, 1.08, 1.03],
                 }
           }
           transition={{
-            duration: 24,
+            duration: 22,
             ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "mirror",
