@@ -29,23 +29,23 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.documentTypeListItem('category').title('Categories'),
               S.documentTypeListItem('destination').title('Destinations'),
-              S.documentTypeListItem('essay').title('Essays / Travel Stories'),
+              S.documentTypeListItem('essay').title('Journal Stories'),
               S.documentTypeListItem('photoJournal').title('Photo Journals'),
               S.documentTypeListItem('video').title('Videos'),
             ]),
         ),
       S.divider(),
       S.listItem()
-        .title('Homepage Featured Content')
+        .title('Featured Homepage Content')
         .child(
           S.list()
-            .title('Homepage Featured Content')
+            .title('Featured Homepage Content')
             .items([
               S.listItem()
-                .title('Featured Essays')
+                .title('Featured Journal Stories')
                 .child(
                   S.documentList()
-                    .title('Featured Essays')
+                    .title('Featured Journal Stories')
                     .schemaType('essay')
                     .filter('*[_type == "essay" && featured == true] | order(coalesce(publishedAt, date) desc, title asc)'),
                 ),

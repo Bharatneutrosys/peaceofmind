@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 import { client } from "@/sanity/lib/client";
 import { getSiteSettingsQuery } from "@/sanity/lib/queries";
 import { getSiteUrl } from "@/lib/seo";
@@ -69,27 +67,18 @@ export default async function RootLayout({
       className={inter.variable + " " + playfair.variable + " h-full antialiased"}
     >
       <body className="font-sans min-h-full flex flex-col bg-stone-950 text-stone-100">
-        <SmoothScrollProvider>
-          <Navbar
-            brandName={brandName}
-            socialLinks={{
-              facebookUrl: siteSettings?.facebookUrl || null,
-              instagramUrl: siteSettings?.instagramUrl || null,
-              youtubeUrl: siteSettings?.youtubeUrl || null,
-            }}
-          />
-          <div className="flex-grow flex flex-col">{children}</div>
-          <Footer
-            brandName={brandName}
-            tagline={siteSettings?.tagline || null}
-            shortDescription={siteSettings?.shortDescription || null}
-            socialLinks={{
-              facebookUrl: siteSettings?.facebookUrl || null,
-              instagramUrl: siteSettings?.instagramUrl || null,
-              youtubeUrl: siteSettings?.youtubeUrl || null,
-            }}
-          />
-        </SmoothScrollProvider>
+        <SiteChrome
+          brandName={brandName}
+          tagline={siteSettings?.tagline || null}
+          shortDescription={siteSettings?.shortDescription || null}
+          socialLinks={{
+            facebookUrl: siteSettings?.facebookUrl || null,
+            instagramUrl: siteSettings?.instagramUrl || null,
+            youtubeUrl: siteSettings?.youtubeUrl || null,
+          }}
+        >
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

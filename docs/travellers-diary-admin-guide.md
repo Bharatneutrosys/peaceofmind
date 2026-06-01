@@ -2,6 +2,11 @@
 
 Use this guide when updating the website in Sanity Studio.
 
+## Open the admin panel
+
+Visit `/studio` in the browser and sign in with the authorized Sanity account.
+The sidebar is organized so the owner can update content without touching code.
+
 ## 1. Start with Site Settings
 
 Open **Site Settings** first. This controls the brand and homepage.
@@ -150,4 +155,3 @@ Good practice:
 - Avoid fake claims or over-promising language
 - Write in a calm, premium voice
 - Keep social URLs empty until the official pages are ready
-
