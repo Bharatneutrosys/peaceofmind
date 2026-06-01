@@ -47,7 +47,12 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title('Featured Journal Stories')
                     .schemaType('essay')
-                    .filter('*[_type == "essay" && featured == true] | order(coalesce(publishedAt, date) desc, title asc)'),
+                    .filter('_type == "essay" && featured == true')
+                    .defaultOrdering([
+                      {field: 'publishedAt', direction: 'desc'},
+                      {field: 'date', direction: 'desc'},
+                      {field: 'title', direction: 'asc'},
+                    ]),
                 ),
               S.listItem()
                 .title('Featured Destinations')
@@ -55,7 +60,11 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title('Featured Destinations')
                     .schemaType('destination')
-                    .filter('*[_type == "destination" && featured == true] | order(coalesce(order, 9999) asc, title asc)'),
+                    .filter('_type == "destination" && featured == true')
+                    .defaultOrdering([
+                      {field: 'order', direction: 'asc'},
+                      {field: 'title', direction: 'asc'},
+                    ]),
                 ),
               S.listItem()
                 .title('Featured Videos')
@@ -63,7 +72,12 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title('Featured Videos')
                     .schemaType('video')
-                    .filter('*[_type == "video" && featured == true] | order(coalesce(publishedAt, _createdAt) desc, title asc)'),
+                    .filter('_type == "video" && featured == true')
+                    .defaultOrdering([
+                      {field: 'publishedAt', direction: 'desc'},
+                      {field: '_createdAt', direction: 'desc'},
+                      {field: 'title', direction: 'asc'},
+                    ]),
                 ),
             ]),
         ),

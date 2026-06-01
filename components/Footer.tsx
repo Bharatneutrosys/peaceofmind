@@ -100,7 +100,15 @@ export default function Footer({
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/8 pt-6 text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/50 sm:flex-row sm:items-center sm:justify-between">
           <span>&copy; {new Date().getFullYear()} {brandName}</span>
-          <span>Built for journeys that deserve their own light.</span>
+          <div className="flex flex-wrap items-center gap-4">
+            <span>Built for journeys that deserve their own light.</span>
+            <Link
+              href="/studio"
+              className="text-[0.62rem] uppercase tracking-[0.34em] text-stone-300/35 transition-colors duration-300 hover:text-stone-100/70"
+            >
+              Studio
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

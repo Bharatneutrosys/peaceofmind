@@ -7,6 +7,10 @@ Use this guide when updating the website in Sanity Studio.
 Visit `/studio` in the browser and sign in with the authorized Sanity account.
 The sidebar is organized so the owner can update content without touching code.
 
+Local admin URL: `http://localhost:3000/studio`
+
+On Vercel, the direct URL is `https://peaceofmind-steel.vercel.app/studio`.
+
 ## 1. Start with Site Settings
 
 Open **Site Settings** first. This controls the brand and homepage.
@@ -155,3 +159,20 @@ Good practice:
 - Avoid fake claims or over-promising language
 - Write in a calm, premium voice
 - Keep social URLs empty until the official pages are ready
+
+## 11. Deployment checklist
+
+- Add the Sanity environment variables in Vercel Project Settings
+- Add your Vercel domain to Sanity CORS origins
+- Redeploy after changing environment variables
+- Visit `/studio` and sign in with the authorized Sanity account
+
+If the Studio opens but content does not load, check the dataset, project ID, and CORS settings first.
+
+Required environment variables:
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID=`
+- `NEXT_PUBLIC_SANITY_DATASET=`
+- `NEXT_PUBLIC_SANITY_API_VERSION=`
+
+If the dataset is private or preview access is needed, a Sanity token may also be required in the server environment. Do not expose it in the public frontend.
