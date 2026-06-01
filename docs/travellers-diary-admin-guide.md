@@ -4,6 +4,8 @@ Use this guide when updating the website in Sanity Studio.
 
 ## Open the admin panel
 
+You can also open **Admin** from the main website navbar, which takes you to the Studio.
+
 Visit `/studio` in the browser and sign in with the authorized Sanity account.
 The sidebar is organized so the owner can update content without touching code.
 
