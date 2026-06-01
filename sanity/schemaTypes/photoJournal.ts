@@ -11,7 +11,9 @@ export const photoJournal = defineType({
       category: 'category.title',
       publishedAt: 'publishedAt',
       media: 'coverImage',
+      galleryThumb: 'gallery.0',
       featured: 'featured',
+      excerpt: 'excerpt',
     },
     prepare(selection) {
       const {
@@ -20,20 +22,24 @@ export const photoJournal = defineType({
         category,
         publishedAt,
         featured,
+        excerpt,
       } = selection as {
         title?: string;
         destination?: string;
         category?: string;
         publishedAt?: string;
         featured?: boolean;
+        excerpt?: string;
       };
 
       return {
         title: title || 'Untitled photo journal',
         subtitle:
+          excerpt ||
           [destination, category, publishedAt && new Date(publishedAt).getFullYear()]
             .filter(Boolean)
-            .join(' • ') || (featured ? 'Featured photo journal' : 'Photo journal'),
+            .join(' • ') || (featured ? 'Show on homepage' : 'Photo journal'),
+        media: selection.media || selection.galleryThumb,
       };
     },
   },
@@ -47,7 +53,7 @@ export const photoJournal = defineType({
     }),
     defineField({
       name: 'destination',
-      title: 'Destination',
+      title: 'Related Destination',
       type: 'reference',
       to: [{ type: 'destination' }],
       description: 'Reference to the place featured in this photo journal.',
@@ -55,7 +61,7 @@ export const photoJournal = defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Travel Region',
       type: 'reference',
       to: [{ type: 'category' }],
       description: 'Optional category reference for grouping photo journals.',
@@ -72,7 +78,7 @@ export const photoJournal = defineType({
     }),
     defineField({
       name: 'gallery',
-      title: 'Gallery',
+      title: 'Gallery Images',
       type: 'array',
       description: 'Add one or more images for the gallery grid.',
       of: [
@@ -100,33 +106,33 @@ export const photoJournal = defineType({
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'Short Introduction',
       type: 'text',
       rows: 4,
       description: 'Short summary used on the homepage and archive cards.',
     }),
     defineField({
       name: 'featuredVideoUrl',
-      title: 'Featured Video URL',
+      title: 'Featured Video Link',
       type: 'url',
       description: 'Optional YouTube or video URL for future homepage embedding.',
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Published Date',
       type: 'datetime',
       description: 'Optional publishing date for sorting and display.',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured on Homepage',
+      title: 'Show on Homepage',
       type: 'boolean',
       initialValue: false,
       description: 'Turn this on if the journal should appear first on the homepage.',
     }),
     defineField({
       name: 'tags',
-      title: 'Tags',
+      title: 'Tags / Keywords',
       type: 'array',
       of: [{ type: 'string' }],
       description: 'Optional keywords for the photo journal.',

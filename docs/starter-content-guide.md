@@ -1,19 +1,22 @@
-# Traveller’s Diary Starter Content Guide
+# Traveller's Diary Starter Content Guide
 
-Use this if you want to add the first content manually in Sanity Studio before running the seed script.
+Use this if you want to seed the first content manually in Sanity Studio.
+
+For a full admin workflow reference, see `docs/travellers-diary-admin-guide.md`.
 
 ## 1. Site Settings
 
 Create one `Site Settings` document.
 
 - Brand Name: `Traveller's Diary`
-- Secondary Name / Subtitle: `A young travel diary from the hills of Nepal to the wider world`
+- Secondary Brand Line: `A young travel diary from the hills of Nepal to the wider world`
 - Tagline: `A young travel diary from the hills of Nepal to the wider world`
 - Short Homepage Introduction: `Stories, photos, and slow journeys shaped by mountains, people, culture, and memory.`
 - Hero Headline: `Travel begins where the road starts to feel personal`
 - Hero Subheading: `Stories, photos, and slow journeys shaped by mountains, people, culture, and memory.`
-- Author Bio: `Traveller’s Diary is the reflective travel journal of a young woman from Far Western Nepal who grew up near hills and mountains and is studying travel and tourism.`
+- Author Bio: `Traveller's Diary is the reflective travel journal of a young woman from Far Western Nepal who grew up near hills and mountains and is studying travel and tourism.`
 - Social URLs: leave blank until the official pages are ready
+- Featured Video Link: leave blank until the official channel is ready
 - YouTube Feature Title: `A cinematic frame reserved for future travel films.`
 - YouTube Feature Description: `The official channel space is ready for future films, route stories, and slower documentary pieces.`
 
@@ -25,7 +28,7 @@ Create three `Category` documents:
 - South Asia
 - Europe
 
-Set `Featured on Homepage` on all three if you want them shown first.
+Turn on `Show on Homepage` if you want them shown first.
 
 ## 3. Destinations
 
@@ -37,17 +40,17 @@ Create five `Destination` documents:
 - South Asia Journey
 - Europe Notes
 
-Link them to the matching category.
+Link them to the matching category when possible.
 
 ## 4. Essays / Travel Stories
 
 Create one starter essay:
 
 - Title: `First Light on the Road`
-- Excerpt: `A short starter story about learning to read roads, weather, and silence with care.`
+- Short Introduction: `A short starter story about learning to read roads, weather, and silence with care.`
 - Destination: `Far Western Nepal`
-- Category: `Nepal`
-- Featured on Homepage: on
+- Travel Region: `Nepal`
+- Show on Homepage: on
 - Body: use two or three short paragraphs about the beginning of the diary, not a fake travel claim
 
 ## 5. Photo Journals
@@ -55,20 +58,20 @@ Create one starter essay:
 Create one starter photo journal:
 
 - Title: `Mountain Notes`
-- Excerpt: `A placeholder journal for mountain weather, roadside stops, and quiet frames from home territory.`
-- Destination: `Far Western Nepal`
-- Category: `Nepal`
-- Featured on Homepage: on
-- Gallery: add at least one image when ready
+- Short Introduction: `A placeholder journal for mountain weather, roadside stops, and quiet frames from home territory.`
+- Related Destination: `Far Western Nepal`
+- Travel Region: `Nepal`
+- Show on Homepage: on
+- Gallery Images: add at least one image when ready
 
 ## 6. Videos
 
 Create one starter video:
 
 - Title: `Channel Opening Film`
-- Description: `A placeholder entry for the first YouTube story once the channel is ready.`
-- Featured on Homepage: on
-- YouTube URL: leave blank until the official channel is ready
+- Short Description: `A placeholder entry for the first YouTube story once the channel is ready.`
+- Show on Homepage: on
+- YouTube Video URL: leave blank until the official channel is ready
 
 ## 7. Recommended order
 
@@ -94,3 +97,4 @@ Required environment variables:
 - `SANITY_API_TOKEN`
 
 The script is guarded against missing environment variables and will not write anything unless the required values are present.
+

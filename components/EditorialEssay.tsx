@@ -25,6 +25,11 @@ type EssayPortableTextImage = {
   caption?: string | null;
 };
 
+type EssayPortableTextLink = {
+  href?: string | null;
+  blank?: boolean | null;
+};
+
 type EssayPortableTextValue = PortableTextBlock | EssayPortableTextImage;
 
 export type EditorialEssayData = {
@@ -75,6 +80,30 @@ function resolveImageUrl(source?: SanityImageSource | null, width = 1600) {
 }
 
 export const portableTextComponents: PortableTextComponents<EssayPortableTextValue> = {
+  marks: {
+    link: ({ children, value }) => {
+      const link = value as EssayPortableTextLink | undefined;
+
+      if (!link?.href) {
+        return <span>{children}</span>;
+      }
+
+      return (
+        <a
+          href={link.href}
+          target={link.blank ? "_blank" : undefined}
+          rel={link.blank ? "noreferrer" : undefined}
+          className="text-amber-100 underline decoration-amber-100/40 underline-offset-4 transition-colors duration-300 hover:text-amber-50 hover:decoration-amber-50"
+        >
+          {children}
+        </a>
+      );
+    },
+    strong: ({ children }) => (
+      <strong className="font-semibold text-stone-50">{children}</strong>
+    ),
+    em: ({ children }) => <em className="italic text-stone-100/90">{children}</em>,
+  },
   block: {
     normal: ({ children }) => (
       <p className="max-w-3xl text-pretty text-[1.04rem] leading-8 text-stone-200/86 md:text-[1.08rem] md:leading-9">
@@ -188,6 +217,7 @@ export default function EditorialEssay({
   const formattedDate = formatDate(essay.date);
   const readTime = estimateReadTime(essay.body);
   const coverSrc = resolveImageUrl(essay.coverImage, 1800);
+  const hasBody = Boolean(essay.body?.length);
 
   return (
     <section
@@ -237,10 +267,23 @@ export default function EditorialEssay({
             </div>
 
             <div className="mt-10 border-t border-white/10 pt-8">
-              <PortableText
-                value={(essay.body ?? []) as EssayPortableTextValue[]}
-                components={portableTextComponents}
-              />
+              {hasBody ? (
+                <div className="space-y-6">
+                  <PortableText
+                    value={(essay.body ?? []) as EssayPortableTextValue[]}
+                    components={portableTextComponents}
+                  />
+                </div>
+              ) : (
+                <div className="max-w-3xl rounded-[1.5rem] border border-white/10 bg-white/4 px-6 py-8">
+                  <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+                    Story body
+                  </p>
+                  <p className="mt-4 text-pretty text-base leading-8 text-stone-200/78">
+                    This story is waiting for its full travel text. The page is ready, and the article body can be added from Sanity whenever the essay is published.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

@@ -12,6 +12,7 @@ export const video = defineType({
       publishedAt: 'publishedAt',
       media: 'thumbnail',
       featured: 'featured',
+      description: 'description',
     },
     prepare(selection) {
       const {
@@ -20,20 +21,25 @@ export const video = defineType({
         category,
         publishedAt,
         featured,
+        description,
       } = selection as {
         title?: string;
         destination?: string;
         category?: string;
         publishedAt?: string;
         featured?: boolean;
+        description?: string;
       };
+
+      const when = publishedAt ? new Date(publishedAt).getFullYear() : null;
 
       return {
         title: title || 'Untitled video',
         subtitle:
-          [destination, category, publishedAt && new Date(publishedAt).getFullYear()]
-            .filter(Boolean)
-            .join(' • ') || (featured ? 'Featured video' : 'Video'),
+          description ||
+          [destination, category, when].filter(Boolean).join(' • ') ||
+          (featured ? 'Show on homepage' : 'Video'),
+        media: selection.media,
       };
     },
   },
@@ -58,21 +64,21 @@ export const video = defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Short Description',
       type: 'text',
       rows: 4,
       description: 'Optional summary shown in the video feature.',
     }),
     defineField({
       name: 'youtubeUrl',
-      title: 'YouTube URL',
+      title: 'YouTube Video URL',
       type: 'url',
       description: 'Paste a watch or embed-friendly YouTube URL here.',
       validation: (Rule) => Rule.uri({ allowRelative: false, scheme: ['http', 'https'] }),
     }),
     defineField({
       name: 'thumbnail',
-      title: 'Thumbnail',
+      title: 'Thumbnail Image',
       type: 'image',
       options: {
         hotspot: true,
@@ -81,28 +87,28 @@ export const video = defineType({
     }),
     defineField({
       name: 'destination',
-      title: 'Destination',
+      title: 'Related Destination',
       type: 'reference',
       to: [{ type: 'destination' }],
       description: 'Optional destination connected to this video.',
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Travel Region',
       type: 'reference',
       to: [{ type: 'category' }],
       description: 'Optional category connected to this video.',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured on Homepage',
+      title: 'Show on Homepage',
       type: 'boolean',
       initialValue: false,
       description: 'Turn this on if the video should appear first on the homepage.',
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Published Date',
       type: 'datetime',
       description: 'Optional publish date used for sorting.',
     }),

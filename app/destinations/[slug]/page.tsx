@@ -13,6 +13,7 @@ import {
   getSiteSettingsQuery,
 } from "@/sanity/lib/queries";
 import { resolveImageUrl } from "@/sanity/lib/media";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -101,23 +102,30 @@ export async function generateMetadata({
   const brandName = siteSettings?.brandName || "Traveller's Diary";
 
   if (!destination) {
-    return {
+    return buildMetadata({
       title: `Destinations | ${brandName}`,
       description:
         siteSettings?.shortDescription ||
         siteSettings?.tagline ||
         "Browse destinations from Traveller's Diary.",
-    };
+      path: "/destinations",
+      siteName: brandName,
+    });
   }
 
-  return {
+  return buildMetadata({
     title: `${destination.title} | Destinations | ${brandName}`,
     description:
       destination.shortIntro ||
       destination.description ||
       siteSettings?.shortDescription ||
       "A destination page from Traveller's Diary.",
-  };
+    path: `/destinations/${slug}`,
+    image: resolveImageUrl(destination.coverImage, 1600) || undefined,
+    imageAlt: destination.coverImage?.alt || destination.title,
+    siteName: brandName,
+    type: "article",
+  });
 }
 
 export default async function DestinationDetailPage({
@@ -155,7 +163,7 @@ export default async function DestinationDetailPage({
         description={
           destination.shortIntro ||
           destination.description ||
-          "A destination landing page shaped by the calm editorial tone of Traveller’s Diary."
+          "A destination landing page shaped by the calm editorial tone of Traveller's Diary."
         }
         action={
           <Link
@@ -250,7 +258,7 @@ export default async function DestinationDetailPage({
             </p>
             <div className="space-y-4 text-sm leading-7 text-stone-200/78">
               <p>
-                Traveller’s Diary uses each destination as a chapter heading,
+                Traveller&apos;s Diary uses each destination as a chapter heading,
                 allowing stories and photo journals to grow underneath it.
               </p>
               <p>
@@ -263,6 +271,16 @@ export default async function DestinationDetailPage({
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
+        {relatedEssays.length === 0 && relatedJournals.length === 0 ? (
+          <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm">
+            <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+              Related content
+            </p>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-stone-200/78">
+              Stories and photo journals for this destination will appear here soon.
+            </p>
+          </div>
+        ) : null}
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-8 backdrop-blur-sm md:px-8">
             <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">

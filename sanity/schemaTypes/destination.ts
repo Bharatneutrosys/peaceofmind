@@ -12,6 +12,7 @@ export const destination = defineType({
       category: 'category.title',
       media: 'coverImage',
       featured: 'featured',
+      description: 'description',
     },
     prepare(selection) {
       const {
@@ -20,12 +21,14 @@ export const destination = defineType({
         region,
         category,
         featured,
+        description,
       } = selection as {
         title?: string;
         subtitle?: string;
         region?: string;
         category?: string;
         featured?: boolean;
+        description?: string;
       };
 
       return {
@@ -34,7 +37,9 @@ export const destination = defineType({
           subtitle ||
           region ||
           category ||
-          (featured ? 'Featured destination' : 'Destination'),
+          description ||
+          (featured ? 'Show on homepage' : 'Destination'),
+        media: selection.media,
       };
     },
   },
@@ -59,27 +64,27 @@ export const destination = defineType({
     }),
     defineField({
       name: 'region',
-      title: 'Region / Category',
+      title: 'Travel Region',
       type: 'string',
       description: 'Optional label for grouping destinations, such as Nepal, South Asia, or Europe.',
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Related Category',
       type: 'reference',
       to: [{ type: 'category' }],
       description: 'Optional reusable category reference for site-wide grouping.',
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Short Description',
       type: 'text',
       rows: 4,
       description: 'Optional short description for the destination card.',
     }),
     defineField({
       name: 'shortIntro',
-      title: 'Short Intro',
+      title: 'Short Introduction',
       type: 'text',
       rows: 3,
       description: 'A brief introduction for the destination section.',
@@ -101,7 +106,7 @@ export const destination = defineType({
     }),
     defineField({
       name: 'featured',
-      title: 'Featured on Homepage',
+      title: 'Show on Homepage',
       type: 'boolean',
       initialValue: false,
       description: 'Turn this on if the destination should appear higher in lists.',

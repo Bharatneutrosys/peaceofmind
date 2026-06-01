@@ -71,7 +71,7 @@ export default function AuthorProfile({
           </p>
 
           <h2 className="mt-5 text-balance font-serif text-[clamp(2.7rem,5vw,4.9rem)] leading-[0.96] tracking-tight text-stone-50">
-            Raised close to the hills of Far Western Nepal, Traveller’s Diary
+            Raised close to the hills of Far Western Nepal, Traveller&apos;s Diary
             studies the world through roads, weather, food, silence, and movement.
           </h2>
 

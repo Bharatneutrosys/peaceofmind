@@ -6,6 +6,7 @@ import PageHeader from "@/components/PageHeader";
 import { client } from "@/sanity/lib/client";
 import { resolveImageUrl } from "@/sanity/lib/media";
 import { getSiteSettingsQuery } from "@/sanity/lib/queries";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -39,13 +40,17 @@ async function getSiteSettings() {
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings();
   const brandName = siteSettings?.brandName || "Traveller's Diary";
-  return {
+  return buildMetadata({
     title: `About | ${brandName}`,
     description:
       siteSettings?.shortDescription ||
       siteSettings?.tagline ||
       "Learn about Traveller's Diary and its calm travel philosophy.",
-  };
+    path: "/about",
+    image: siteSettings?.authorImage?.asset?.url || undefined,
+    imageAlt: siteSettings?.authorImage?.alt || "Traveller's Diary author portrait",
+    siteName: brandName,
+  });
 }
 
 export default async function AboutPage() {
@@ -55,7 +60,7 @@ export default async function AboutPage() {
     <main className="min-h-screen">
       <PageHeader
         eyebrow="About"
-        title="Traveller’s Diary"
+        title="Traveller's Diary"
         description="A premium travel journal shaped by a young woman from Far Western Nepal who grew up near hills and mountains and studies travel and tourism."
         action={
           <Link

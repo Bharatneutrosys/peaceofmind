@@ -4,6 +4,7 @@ import MasonryGallery, { type SanityPhoto } from "@/components/MasonryGallery";
 import PageHeader from "@/components/PageHeader";
 import { client } from "@/sanity/lib/client";
 import { getPhotoJournalsQuery, getSiteSettingsQuery } from "@/sanity/lib/queries";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -21,6 +22,8 @@ type SiteSettings = {
   brandName?: string | null;
   shortDescription?: string | null;
   tagline?: string | null;
+  heroImage?: ImageField | null;
+  heroHeadline?: string | null;
 };
 
 type PhotoJournalRecord = {
@@ -70,13 +73,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings();
   const brandName = siteSettings?.brandName || "Traveller's Diary";
 
-  return {
+  return buildMetadata({
     title: `Gallery | ${brandName}`,
     description:
       siteSettings?.shortDescription ||
       siteSettings?.tagline ||
       "A cinematic gallery from Traveller's Diary.",
-  };
+    path: "/gallery",
+    image: siteSettings?.heroImage?.asset?.url || undefined,
+    imageAlt: siteSettings?.heroHeadline || brandName,
+    siteName: brandName,
+  });
 }
 
 export default async function GalleryPage() {

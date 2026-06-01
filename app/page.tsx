@@ -24,6 +24,7 @@ import {
   getPhotoJournalsQuery,
   getSiteSettingsQuery,
 } from "@/sanity/lib/queries";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -119,6 +120,49 @@ type VideoRecord = {
   category?: { _id: string; title: string; slug?: string | null } | null;
   publishedAt?: string | null;
 };
+
+export async function generateMetadata() {
+  const [siteSettings, featuredEssays, featuredJournals] = await Promise.all([
+    safeFetch(
+      "siteSettings",
+      () => client.fetch<SiteSettings | null>(getSiteSettingsQuery),
+      null,
+    ),
+    safeFetch(
+      "featuredEssays",
+      () => client.fetch<EssayRecord[]>(getFeaturedEssaysQuery),
+      [],
+    ),
+    safeFetch(
+      "featuredJournals",
+      () => client.fetch<PhotoJournalRecord[]>(getFeaturedPhotoJournalsQuery),
+      [],
+    ),
+  ]);
+
+  const brandName = siteSettings?.brandName || "Traveller's Diary";
+  const image =
+    resolveImageUrl(siteSettings?.heroImage) ||
+    resolveImageUrl(featuredJournals[0]?.coverImage) ||
+    resolveImageUrl(featuredEssays[0]?.coverImage) ||
+    undefined;
+
+  return buildMetadata({
+    title: brandName,
+    description:
+      siteSettings?.shortDescription ||
+      siteSettings?.tagline ||
+      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+    path: "/",
+    image,
+    imageAlt:
+      siteSettings?.heroHeadline ||
+      featuredEssays[0]?.title ||
+      featuredJournals[0]?.title ||
+      brandName,
+    siteName: brandName,
+  });
+}
 
 async function safeFetch<T>(
   label: string,

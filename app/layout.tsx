@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { client } from "@/sanity/lib/client";
 import { getSiteSettingsQuery } from "@/sanity/lib/queries";
+import { getSiteUrl } from "@/lib/seo";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,6 +22,21 @@ export const metadata: Metadata = {
   title: "Traveller's Diary | Premium Nepal Travel Stories",
   description:
     "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+  metadataBase: new URL(getSiteUrl()),
+  openGraph: {
+    title: "Traveller's Diary | Premium Nepal Travel Stories",
+    description:
+      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+    url: "/",
+    siteName: "Traveller's Diary",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Traveller's Diary | Premium Nepal Travel Stories",
+    description:
+      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+  },
 };
 
 type SiteSettings = {
@@ -52,7 +68,7 @@ export default async function RootLayout({
       lang="en"
       className={inter.variable + " " + playfair.variable + " h-full antialiased"}
     >
-      <body className="font-sans min-h-full flex flex-col bg-transparent text-stone-100">
+      <body className="font-sans min-h-full flex flex-col bg-stone-950 text-stone-100">
         <SmoothScrollProvider>
           <Navbar
             brandName={brandName}

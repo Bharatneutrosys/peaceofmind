@@ -10,6 +10,7 @@ import {
   getAllDestinationsQuery,
 } from "@/sanity/lib/queries";
 import { resolveImageUrl } from "@/sanity/lib/media";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -49,11 +50,13 @@ type DestinationRecord = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildMetadata({
     title: "Destinations | Traveller's Diary",
     description:
       "Browse destinations, categories, and future travel routes from Traveller's Diary.",
-  };
+    path: "/destinations",
+    siteName: "Traveller's Diary",
+  });
 }
 
 function groupKey(destination: DestinationRecord) {
@@ -114,7 +117,7 @@ export default async function DestinationsPage() {
       <PageHeader
         eyebrow="Destinations"
         title="A map of places, from Nepal outward."
-        description="Traveller’s Diary is designed to grow into a destination archive where category, region, and story can sit together with a quiet editorial rhythm."
+        description="Traveller's Diary is designed to grow into a destination archive where category, region, and story can sit together with a quiet editorial rhythm."
         action={
           <Link
             href="/journal"

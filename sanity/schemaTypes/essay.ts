@@ -13,6 +13,7 @@ export const essay = defineType({
       publishedAt: 'publishedAt',
       media: 'coverImage',
       featured: 'featured',
+      excerpt: 'excerpt',
     },
     prepare(selection) {
       const {
@@ -22,6 +23,7 @@ export const essay = defineType({
         date,
         publishedAt,
         featured,
+        excerpt,
       } = selection as {
         title?: string;
         destination?: string;
@@ -29,6 +31,7 @@ export const essay = defineType({
         date?: string;
         publishedAt?: string;
         featured?: boolean;
+        excerpt?: string;
       };
 
       const when = publishedAt || date;
@@ -36,8 +39,10 @@ export const essay = defineType({
       return {
         title: title || 'Untitled essay',
         subtitle:
+          excerpt ||
           [destination, category, when && new Date(when).getFullYear()].filter(Boolean).join(' • ') ||
-          (featured ? 'Featured travel story' : 'Travel story'),
+          (featured ? 'Show on homepage' : 'Travel story'),
+        media: selection.media,
       };
     },
   },
@@ -72,28 +77,28 @@ export const essay = defineType({
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'Short Introduction',
       type: 'text',
       rows: 4,
       description: 'Short summary used on the homepage and archive cards.',
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Travel Region',
       type: 'reference',
       to: [{ type: 'category' }],
       description: 'Optional category reference for grouping essays.',
     }),
     defineField({
       name: 'date',
-      title: 'Date',
+      title: 'Story Date',
       type: 'datetime',
       description: 'When this story took place or was written.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Published Date',
       type: 'datetime',
       description: 'Optional publishing date shown in the journal feature.',
     }),
@@ -107,7 +112,7 @@ export const essay = defineType({
     }),
     defineField({
       name: 'featured',
-      title: 'Featured on Homepage',
+      title: 'Show on Homepage',
       type: 'boolean',
       initialValue: false,
       description: 'Turn this on if the essay should appear first on the homepage.',
@@ -120,7 +125,7 @@ export const essay = defineType({
     }),
     defineField({
       name: 'tags',
-      title: 'Tags',
+      title: 'Tags / Keywords',
       type: 'array',
       of: [{ type: 'string' }],
       description: 'Optional keywords for the story.',

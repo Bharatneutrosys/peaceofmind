@@ -15,6 +15,7 @@ import {
 import { client } from "@/sanity/lib/client";
 import { resolveImageUrl } from "@/sanity/lib/media";
 import { portableTextComponents } from "@/components/EditorialEssay";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -135,22 +136,29 @@ export async function generateMetadata({
 
   const brandName = siteSettings?.brandName || "Traveller's Diary";
   if (!essay) {
-    return {
+    return buildMetadata({
       title: `Journal | ${brandName}`,
       description:
         siteSettings?.shortDescription ||
         siteSettings?.tagline ||
         "Premium travel stories from Traveller's Diary.",
-    };
+      path: "/journal",
+      siteName: brandName,
+    });
   }
 
-  return {
+  return buildMetadata({
     title: `${essay.title} | Journal | ${brandName}`,
     description:
       essay.excerpt ||
       siteSettings?.shortDescription ||
       "A premium travel story from Traveller's Diary.",
-  };
+    path: `/journal/${slug}`,
+    image: resolveImageUrl(essay.coverImage, 1600) || undefined,
+    imageAlt: essay.coverImage?.alt || essay.title,
+    siteName: brandName,
+    type: "article",
+  });
 }
 
 export default async function JournalDetailPage({
@@ -194,7 +202,7 @@ export default async function JournalDetailPage({
         title={essay.title}
         description={
           essay.excerpt ||
-          "A full travel story set in the quiet, cinematic voice of Traveller’s Diary."
+          "A full travel story set in the quiet, cinematic voice of Traveller's Diary."
         }
         action={
           <Link
@@ -247,15 +255,34 @@ export default async function JournalDetailPage({
                   Featured story
                 </p>
                 {essay.category?.title ? (
-                  <p className="mt-3 text-sm uppercase tracking-[0.28em] text-stone-300/55">
-                    {essay.category.regionLabel || essay.category.title}
-                  </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-sm uppercase tracking-[0.28em] text-stone-300/55">
+                    <span>{essay.category.regionLabel || essay.category.title}</span>
+                    {essay.destination?.title ? (
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[0.68rem] tracking-[0.22em] text-stone-200/66">
+                        <MapPin className="h-3.5 w-3.5 text-amber-100" />
+                        {essay.destination.title}
+                      </span>
+                    ) : null}
+                  </div>
                 ) : null}
                 <div className="mt-5 border-t border-white/10 pt-8">
-                  <PortableText
-                    value={(essay.body ?? []) as EssayBodyValue[]}
-                    components={portableTextComponents}
-                  />
+                  {essay.body?.length ? (
+                    <PortableText
+                      value={(essay.body ?? []) as EssayBodyValue[]}
+                      components={portableTextComponents}
+                    />
+                  ) : (
+                    <div className="max-w-3xl rounded-[1.5rem] border border-white/10 bg-white/4 px-6 py-8">
+                      <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+                        Story body
+                      </p>
+                      <p className="mt-4 text-pretty text-base leading-8 text-stone-200/78">
+                        This story is waiting for its full travel text. The page
+                        is ready, and the article body can be added from Sanity
+                        whenever the essay is published.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -270,10 +297,10 @@ export default async function JournalDetailPage({
                     ? `Written from ${essay.destination.title}, this story stays close to the details that make a journey feel personal.`
                     : "This story stays close to the details that make a journey feel personal."}
                 </p>
-                <p>
-                  Traveller’s Diary uses a calm editorial voice, letting the road,
+              <p>
+                  Traveller&apos;s Diary uses a calm editorial voice, letting the road,
                   light, and memory do most of the talking.
-                </p>
+              </p>
               </div>
 
               {essay.tags?.length ? (

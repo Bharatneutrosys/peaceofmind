@@ -10,18 +10,21 @@ export const category = defineType({
       subtitle: 'regionLabel',
       media: 'coverImage',
       featured: 'featured',
+      description: 'description',
     },
     prepare(selection) {
-      const { title, subtitle, featured } = selection as {
+      const { title, subtitle, featured, description } = selection as {
         title?: string;
         subtitle?: string;
         featured?: boolean;
+        description?: string;
       };
 
       return {
         title: title || 'Untitled category',
         subtitle:
-          subtitle || (featured ? 'Featured on homepage' : 'Travel category'),
+          subtitle || description || (featured ? 'Show on homepage' : 'Travel category'),
+        media: selection.media,
       };
     },
   },
@@ -62,13 +65,13 @@ export const category = defineType({
     }),
     defineField({
       name: 'regionLabel',
-      title: 'Region Label',
+      title: 'Travel Region',
       type: 'string',
       description: 'Optional editorial label such as Nepal, Europe, or South Asia.',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured on Homepage',
+      title: 'Show on Homepage',
       type: 'boolean',
       initialValue: false,
       description: 'Turn this on if the category should appear higher in the homepage.',

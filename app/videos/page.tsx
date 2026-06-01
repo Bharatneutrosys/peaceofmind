@@ -7,6 +7,7 @@ import PageHeader from "@/components/PageHeader";
 import { client } from "@/sanity/lib/client";
 import { getAllVideosQuery, getSiteSettingsQuery } from "@/sanity/lib/queries";
 import { resolveImageUrl } from "@/sanity/lib/media";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -24,6 +25,8 @@ type SiteSettings = {
   brandName?: string | null;
   shortDescription?: string | null;
   tagline?: string | null;
+  heroImage?: ImageField | null;
+  heroHeadline?: string | null;
 };
 
 type VideoRecord = {
@@ -79,13 +82,17 @@ function toYoutubeEmbedUrl(raw?: string | null) {
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings();
   const brandName = siteSettings?.brandName || "Traveller's Diary";
-  return {
+  return buildMetadata({
     title: `Videos | ${brandName}`,
     description:
       siteSettings?.shortDescription ||
       siteSettings?.tagline ||
       "Watch travel videos and future channel stories from Traveller's Diary.",
-  };
+    path: "/videos",
+    image: siteSettings?.heroImage?.asset?.url || undefined,
+    imageAlt: siteSettings?.heroHeadline || brandName,
+    siteName: brandName,
+  });
 }
 
 export default async function VideosPage() {
@@ -96,7 +103,7 @@ export default async function VideosPage() {
       <PageHeader
         eyebrow="Videos"
         title="Film frames, route stories, and future travel episodes."
-        description="A dedicated space for Traveller’s Diary videos. Each card is ready to hold a watch link or a clean embed when the channel content arrives."
+        description="A dedicated space for Traveller's Diary videos. Each card is ready to hold a watch link or a clean embed when the channel content arrives."
         action={
           <Link
             href="/about"
@@ -113,7 +120,7 @@ export default async function VideosPage() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {videos.map((video) => {
               const embedUrl = toYoutubeEmbedUrl(video.youtubeUrl);
-              const watchUrl = video.youtubeUrl || embedUrl || "#";
+              const watchUrl = video.youtubeUrl || embedUrl;
 
               return (
                 <article
@@ -160,15 +167,22 @@ export default async function VideosPage() {
                       {video.description ||
                         "A future travel video can live here with a clean embed or watch link."}
                     </p>
-                    <a
-                      href={watchUrl}
-                      className="mt-5 inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
-                      target={watchUrl.startsWith("http") ? "_blank" : undefined}
-                      rel={watchUrl.startsWith("http") ? "noreferrer" : undefined}
-                    >
-                      Watch on YouTube
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
+                    {watchUrl ? (
+                      <a
+                        href={watchUrl}
+                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
+                        target={watchUrl.startsWith("http") ? "_blank" : undefined}
+                        rel={watchUrl.startsWith("http") ? "noreferrer" : undefined}
+                      >
+                        Watch on YouTube
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    ) : (
+                      <span className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50/60">
+                        Watch on YouTube
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    )}
                   </div>
                 </article>
               );

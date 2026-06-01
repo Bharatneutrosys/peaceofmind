@@ -7,6 +7,7 @@ import PageHeader from "@/components/PageHeader";
 import { client } from "@/sanity/lib/client";
 import { getEssaysQuery, getSiteSettingsQuery } from "@/sanity/lib/queries";
 import { resolveImageUrl } from "@/sanity/lib/media";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -24,6 +25,8 @@ type SiteSettings = {
   brandName?: string | null;
   shortDescription?: string | null;
   tagline?: string | null;
+  heroImage?: ImageField | null;
+  heroHeadline?: string | null;
 };
 
 type EssayCard = {
@@ -70,10 +73,14 @@ export async function generateMetadata(): Promise<Metadata> {
     siteSettings?.tagline ||
     "Read the latest travel stories from Traveller's Diary.";
 
-  return {
+  return buildMetadata({
     title: `Journal | ${brandName}`,
     description,
-  };
+    path: "/journal",
+    image: siteSettings?.heroImage?.asset?.url || undefined,
+    imageAlt: siteSettings?.heroHeadline || brandName,
+    siteName: brandName,
+  });
 }
 
 export default async function JournalPage() {
@@ -89,7 +96,7 @@ export default async function JournalPage() {
       <PageHeader
         eyebrow="Journal"
         title="Travel stories shaped by roads, weather, and memory."
-        description="Long-form writing from Traveller’s Diary, arranged like a premium travel magazine and ready to expand as the archive grows."
+        description="Long-form writing from Traveller's Diary, arranged like a premium travel magazine and ready to expand as the archive grows."
         action={
           <Link
             href="/about"

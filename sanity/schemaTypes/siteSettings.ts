@@ -4,6 +4,25 @@ export const siteSettings = defineType({
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
+  preview: {
+    select: {
+      title: 'brandName',
+      subtitle: 'tagline',
+      media: 'heroImage',
+    },
+    prepare(selection) {
+      const { title, subtitle } = selection as {
+        title?: string;
+        subtitle?: string;
+      };
+
+      return {
+        title: title || "Traveller's Diary",
+        subtitle: subtitle || 'Homepage settings and brand details',
+        media: selection.media,
+      };
+    },
+  },
   fields: [
     defineField({
       name: 'brandName',
@@ -15,7 +34,7 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'subtitle',
-      title: 'Secondary Name / Subtitle',
+      title: 'Secondary Brand Line',
       type: 'string',
       description: 'Optional shorter line for the brand, if you want one.',
     }),
@@ -34,7 +53,7 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'facebookUrl',
-      title: 'Facebook Profile URL',
+      title: 'Facebook Page URL',
       type: 'url',
       description: 'Paste your official Facebook page link here.',
     }),
@@ -115,7 +134,7 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'youtubeFeatureUrl',
-      title: 'YouTube Feature URL',
+      title: 'Featured Video Link',
       type: 'url',
       description: 'Optional YouTube link for the homepage video feature.',
     }),
