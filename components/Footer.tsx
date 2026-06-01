@@ -89,19 +89,10 @@ export default function Footer({
                   </a>
                 ))
               ) : (
-                <div className="space-y-3">
-                  {["Facebook", "Instagram", "YouTube"].map((label) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between border-b border-white/8 pb-3 text-sm text-stone-500"
-                    >
-                      {label}
-                      <span className="text-[0.68rem] uppercase tracking-[0.24em] text-stone-500">
-                        Pending
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <p className="max-w-xs text-sm leading-7 text-stone-300/62">
+                  Official social links can be added in Site Settings when the
+                  creator pages are ready.
+                </p>
               )}
             </div>
           </div>

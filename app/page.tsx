@@ -627,20 +627,13 @@ export default async function Home() {
                       {item.label}
                     </span>
                     <ArrowRight className="h-4 w-4 text-stone-300/50" />
-                  </a>
-                ))
+                    </a>
+                  ))
               ) : (
-                ["Facebook", "Instagram", "YouTube"].map((label) => (
-                  <div
-                    key={label}
-                    className="flex items-center justify-between rounded-[1rem] border border-white/8 bg-stone-950/25 px-4 py-3 text-sm text-stone-500"
-                  >
-                    <span>{label}</span>
-                    <span className="text-[0.68rem] uppercase tracking-[0.24em] text-stone-500">
-                      Pending
-                    </span>
-                  </div>
-                ))
+                <p className="text-sm leading-7 text-stone-300/62">
+                  Official social links can be added in Site Settings when the
+                  creator pages are ready.
+                </p>
               )}
             </div>
           </aside>
@@ -695,14 +688,10 @@ export default async function Home() {
                   </a>
                 ))
               ) : (
-                ["Facebook", "Instagram", "YouTube"].map((label) => (
-                  <span
-                    key={label}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50/60"
-                  >
-                    {label}
-                  </span>
-                ))
+                <p className="max-w-xl text-sm leading-7 text-stone-300/62 lg:text-right">
+                  Official social links can be added in Site Settings when the
+                  creator pages are ready.
+                </p>
               )}
             </div>
           </div>

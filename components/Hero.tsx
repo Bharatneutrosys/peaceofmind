@@ -85,7 +85,7 @@ export default function Hero({
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-6 pb-8 pt-28 sm:px-8 lg:px-12 lg:pb-12">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(17rem,0.68fr)] lg:items-end">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(17rem,0.68fr)] lg:items-end">
           <div className="max-w-4xl">
             <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-[0.68rem] uppercase tracking-[0.32em] text-stone-100/78 backdrop-blur-md">
               <Sparkles className="h-3.5 w-3.5 text-amber-100" />
@@ -97,7 +97,7 @@ export default function Hero({
               {eyebrow}
             </p>
 
-            <h1 className="font-serif text-[clamp(3.4rem,8.2vw,8rem)] leading-[0.9] tracking-tight text-balance text-stone-50 drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
+            <h1 className="font-serif text-[clamp(2.9rem,7.8vw,8rem)] leading-[0.9] tracking-tight text-balance text-stone-50 drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
               {headline}
             </h1>
 
@@ -122,7 +122,7 @@ export default function Hero({
             </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur-xl">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-4 backdrop-blur-xl sm:p-5">
             <div className="space-y-4">
               <div className="rounded-[1.25rem] border border-white/10 bg-stone-950/35 px-4 py-4">
                 <div className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/64">
@@ -154,7 +154,7 @@ export default function Hero({
           </div>
         </div>
 
-        <div className="mt-10 flex items-center justify-between border-t border-white/10 pt-5 text-[0.7rem] uppercase tracking-[0.32em] text-stone-200/58">
+        <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4 text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/58 sm:mt-10 sm:pt-5 sm:text-[0.7rem] sm:tracking-[0.32em]">
           <span className="hidden sm:inline">Scroll for stories and frames</span>
           <span className="sm:hidden">Scroll</span>
           <span className="inline-flex items-center gap-2">

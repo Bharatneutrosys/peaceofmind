@@ -19,7 +19,7 @@ export default function EmptyState({
       <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
         {eyebrow}
       </p>
-      <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
+      <h2 className="mt-4 font-serif text-[clamp(2.2rem,5.8vw,4.8rem)] leading-tight text-stone-50">
         {title}
       </h2>
       <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">

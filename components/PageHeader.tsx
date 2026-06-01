@@ -20,7 +20,7 @@ export default function PageHeader({
       ) : null}
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-4xl">
-          <h1 className="text-balance font-serif text-[clamp(3rem,7vw,6rem)] leading-[0.92] tracking-tight text-stone-50">
+          <h1 className="text-balance font-serif text-[clamp(2.4rem,6.8vw,6rem)] leading-[0.94] tracking-tight text-stone-50">
             {title}
           </h1>
           {description ? (

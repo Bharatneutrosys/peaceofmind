@@ -177,7 +177,7 @@ export default function Navbar({
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between rounded-[1.25rem] border border-white/10 bg-white/6 px-4 py-4 text-2xl font-light tracking-[0.08em] text-stone-50 transition-colors duration-300 hover:bg-white/12"
+              className="flex items-center justify-between rounded-[1.25rem] border border-white/10 bg-white/6 px-4 py-4 text-xl font-light tracking-[0.06em] text-stone-50 transition-colors duration-300 hover:bg-white/12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-100/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:text-2xl"
               onClick={() => setMenuOpen(false)}
             >
               {item.label}
@@ -192,7 +192,7 @@ export default function Navbar({
               <a
                 key={item.label}
                 href={item.href}
-                className="rounded-full border border-white/10 bg-white/6 px-3 py-3 text-center text-[0.7rem] uppercase tracking-[0.2em] text-stone-100/72"
+                className="rounded-full border border-white/10 bg-white/6 px-3 py-3 text-center text-[0.7rem] uppercase tracking-[0.2em] text-stone-100/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-100/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
