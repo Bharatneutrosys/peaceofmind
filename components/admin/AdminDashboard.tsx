@@ -211,9 +211,9 @@ export default function AdminDashboard({
         <div className="mt-8 space-y-8">
           <AdminSection
             title="Website Settings"
-            description="Website name, tagline, short description, and the homepage video text."
+            description="Editing: Homepage Settings. Current website values are pre-filled below."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save website settings">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save Changes">
               <div className="grid gap-5 md:grid-cols-2">
                 <Field label="Website Name" name="brandName" defaultValue={settings.brandName || brandName} required />
                 <Field label="Tagline" name="tagline" defaultValue={settings.tagline || ""} />
@@ -224,21 +224,36 @@ export default function AdminDashboard({
                   className="md:col-span-2"
                   helpText="Keep this to one or two simple sentences."
                 />
+                <Field
+                  label="Hero Headline"
+                  name="heroHeadline"
+                  defaultValue={settings.heroHeadline || ""}
+                  helpText="This is also available in the Hero section."
+                />
+                <TextAreaField
+                  label="Hero Description"
+                  name="heroSubheading"
+                  defaultValue={settings.heroSubheading || ""}
+                  className="md:col-span-2"
+                />
+                <Field label="Facebook URL" name="facebookUrl" defaultValue={settings.facebookUrl || ""} />
+                <Field label="Instagram URL" name="instagramUrl" defaultValue={settings.instagramUrl || ""} />
+                <Field label="YouTube URL" name="youtubeUrl" defaultValue={settings.youtubeUrl || ""} />
+                <Field label="Author Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
+                <TextAreaField
+                  label="Author Bio"
+                  name="authorBio"
+                  defaultValue={settings.authorBio || ""}
+                  className="md:col-span-2"
+                />
                 <Field label="YouTube Feature Title" name="youtubeFeatureTitle" defaultValue={settings.youtubeFeatureTitle || ""} />
-                <Field label="YouTube Feature Link" name="youtubeFeatureUrl" defaultValue={settings.youtubeFeatureUrl || ""} />
+                <Field label="YouTube Feature URL" name="youtubeFeatureUrl" defaultValue={settings.youtubeFeatureUrl || ""} />
                 <TextAreaField
                   label="YouTube Feature Description"
                   name="youtubeFeatureDescription"
                   defaultValue={settings.youtubeFeatureDescription || ""}
                   className="md:col-span-2"
                 />
-                <input type="hidden" name="heroHeadline" value={settings.heroHeadline || ""} />
-                <input type="hidden" name="heroSubheading" value={settings.heroSubheading || ""} />
-                <input type="hidden" name="facebookUrl" value={settings.facebookUrl || ""} />
-                <input type="hidden" name="instagramUrl" value={settings.instagramUrl || ""} />
-                <input type="hidden" name="youtubeUrl" value={settings.youtubeUrl || ""} />
-                <input type="hidden" name="authorDisplayName" value={settings.authorDisplayName || ""} />
-                <input type="hidden" name="authorBio" value={settings.authorBio || ""} />
               </div>
             </ActionForm>
           </AdminSection>
@@ -247,7 +262,7 @@ export default function AdminDashboard({
             title="Hero"
             description="The first headline and description visitors see on the homepage."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save hero">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save Changes">
               <div className="grid gap-5">
                 <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading"]} />
                 <Field
@@ -267,7 +282,7 @@ export default function AdminDashboard({
                   label="Hero Image"
                   name="heroImage"
                   currentUrl={settings.heroImageUrl}
-                  helpText="Recommended hero image: wide panorama, 2400px+ width. Avoid very large uncompressed files."
+                  helpText="Edit only the fields you want to change. Existing values and image will remain if left unchanged. Recommended hero image: wide panorama, 2400px+ width."
                 />
               </div>
             </ActionForm>
@@ -277,7 +292,7 @@ export default function AdminDashboard({
             title="Social Links"
             description="Leave a link empty to hide it gracefully on the public site."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save social links">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save Changes">
               <div className="grid gap-5 md:grid-cols-3">
                 <HiddenSettings settings={settings} brandName={brandName} except={["facebookUrl", "instagramUrl", "youtubeUrl"]} />
                 <Field label="Facebook URL" name="facebookUrl" defaultValue={settings.facebookUrl || ""} />
@@ -291,7 +306,7 @@ export default function AdminDashboard({
             title="About the Traveler"
             description="The traveler name and short profile used on the About page and homepage profile section."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save author profile">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save Changes">
               <div className="grid gap-5 md:grid-cols-2">
                 <HiddenSettings settings={settings} brandName={brandName} except={["authorDisplayName", "authorBio"]} />
                 <Field label="Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
@@ -318,10 +333,10 @@ export default function AdminDashboard({
             title="Categories"
             description="Create and update the travel groupings shown across the site. Delete is skipped for now to avoid removing content that may be in use."
           >
-            <CategoryForm title="Add Category" />
+            <CategoryForm title="Add New Category" />
             <RecordList emptyText="No categories yet.">
               {categories.map((category) => (
-                <CategoryForm key={category._id} title={category.title || "Edit Category"} category={category} />
+                <CategoryForm key={category._id} title={`Editing: ${category.title || "Untitled Category"}`} category={category} />
               ))}
             </RecordList>
           </AdminSection>
@@ -330,12 +345,12 @@ export default function AdminDashboard({
             title="Destinations"
             description="Create and update the places connected to stories, photos, and videos."
           >
-            <DestinationForm title="Add Destination" categories={categories} />
+            <DestinationForm title="Add New Destination" categories={categories} />
             <RecordList emptyText="No destinations yet.">
               {destinations.map((destination) => (
                 <DestinationForm
                   key={destination._id}
-                  title={destination.title || "Edit Destination"}
+                  title={`Editing: ${destination.title || "Untitled Destination"}`}
                   destination={destination}
                   categories={categories}
                 />
@@ -347,12 +362,12 @@ export default function AdminDashboard({
             title="Journal Stories"
             description="Write basic story text without raw JSON. Body text is saved as simple readable paragraphs."
           >
-            <EssayForm title="Add Journal Story" categories={categories} destinations={destinations} />
+            <EssayForm title="Add New Journal Story" categories={categories} destinations={destinations} />
             <RecordList emptyText="No journal stories yet.">
               {essays.map((essay) => (
                 <EssayForm
                   key={essay._id}
-                  title={essay.title || "Edit Journal Story"}
+                  title={`Editing: ${essay.title || "Untitled Journal Story"}`}
                   essay={essay}
                   categories={categories}
                   destinations={destinations}
@@ -365,12 +380,12 @@ export default function AdminDashboard({
             title="Photo Journals"
             description="Create photo journal records and upload gallery images for the public gallery."
           >
-            <PhotoJournalForm title="Add Photo Journal" categories={categories} destinations={destinations} />
+            <PhotoJournalForm title="Add New Photo Journal" categories={categories} destinations={destinations} />
             <RecordList emptyText="No photo journals yet.">
               {photoJournals.map((journal) => (
                 <PhotoJournalForm
                   key={journal._id}
-                  title={journal.title || "Edit Photo Journal"}
+                  title={`Editing: ${journal.title || "Untitled Photo Journal"}`}
                   journal={journal}
                   categories={categories}
                   destinations={destinations}
@@ -383,12 +398,12 @@ export default function AdminDashboard({
             title="Videos"
             description="Add YouTube watch, embed, or youtu.be links. No YouTube API connection is needed."
           >
-            <VideoForm title="Add Video" categories={categories} destinations={destinations} />
+            <VideoForm title="Add New Video" categories={categories} destinations={destinations} />
             <RecordList emptyText="No videos yet.">
               {videos.map((video) => (
                 <VideoForm
                   key={video._id}
-                  title={video.title || "Edit Video"}
+                  title={`Editing: ${video.title || "Untitled Video"}`}
                   video={video}
                   categories={categories}
                   destinations={destinations}
@@ -648,18 +663,20 @@ function ContentForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <details className="rounded-[1.5rem] border border-white/10 bg-stone-950/25 p-5" open={!title.startsWith("Edit")}>
+    <details className="rounded-[1.5rem] border border-white/10 bg-stone-950/25 p-5" open={title.startsWith("Add New")}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-stone-50">
         <span className="inline-flex items-center gap-2 font-serif text-2xl">
           {title.startsWith("Add") ? <Plus className="h-5 w-5" /> : <PencilLine className="h-5 w-5" />}
           {title}
         </span>
-        <span className="text-xs uppercase tracking-[0.22em] text-stone-300/55">Open</span>
+        <span className="text-xs uppercase tracking-[0.22em] text-stone-300/55">
+          {title.startsWith("Add") ? "Creating new content" : "Edit existing content"}
+        </span>
       </summary>
       <form action={formAction} encType="multipart/form-data" className="mt-6 space-y-6">
         {children}
         <FormStatus state={state} />
-        <SubmitButton pending={pending} label="Save" />
+        <SubmitButton pending={pending} label="Save Changes" />
       </form>
     </details>
   );
@@ -920,11 +937,20 @@ function FormStatus({ state }: { state: AdminState }) {
   if (state.error) return <p className="text-sm leading-7 text-amber-100">{state.error}</p>;
 
   if (state.message) {
+    const savedAt = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format(new Date());
+
     return (
-      <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100">
-        <Check className="h-4 w-4" />
-        {state.message}
-      </p>
+      <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100">
+        <span className="inline-flex items-center gap-2">
+          <Check className="h-4 w-4" />
+          {state.message}
+        </span>
+        <span className="text-xs text-emerald-100/75">Last saved: {savedAt}</span>
+      </div>
     );
   }
 

@@ -14,6 +14,12 @@ Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
 
 The owner should use `/admin`. Sanity Studio at `/studio` is advanced developer CMS access and is usually not needed.
 
+## Editing existing content
+
+Existing website content is pre-filled in the admin forms. If a form says `Editing: Nepal`, saving updates that existing item. If a form says `Add New Category`, saving creates a new item.
+
+Edit only the fields you want to change. Unchanged text and images stay in place. Image fields are only replaced when you choose a new image file.
+
 ## Edit website settings
 
 Open Website Settings to update:
@@ -57,7 +63,7 @@ Write simply and naturally. Use a clear portrait or creator image owned by the c
 
 ## Add a category
 
-Open Categories, then Add Category. Fill in:
+Open Categories, then Add New Category. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
@@ -71,7 +77,7 @@ Delete is intentionally not available yet so existing content is not removed acc
 
 ## Add a destination
 
-Open Destinations, then Add Destination. Fill in:
+Open Destinations, then Add New Destination. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
@@ -87,7 +93,7 @@ Recommended cover image size: 1600px or wider.
 
 ## Add a journal story
 
-Open Journal Stories, then Add Journal Story. Fill in:
+Open Journal Stories, then Add New Journal Story. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
@@ -105,7 +111,7 @@ Use a real travel photo owned by the creator. The title is used as fallback imag
 
 ## Add a photo journal
 
-Open Photo Journals, then Add Photo Journal. Fill in:
+Open Photo Journals, then Add New Photo Journal. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
@@ -117,11 +123,11 @@ Open Photo Journals, then Add Photo Journal. Fill in:
 - Cover Image
 - Gallery Images
 
-Use compressed JPG/WebP travel photos. You can upload multiple gallery images at once. Shared alt text and caption apply to the new uploaded batch. Existing gallery images stay visible; reorder and remove controls are still pending.
+Use compressed JPG/WebP travel photos. Existing gallery images are shown in the edit form. You can upload multiple new gallery images at once. Shared alt text and caption apply to the new uploaded batch. Reorder and remove controls are still pending.
 
 ## Add a video
 
-Open Videos, then Add Video. Fill in:
+Open Videos, then Add New Video. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
@@ -146,7 +152,7 @@ If no thumbnail is uploaded, the public videos page shows a polished fallback.
 
 ## Preview changes
 
-Use the Home button to return to the site in the same tab. Use Preview Website to open the public homepage in a new tab. Most pages update after revalidation or refresh.
+After saving, the form shows `Saved successfully` with a last-saved time. Use the Home button to return to the site in the same tab. Use Preview Website to open the public homepage in a new tab. Most pages update after revalidation or refresh.
 
 ## Required Vercel environment variables
 

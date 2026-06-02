@@ -236,7 +236,7 @@ async function saveDocumentWithClient(
 
   return {
     ...SUCCESS,
-    message: "Saved. The public site will update after revalidation or refresh.",
+    message: "Saved successfully",
   };
 }
 
@@ -366,7 +366,7 @@ export async function saveSiteSettingsAction(
 
   return {
     ...SUCCESS,
-    message: "Site settings saved. The public site will update after revalidation or refresh.",
+    message: "Saved successfully",
   };
 }
 
@@ -580,7 +580,7 @@ export async function savePhotoJournalAction(
 
   return {
     ...SUCCESS,
-    message: "Saved. The public site will update after revalidation or refresh.",
+    message: "Saved successfully",
   };
 }
 
