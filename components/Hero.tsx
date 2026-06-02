@@ -32,7 +32,7 @@ export default function Hero({
   const reduceMotion = useReducedMotion();
   const heroImage =
     image ?? {
-      src: "/images/hero-panorama.jpg",
+      src: "/images/hero-panorama.png",
       alt: "A long Himalayan mountain panorama",
     };
 
@@ -62,7 +62,7 @@ export default function Hero({
                 }
           }
           transition={{
-            duration: 20,
+            duration: 24,
             ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "mirror",
@@ -79,8 +79,8 @@ export default function Hero({
           />
         </motion.div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/78 via-stone-950/34 to-stone-950/12" />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/88 via-stone-950/18 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/74 via-stone-950/28 to-stone-950/8" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/82 via-stone-950/12 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-stone-950 to-transparent" />
       </div>
 

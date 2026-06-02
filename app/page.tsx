@@ -143,7 +143,7 @@ export async function generateMetadata() {
     resolveImageUrl(siteSettings?.heroImage) ||
     resolveImageUrl(featuredJournals[0]?.coverImage) ||
     resolveImageUrl(featuredEssays[0]?.coverImage) ||
-    "/images/hero-panorama.jpg";
+    "/images/hero-panorama.png";
 
   return buildMetadata({
     title: brandName,
@@ -256,7 +256,7 @@ export default async function Home() {
     ]);
 
   const brandName = siteSettings?.brandName || "Traveller's Diary";
-  const heroImage = "/images/hero-panorama.jpg";
+  const heroImage = "/images/hero-panorama.png";
   const localHeroImage: ImageField = {
     asset: { url: heroImage },
     alt: "A long Himalayan mountain panorama",

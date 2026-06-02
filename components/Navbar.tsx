@@ -96,17 +96,17 @@ export default function Navbar({
             className="group inline-flex items-center gap-3"
             onClick={() => setMenuOpen(false)}
           >
-            <span className="relative h-11 w-11 overflow-hidden rounded-full border border-white/15 bg-stone-950/30 shadow-[0_10px_28px_rgba(0,0,0,0.24)]">
+            <span className="relative h-12 w-12 overflow-hidden rounded-full border border-amber-100/30 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.3)] ring-1 ring-black/10">
               <Image
-                src="/travel-logo.svg"
+                src="/logo/logo.png"
                 alt=""
                 fill
                 priority
-                sizes="44px"
+                sizes="48px"
                 className="object-cover"
               />
             </span>
-            <span className="font-serif text-lg text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">
+            <span className="font-serif text-lg leading-none text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">
               {brandName}
             </span>
           </Link>

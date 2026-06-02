@@ -113,7 +113,7 @@ export default async function VideosPage() {
             slug: "sample-nepal-video",
             thumbnail:
               siteSettings?.heroImage || {
-                asset: { url: "/images/hero-panorama.jpg" },
+                asset: { url: "/images/hero-panorama.png" },
                 alt: "A long Himalayan mountain panorama",
               },
             destination: null,
