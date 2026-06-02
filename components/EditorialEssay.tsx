@@ -182,17 +182,16 @@ export default function EditorialEssay({
 }) {
   if (!essay) {
     return (
-      <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm sm:px-8">
+      <section className="relative mx-auto max-w-7xl px-0 py-0">
+        <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-6 py-8 backdrop-blur-sm sm:px-8">
           <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
             Journal
           </p>
           <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-            The next story is still forming.
+            The first story is waiting.
           </h2>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/78">
-            The archive is waiting for its next long-form story. Until then,
-            the gallery, destination notes, and video frame remain open.
+            Add a travel story from the admin panel when it is ready.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -222,9 +221,9 @@ export default function EditorialEssay({
   return (
     <section
       id="journal"
-      className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
+      className="relative mx-auto max-w-7xl px-0 py-0"
     >
-      <article className="overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-sm">
+      <article className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] shadow-[0_16px_50px_rgba(0,0,0,0.18)] backdrop-blur-sm">
         {coverSrc ? (
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
@@ -239,7 +238,7 @@ export default function EditorialEssay({
           </div>
         ) : null}
 
-        <div className="grid gap-12 px-6 py-8 md:px-10 md:py-12 lg:grid-cols-[minmax(0,1.6fr)_minmax(16rem,0.7fr)] lg:px-12">
+        <div className="grid gap-8 px-5 py-7 md:px-8 md:py-9 lg:grid-cols-[minmax(0,1.6fr)_minmax(16rem,0.7fr)]">
           <div>
             <div className="flex flex-wrap items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-stone-300/60">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
@@ -256,13 +255,13 @@ export default function EditorialEssay({
               <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
                 Featured essay
               </p>
-              <h2 className="mt-4 text-balance font-serif text-[clamp(2.7rem,5vw,4.8rem)] leading-[0.95] tracking-tight text-stone-50">
+              <h2 className="mt-4 text-balance font-serif text-[clamp(2rem,4vw,3.4rem)] leading-[1] tracking-tight text-stone-50">
                 {essay.title}
               </h2>
               <p className="mt-5 max-w-2xl text-pretty text-base leading-8 text-stone-200/76 md:text-lg">
                 {essay.destination
-                  ? `Written from ${essay.destination}, this story lingers on the details that turn movement into memory.`
-                  : "Written in the language of slow movement, this story lingers on the details that turn travel into memory."}
+                  ? `A travel note from ${essay.destination}.`
+                  : "A travel note from the road."}
               </p>
             </div>
 
@@ -280,7 +279,7 @@ export default function EditorialEssay({
                     Story body
                   </p>
                   <p className="mt-4 text-pretty text-base leading-8 text-stone-200/78">
-                    This story is waiting for its full travel text. The page is ready, and the article body can be added from Sanity whenever the essay is published.
+                    This story is waiting for its full text. Add it from the admin panel when ready.
                   </p>
                 </div>
               )}
@@ -289,25 +288,20 @@ export default function EditorialEssay({
 
           <aside className="space-y-4 self-start rounded-[1.75rem] border border-white/10 bg-stone-950/35 p-5">
             <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
-              Editorial notes
+              Story note
             </p>
             <div className="space-y-4 text-sm leading-7 text-stone-200/78">
               <p>
-                A quiet record of place, weather, and the small decisions that
-                make a journey feel personal.
-              </p>
-              <p>
-                The full archive stays easy to scan, with generous spacing and
-                restrained motion for reading on any screen.
+                Keep the story simple, personal, and easy to read.
               </p>
             </div>
 
             <div className="rounded-[1.25rem] border border-white/10 bg-white/5 p-4">
               <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/55">
-                Reading tone
+                Best for
               </p>
               <p className="mt-3 font-serif text-2xl text-stone-50">
-                Measured, immersive, and unhurried.
+                Places, photos, and memories.
               </p>
             </div>
           </aside>

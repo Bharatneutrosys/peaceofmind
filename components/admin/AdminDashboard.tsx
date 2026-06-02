@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useActionState } from "react";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
   Check,
+  ExternalLink,
+  Home,
   ImagePlus,
   LogOut,
   PencilLine,
@@ -148,31 +151,49 @@ export default function AdminDashboard({
   const settings = initialSettings || {};
 
   return (
-    <main className="min-h-screen px-6 pb-16 pt-24 sm:px-8 lg:px-12">
+    <main className="admin-panel min-h-screen bg-[#f7f2ea] px-6 pb-16 pt-10 text-stone-900 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+            <p className="text-xs uppercase tracking-[0.32em] text-stone-500">
               Traveller&apos;s Diary Admin
             </p>
-            <h1 className="mt-4 font-serif text-4xl leading-tight text-stone-50 md:text-6xl">
+            <h1 className="mt-4 font-serif text-4xl leading-tight text-stone-950 md:text-6xl">
               Simple website editing.
             </h1>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-stone-200/72">
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-stone-600">
               Update the website text, links, destinations, stories, photo journals,
               and videos from one owner-friendly panel.
             </p>
           </div>
 
-          <form action={logoutAction}>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 transition-colors duration-300 hover:bg-white/12"
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50"
             >
-              <LogOut className="h-4 w-4" />
-              Logout
-            </button>
-          </form>
+              <Home className="h-4 w-4" />
+              Home
+            </Link>
+            <Link
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Preview Website
+            </Link>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-stone-700"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
+            </form>
+          </div>
         </div>
 
         <nav className="mt-10 flex gap-3 overflow-x-auto pb-2">
@@ -180,7 +201,7 @@ export default function AdminDashboard({
             <a
               key={tab}
               href={`#${sectionId(tab)}`}
-              className="shrink-0 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-100/72 transition-colors hover:bg-white/12"
+              className="shrink-0 rounded-full border border-stone-300 bg-white px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-600 shadow-sm transition-colors hover:bg-stone-50"
             >
               {tab}
             </a>
@@ -228,7 +249,7 @@ export default function AdminDashboard({
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save hero">
               <div className="grid gap-5">
                 <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading"]} />
-                <Field label="Hero Headline" name="heroHeadline" defaultValue={settings.heroHeadline || ""} required />
+                <Field label="Hero Heading" name="heroHeadline" defaultValue={settings.heroHeadline || ""} required />
                 <TextAreaField label="Hero Description" name="heroSubheading" defaultValue={settings.heroSubheading || ""} />
                 <ImageUploadField
                   label="Hero Image"
@@ -256,14 +277,14 @@ export default function AdminDashboard({
 
           <AdminSection
             title="Author Profile"
-            description="The author name and biography used on the About page and homepage profile section."
+            description="The traveler name and short profile used on the About page and homepage profile section."
           >
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save author profile">
               <div className="grid gap-5 md:grid-cols-2">
                 <HiddenSettings settings={settings} brandName={brandName} except={["authorDisplayName", "authorBio"]} />
-                <Field label="Author Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
+                <Field label="Traveler Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
                 <TextAreaField
-                  label="About the Author"
+                  label="About the Traveler"
                   name="authorBio"
                   defaultValue={settings.authorBio || ""}
                   className="md:col-span-2"

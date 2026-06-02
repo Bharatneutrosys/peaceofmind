@@ -104,3 +104,54 @@ section {
     scroll-behavior: auto !important;
   }
 }
+
+.admin-panel {
+  color-scheme: light;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42)),
+    #f7f2ea;
+}
+
+.admin-panel section,
+.admin-panel details,
+.admin-panel [class*="bg-white/["],
+.admin-panel [class*="bg-white/5"],
+.admin-panel [class*="bg-white/6"],
+.admin-panel [class*="bg-stone-950"] {
+  border-color: rgba(120, 113, 108, 0.22) !important;
+  background: rgba(255, 255, 255, 0.76) !important;
+  box-shadow: 0 18px 48px rgba(68, 64, 60, 0.11) !important;
+}
+
+.admin-panel [class*="text-stone-50"],
+.admin-panel [class*="text-stone-100"] {
+  color: #1c1917 !important;
+}
+
+.admin-panel [class*="text-stone-200"],
+.admin-panel [class*="text-stone-300"],
+.admin-panel [class*="text-stone-400"] {
+  color: rgba(68, 64, 60, 0.72) !important;
+}
+
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel select {
+  border-color: rgba(120, 113, 108, 0.28) !important;
+  background: #fff !important;
+  color: #1c1917 !important;
+}
+
+.admin-panel input::file-selector-button {
+  background: #1c1917;
+  color: #fff;
+}
+
+.admin-panel summary,
+.admin-panel label {
+  color: #1c1917;
+}
+
+.admin-panel button[type="submit"] {
+  box-shadow: 0 10px 24px rgba(68, 64, 60, 0.16);
+}

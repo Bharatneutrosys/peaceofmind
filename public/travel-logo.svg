@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Travel diary mountain emblem</title>
+  <desc id="desc">Round emblem with a traveler walking on a mountain trail.</desc>
+  <defs>
+    <linearGradient id="sky" x1="24" x2="78" y1="10" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6ead7"/>
+      <stop offset=".48" stop-color="#d7b67b"/>
+      <stop offset="1" stop-color="#6f8fa1"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="29" x2="68" y1="58" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff4df"/>
+      <stop offset="1" stop-color="#b98f54"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1d1710" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <circle cx="48" cy="48" r="44" fill="#15110c"/>
+  <circle cx="48" cy="48" r="39" fill="url(#sky)" filter="url(#shadow)"/>
+  <path d="M10 61c9-12 16-23 25-34l18 24 12-15 21 27v16H10V61Z" fill="#233036" opacity=".92"/>
+  <path d="m19 60 16-20 9 12-6-2-11 15-8-5Zm31-8 15-18 20 28-11-6-8-11-10 14-6-7Z" fill="#f9ead0" opacity=".88"/>
+  <path d="M18 79c15-14 29-21 45-24 1 0 2 1 1 2-9 6-13 12-12 22H18Z" fill="url(#trail)"/>
+  <path d="M43 80c4-12 10-18 21-24" fill="none" stroke="#654621" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+  <g fill="#1b1712" stroke="#1b1712" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="48" cy="38" r="4.2"/>
+    <path d="M46 43c-3 4-4 10-3 17m5-16 8 8m-10 1-8 6m6-1-5 11m11-10 7 10" fill="none" stroke-width="3.2"/>
+    <path d="M55 48c3-2 6-2 8 1l-2 8c-4-1-7-4-8-7l2-2Z"/>
+    <path d="M63 52v20" fill="none" stroke-width="2"/>
+  </g>
+  <circle cx="48" cy="48" r="39" fill="none" stroke="#fff7e8" stroke-opacity=".62" stroke-width="2"/>
+</svg>

@@ -6,7 +6,8 @@ Use this guide when updating the website from the simple owner panel.
 
 1. Open `/admin`.
 2. Enter the admin passcode.
-3. Use Logout when finished.
+3. Use Home or Preview Website to check the public site.
+4. Use Logout when finished.
 
 Local URL: `http://localhost:3000/admin`
 Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
@@ -28,7 +29,7 @@ Select Save after editing. The public site updates after revalidation or refresh
 
 Open the Hero section to update:
 
-- Hero Headline
+- Hero Heading
 - Hero Description
 - Hero Image
 
@@ -48,8 +49,8 @@ Leave a field empty to hide that social link on the public site.
 
 Open Author Profile to update:
 
-- Author Display Name
-- About the Author
+- Traveler Display Name
+- About the Traveler
 - Author Image
 
 Use a clear portrait or creator image owned by the creator.

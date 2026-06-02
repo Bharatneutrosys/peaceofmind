@@ -17,23 +17,23 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Traveller's Diary | Premium Nepal Travel Stories",
+  title: "Traveller's Diary | Travel Notes, Photos, and Videos",
   description:
-    "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+    "Simple travel notes, photos, and videos from places worth remembering.",
   metadataBase: new URL(getSiteUrl()),
   openGraph: {
-    title: "Traveller's Diary | Premium Nepal Travel Stories",
+    title: "Traveller's Diary | Travel Notes, Photos, and Videos",
     description:
-      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+      "Simple travel notes, photos, and videos from places worth remembering.",
     url: "/",
     siteName: "Traveller's Diary",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Traveller's Diary | Premium Nepal Travel Stories",
+    title: "Traveller's Diary | Travel Notes, Photos, and Videos",
     description:
-      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+      "Simple travel notes, photos, and videos from places worth remembering.",
   },
 };
 

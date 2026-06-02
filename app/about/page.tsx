@@ -55,13 +55,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const siteSettings = await getSiteSettings();
+  const brandName = siteSettings?.brandName || "Traveller's Diary";
 
   return (
     <main className="min-h-screen">
       <PageHeader
         eyebrow="About"
-        title="Traveller's Diary"
-        description="A premium travel journal shaped by a young woman from Far Western Nepal who grew up near hills and mountains and studies travel and tourism."
+        title={brandName}
+        description="Travel notes, photos, and videos from a traveler collecting places worth remembering."
         action={
           <Link
             href="/journal"

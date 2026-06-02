@@ -96,14 +96,34 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function VideosPage() {
-  const videos = await client.fetch<VideoRecord[]>(getAllVideosQuery).catch(() => []);
+  const [videos, siteSettings] = await Promise.all([
+    client.fetch<VideoRecord[]>(getAllVideosQuery).catch(() => []),
+    getSiteSettings(),
+  ]);
+  const visibleVideos =
+    videos.length > 0
+      ? videos
+      : [
+          {
+            _id: "sample-nepal-video",
+            title: "Sample Nepal travel video",
+            description:
+              "Sample content for testing the video section. Replace it from the admin panel when the first real video is ready.",
+            youtubeUrl: "https://www.youtube.com/watch?v=ZZIwr_gUvc0",
+            slug: "sample-nepal-video",
+            thumbnail: siteSettings?.heroImage || null,
+            destination: null,
+            category: null,
+            publishedAt: null,
+          },
+        ];
 
   return (
     <main className="min-h-screen">
       <PageHeader
         eyebrow="Videos"
-        title="Film frames, route stories, and future travel episodes."
-        description="A dedicated space for Traveller's Diary videos. Each card is ready to hold a watch link or a clean embed when the channel content arrives."
+        title="Travel videos and road notes."
+        description="A simple place for journey clips, YouTube links, and quiet video moments from the road."
         action={
           <Link
             href="/about"
@@ -116,9 +136,9 @@ export default async function VideosPage() {
       />
 
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
-        {videos.length > 0 ? (
+        {visibleVideos.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {videos.map((video) => {
+            {visibleVideos.map((video) => {
               const embedUrl = toYoutubeEmbedUrl(video.youtubeUrl);
               const watchUrl = video.youtubeUrl || embedUrl;
 

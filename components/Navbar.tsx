@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -12,7 +13,6 @@ const navItems = [
   { label: "Gallery", href: "/gallery" },
   { label: "Videos", href: "/videos" },
   { label: "About", href: "/about" },
-  { label: "Admin", href: "/admin" },
 ];
 
 type SocialLinks = {
@@ -96,11 +96,18 @@ export default function Navbar({
             className="group inline-flex items-center gap-3"
             onClick={() => setMenuOpen(false)}
           >
-            <span className="font-serif text-xl tracking-[0.18em] text-stone-50 transition-colors group-hover:text-amber-100 sm:text-2xl">
-              {brandName}
+            <span className="relative h-11 w-11 overflow-hidden rounded-full border border-white/15 bg-stone-950/30 shadow-[0_10px_28px_rgba(0,0,0,0.24)]">
+              <Image
+                src="/travel-logo.svg"
+                alt=""
+                fill
+                priority
+                sizes="44px"
+                className="object-cover"
+              />
             </span>
-            <span className="hidden rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-stone-200/72 md:inline-flex">
-              Slow travel journal
+            <span className="font-serif text-lg text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">
+              {brandName}
             </span>
           </Link>
 
@@ -168,8 +175,7 @@ export default function Navbar({
             {brandName}
           </p>
           <p className="mt-3 max-w-sm text-sm leading-7 text-stone-200/82">
-            Slow routes, measured light, and the places that stay with you long
-            after the road ends.
+            Travel notes, photos, and videos from places worth remembering.
           </p>
         </div>
 

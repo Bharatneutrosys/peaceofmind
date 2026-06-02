@@ -9,9 +9,9 @@ type SocialLinks = {
 };
 
 const values = [
-  "Slow routes over loud itineraries",
-  "Small details over broad summaries",
-  "Quiet luxury over spectacle",
+  "Simple notes from real journeys",
+  "Photos that hold a memory",
+  "Places shared in a warm voice",
 ];
 
 function socialItems(socialLinks?: SocialLinks) {
@@ -43,9 +43,9 @@ export default function AuthorProfile({
   return (
     <section
       id="philosophy"
-      className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
+      className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12"
     >
-      <div className="grid items-center gap-10 rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur-sm md:p-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:p-10">
+      <div className="grid items-center gap-8 rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-5 shadow-[0_18px_54px_rgba(0,0,0,0.18)] backdrop-blur-sm md:p-7 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.1fr)]">
         <div className="relative">
           <div className="absolute -inset-4 hidden rounded-[2rem] border border-white/8 bg-white/6 blur-0 md:block" />
           <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-white/10 bg-stone-950/50">
@@ -70,21 +70,20 @@ export default function AuthorProfile({
             Philosophy
           </p>
 
-          <h2 className="mt-5 text-balance font-serif text-[clamp(2.7rem,5vw,4.9rem)] leading-[0.96] tracking-tight text-stone-50">
-            Raised close to the hills of Far Western Nepal, Traveller&apos;s Diary
-            studies the world through roads, weather, food, silence, and movement.
+          <h2 className="mt-5 text-balance font-serif text-[clamp(2.1rem,4vw,3.8rem)] leading-[1] tracking-tight text-stone-50">
+            A traveler collecting places, photos, and small moments from the road.
           </h2>
 
           <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-stone-200/78 md:text-lg">
             {authorBio ||
-            "This is a quiet beginning for a travel diary: a place for stories, photo journals, and destination notes shaped by a young woman from Far Western Nepal who is studying travel and tourism with a storyteller’s eye."}
+              "This is a simple travel diary for notes, photos, and videos from places that feel worth remembering."}
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {[
-              { label: "Perspective", value: "Mountain-born and observant" },
-              { label: "Focus", value: "People, places, culture" },
-              { label: "Voice", value: "Elegant and grounded" },
+              { label: "Focus", value: "Travel notes" },
+              { label: "Photos", value: "Everyday beauty" },
+              { label: "Voice", value: "Warm and clear" },
             ].map((item) => (
               <div
                 key={item.label}

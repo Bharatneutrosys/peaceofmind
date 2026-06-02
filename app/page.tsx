@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  MapPin,
   Play,
   Sparkles,
 } from "lucide-react";
@@ -15,7 +14,6 @@ import AuthorProfile from "@/components/AuthorProfile";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import {
-  getCategoriesQuery,
   getDestinationsQuery,
   getEssaysQuery,
   getFeaturedVideoQuery,
@@ -152,7 +150,7 @@ export async function generateMetadata() {
     description:
       siteSettings?.shortDescription ||
       siteSettings?.tagline ||
-      "A cinematic travel creator platform from Far Western Nepal, sharing essays, photo journals, destination stories, and future video features.",
+      "Simple travel notes, photos, and videos from places worth remembering.",
     path: "/",
     image,
     imageAlt:
@@ -246,10 +244,9 @@ function socialItems(settings?: SiteSettings | null) {
 }
 
 export default async function Home() {
-  const [siteSettings, categories, allEssays, featuredEssays, allJournals, featuredJournals, destinations, featuredVideo] =
+  const [siteSettings, allEssays, featuredEssays, allJournals, featuredJournals, destinations, featuredVideo] =
     await Promise.all([
       safeFetch("siteSettings", () => client.fetch<SiteSettings | null>(getSiteSettingsQuery), null),
-      safeFetch("categories", () => client.fetch<CategoryRecord[]>(getCategoriesQuery), []),
       safeFetch("essays", () => client.fetch<EssayRecord[]>(getEssaysQuery), []),
       safeFetch("featuredEssays", () => client.fetch<EssayRecord[]>(getFeaturedEssaysQuery), []),
       safeFetch("photoJournals", () => client.fetch<PhotoJournalRecord[]>(getPhotoJournalsQuery), []),
@@ -282,10 +279,10 @@ export default async function Home() {
         _id: "site-settings-featured-video",
         title:
           siteSettings.youtubeFeatureTitle ||
-          "A cinematic frame reserved for future travel films.",
+          "A short travel film for testing the video section.",
         description:
           siteSettings.youtubeFeatureDescription ||
-          "A space reserved for future travel films and route stories from the official channel.",
+          "A sample video card helps preview how future travel films will look here.",
         youtubeUrl: siteSettings.youtubeFeatureUrl,
         thumbnail:
           siteSettings.heroImage ||
@@ -309,54 +306,20 @@ export default async function Home() {
           : null,
       }
     : null);
-
-  const categoryCards: CategoryRecord[] = [
-    {
-      _id: "nepal",
-      title: "Nepal",
-      description: "Mountain roads, local journeys, and the landscapes closest to home.",
-    },
-    {
-      _id: "south-asia",
-      title: "South Asia",
-      description: "Neighboring routes, border towns, culture, and movement across the region.",
-    },
-    {
-      _id: "europe",
-      title: "Europe",
-      description: "Future city escapes, rail journeys, and long-form destination essays.",
-    },
-    {
-      _id: "more-coming-soon",
-      title: "More coming soon",
-      description: "Ready to expand from the simple admin panel as the archive grows.",
-    },
-  ];
-
-  const liveCategories: CategoryRecord[] = categories.length > 0 ? categories : categoryCards;
-
-  const destinationsWithCounts = destinations.map((destination) => {
-    const categoryTitle = destination.category?.title || destination.region || null;
-    const relatedEssays = allEssays.filter((essay) =>
-      Boolean(
-        essay.destination === destination.title ||
-          (categoryTitle && essay.category?.title === categoryTitle),
-      ),
-    ).length;
-    const relatedJournals = allJournals.filter((journal) =>
-      Boolean(
-        journal.destination === destination.title ||
-          (categoryTitle && journal.category?.title === categoryTitle),
-      ),
-    ).length;
-
-    return {
-      ...destination,
-      relatedEssays,
-      relatedJournals,
-      image: resolveImageUrl(destination.coverImage, 1200),
-    };
-  });
+  const sampleVideoSource = featuredVideoSource || {
+    _id: "sample-nepal-video",
+    title: "Sample Nepal travel video",
+    description:
+      "Sample content for testing the video section. Replace it from the admin panel when the first real video is ready.",
+    youtubeUrl: "https://www.youtube.com/watch?v=ZZIwr_gUvc0",
+    thumbnail:
+      siteSettings?.heroImage ||
+      featuredJournals[0]?.coverImage ||
+      latestJournal?.coverImage ||
+      null,
+    destination: null,
+    category: null,
+  };
 
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden bg-transparent">
@@ -373,16 +336,16 @@ export default async function Home() {
         eyebrow={
           siteSettings?.subtitle ||
           siteSettings?.tagline ||
-          "Born in the hills of Far Western Nepal"
+          "Travel diary"
         }
         headline={
           siteSettings?.heroHeadline ||
-          "A cinematic travel diary shaped by mountain roads, long horizons, and quiet discovery."
+          "Stories from the road, the mountains, and beyond."
         }
         subheading={
           siteSettings?.heroSubheading ||
           siteSettings?.shortDescription ||
-          "Stories from Nepal and beyond, told with the patience of a travel notebook and the polish of an editorial brand."
+          "Travel notes, photos, and videos from places worth remembering."
         }
         location={heroLocation}
         season={latestEssay?.date ? featuredMonth : "Nepal • South Asia • Beyond"}
@@ -393,134 +356,21 @@ export default async function Home() {
         ]}
       />
 
-      <section
-        id="destinations"
-        className="mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
-      >
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-stone-300/55">
-              <MapPin className="h-3.5 w-3.5 text-amber-100" />
-              Destination categories
-            </p>
-            <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-              The archive is being built as a map of places, not just a feed.
-            </h2>
-          </div>
-          <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
-            Nepal, South Asia, Europe, and future categories can expand from the
-            admin panel as the brand grows.
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {liveCategories.map((category) => (
-            <article
-              key={category._id || category.title}
-              className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_16px_40px_rgba(0,0,0,0.16)] backdrop-blur-sm"
-            >
-              <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-300/55">
-                {category.regionLabel || category.title}
-              </p>
-              <h3 className="mt-3 font-serif text-2xl text-stone-50">
-                {category.title}
-              </h3>
-              <p className="mt-3 text-sm leading-7 text-stone-200/74">
-                {"description" in category && category.description
-                  ? category.description
-                  : "A category ready to grow with the archive."}
-              </p>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-stone-200/70">
-                <Sparkles className="h-3.5 w-3.5 text-amber-100" />
-                Future routes
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {destinationsWithCounts.length > 0 ? (
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {destinationsWithCounts.map((destination) => (
-              <article
-                key={destination._id}
-                className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] shadow-[0_16px_40px_rgba(0,0,0,0.16)]"
-              >
-                <div className="relative aspect-[16/10] bg-stone-950/40">
-                  {destination.image ? (
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url("${destination.image}")` }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_35%)]" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/24 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/55">
-                      {destination.category?.title || destination.region || "Destination"}
-                    </p>
-                    <h3 className="mt-2 font-serif text-2xl text-stone-50">
-                      {destination.title}
-                    </h3>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <p className="text-sm leading-7 text-stone-200/76">
-                    {destination.shortIntro ||
-                      destination.description ||
-                      "A destination note ready to deepen as more stories are added."}
-                  </p>
-                  <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                    <div className="rounded-[1rem] border border-white/8 bg-stone-950/30 px-4 py-3">
-                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-stone-300/50">
-                        Essays
-                      </p>
-                      <p className="mt-2 text-lg text-stone-50">
-                        {String(destination.relatedEssays).padStart(2, "0")}
-                      </p>
-                    </div>
-                    <div className="rounded-[1rem] border border-white/8 bg-stone-950/30 px-4 py-3">
-                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-stone-300/50">
-                        Frames
-                      </p>
-                      <p className="mt-2 text-lg text-stone-50">
-                        {String(destination.relatedJournals).padStart(2, "0")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm">
-            <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
-              No live destinations yet
-            </p>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-stone-200/76">
-              The category system is ready for future routes from the admin
-              panel, and the homepage still reads as a finished editorial page
-              even before the archive fills out.
-            </p>
-          </div>
-        )}
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
-        <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-8 backdrop-blur-sm md:px-8">
+      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">
+        <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] px-5 py-7 backdrop-blur-sm md:px-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
-                Featured journal entry
+              <p className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+                Featured story
               </p>
-              <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
-                Recent writing from the road
+              <h2 className="mt-3 font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
+                A simple note from the road.
               </h2>
             </div>
             <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
               {storyCount > 0
-                ? `${storyCount} live pieces currently published across essays and photo journals.`
-                : "The journal is waiting for its first long-form story, and the layout is ready for it."}
+                ? `${storyCount} pieces are live across stories and photo journals.`
+                : "The first story can be added from the admin panel when ready."}
             </p>
           </div>
 
@@ -536,7 +386,7 @@ export default async function Home() {
 
       <section
         id="videos"
-        className="mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12"
+        className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12"
       >
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
@@ -544,25 +394,25 @@ export default async function Home() {
               <Play className="h-3.5 w-3.5 text-amber-100" />
               YouTube feature
             </p>
-            <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
+            <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
               {siteSettings?.youtubeFeatureTitle ||
-                "A cinematic frame reserved for future travel films."}
+                "A video window for the journey."}
             </h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
             {siteSettings?.youtubeFeatureDescription ||
-              "This space is ready for an embedded YouTube player later, without changing the structure of the homepage."}
+              "Use this area to test a travel video now, then replace it with the creator's own video from the admin panel."}
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)]">
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_90px_rgba(0,0,0,0.22)]">
             <div className="relative aspect-video bg-stone-950/50">
-              {featuredVideoSource?.thumbnail ? (
+              {sampleVideoSource?.thumbnail ? (
                 <div
                   className="absolute inset-0 bg-cover bg-center"
                   style={{
-                    backgroundImage: `url("${resolveImageUrl(featuredVideoSource.thumbnail, 1800)}")`,
+                    backgroundImage: `url("${resolveImageUrl(sampleVideoSource.thumbnail, 1800)}")`,
                   }}
                 />
               ) : null}
@@ -579,7 +429,7 @@ export default async function Home() {
                     </p>
                     <p className="mt-3 font-serif text-2xl text-stone-50">
                       {featuredVideoSource?.title ||
-                        "Travel films, soon."}
+                        sampleVideoSource.title}
                     </p>
                   </div>
                 </div>
@@ -592,13 +442,11 @@ export default async function Home() {
               Future embed
             </p>
             <p className="mt-4 text-sm leading-7 text-stone-200/76">
-              {featuredVideoSource?.description ||
-                siteFeaturedVideo?.description ||
-                "A YouTube URL can be connected here later from the admin panel or replaced with a live iframe when the channel is ready."}
+              {sampleVideoSource.description}
             </p>
-            {featuredVideoSource?.youtubeUrl ? (
+            {sampleVideoSource.youtubeUrl ? (
               <a
-                href={featuredVideoSource.youtubeUrl}
+                href={sampleVideoSource.youtubeUrl}
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
                 target="_blank"
                 rel="noreferrer"
@@ -665,12 +513,11 @@ export default async function Home() {
                 <Sparkles className="h-3.5 w-3.5 text-amber-100" />
                 Follow the diary
               </p>
-              <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-5xl">
-                Stay close to the next story, the next route, and the next frame.
+              <h2 className="mt-4 font-serif text-3xl leading-tight text-stone-50 md:text-4xl">
+                Follow the next trip.
               </h2>
               <p className="mt-4 max-w-2xl text-pretty text-base leading-8 text-stone-200/76">
-                Built for readers who want the travel diary, the photos, and the
-                future video stories in one elegant place.
+                New notes, photos, and videos will appear here as the journey grows.
               </p>
             </div>
 
