@@ -120,10 +120,10 @@ type Action = (state: AdminState, formData: FormData) => Promise<AdminState>;
 const initialState: AdminState = { error: null, message: null };
 
 const tabs = [
-  "Site Settings",
+  "Website Settings",
   "Hero",
   "Social Links",
-  "Author Profile",
+  "About the Traveler",
   "Categories",
   "Destinations",
   "Journal Stories",
@@ -210,18 +210,19 @@ export default function AdminDashboard({
 
         <div className="mt-8 space-y-8">
           <AdminSection
-            title="Site Settings"
-            description="Website name, homepage intro, featured YouTube text, and the main reusable settings."
+            title="Website Settings"
+            description="Website name, tagline, short description, and the homepage video text."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save site settings">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save website settings">
               <div className="grid gap-5 md:grid-cols-2">
                 <Field label="Website Name" name="brandName" defaultValue={settings.brandName || brandName} required />
-                <Field label="Homepage Tagline" name="tagline" defaultValue={settings.tagline || ""} />
+                <Field label="Tagline" name="tagline" defaultValue={settings.tagline || ""} />
                 <TextAreaField
-                  label="Short Homepage Introduction"
+                  label="Short Description"
                   name="shortDescription"
                   defaultValue={settings.shortDescription || ""}
                   className="md:col-span-2"
+                  helpText="Keep this to one or two simple sentences."
                 />
                 <Field label="YouTube Feature Title" name="youtubeFeatureTitle" defaultValue={settings.youtubeFeatureTitle || ""} />
                 <Field label="YouTube Feature Link" name="youtubeFeatureUrl" defaultValue={settings.youtubeFeatureUrl || ""} />
@@ -249,8 +250,19 @@ export default function AdminDashboard({
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save hero">
               <div className="grid gap-5">
                 <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading"]} />
-                <Field label="Hero Heading" name="heroHeadline" defaultValue={settings.heroHeadline || ""} required />
-                <TextAreaField label="Hero Description" name="heroSubheading" defaultValue={settings.heroSubheading || ""} />
+                <Field
+                  label="Hero Heading"
+                  name="heroHeadline"
+                  defaultValue={settings.heroHeadline || ""}
+                  required
+                  helpText="Keep hero text short so the mountain image stays visible."
+                />
+                <TextAreaField
+                  label="Hero Description"
+                  name="heroSubheading"
+                  defaultValue={settings.heroSubheading || ""}
+                  helpText="One short sentence works best."
+                />
                 <ImageUploadField
                   label="Hero Image"
                   name="heroImage"
@@ -268,26 +280,27 @@ export default function AdminDashboard({
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save social links">
               <div className="grid gap-5 md:grid-cols-3">
                 <HiddenSettings settings={settings} brandName={brandName} except={["facebookUrl", "instagramUrl", "youtubeUrl"]} />
-                <Field label="Facebook Link" name="facebookUrl" defaultValue={settings.facebookUrl || ""} />
-                <Field label="Instagram Link" name="instagramUrl" defaultValue={settings.instagramUrl || ""} />
-                <Field label="YouTube Link" name="youtubeUrl" defaultValue={settings.youtubeUrl || ""} />
+                <Field label="Facebook URL" name="facebookUrl" defaultValue={settings.facebookUrl || ""} />
+                <Field label="Instagram URL" name="instagramUrl" defaultValue={settings.instagramUrl || ""} />
+                <Field label="YouTube URL" name="youtubeUrl" defaultValue={settings.youtubeUrl || ""} />
               </div>
             </ActionForm>
           </AdminSection>
 
           <AdminSection
-            title="Author Profile"
+            title="About the Traveler"
             description="The traveler name and short profile used on the About page and homepage profile section."
           >
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save author profile">
               <div className="grid gap-5 md:grid-cols-2">
                 <HiddenSettings settings={settings} brandName={brandName} except={["authorDisplayName", "authorBio"]} />
-                <Field label="Traveler Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
+                <Field label="Display Name" name="authorDisplayName" defaultValue={settings.authorDisplayName || ""} />
                 <TextAreaField
-                  label="About the Traveler"
+                  label="About/Bio Text"
                   name="authorBio"
                   defaultValue={settings.authorBio || ""}
                   className="md:col-span-2"
+                  helpText="Write simply and naturally, like a short introduction."
                 />
                 <div className="md:col-span-2">
                   <ImageUploadField
@@ -303,7 +316,7 @@ export default function AdminDashboard({
 
           <AdminSection
             title="Categories"
-            description="Create and update the travel groupings shown across the site. Delete is intentionally skipped for now to avoid removing content that may be in use."
+            description="Create and update the travel groupings shown across the site. Delete is skipped for now to avoid removing content that may be in use."
           >
             <CategoryForm title="Add Category" />
             <RecordList emptyText="No categories yet.">
@@ -406,9 +419,9 @@ function CategoryForm({ title, category }: { title: string; category?: CategoryR
         <Field label="Title" name="title" defaultValue={category?.title || ""} required />
         <Field label="Slug" name="slug" defaultValue={category?.slug || ""} />
         <TextAreaField label="Description" name="description" defaultValue={category?.description || ""} className="md:col-span-2" />
-        <Field label="Travel Region" name="regionLabel" defaultValue={category?.regionLabel || ""} />
+        <Field label="Region Label" name="regionLabel" defaultValue={category?.regionLabel || ""} />
         <Field label="Display Order" name="order" type="number" defaultValue={numberValue(category?.order)} />
-        <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(category?.featured)} />
+        <CheckboxField label="Featured" name="featured" defaultChecked={Boolean(category?.featured)} />
         <div className="md:col-span-2">
           <ImageUploadField
             label="Cover Image"
@@ -442,7 +455,7 @@ function DestinationForm({
         <TextAreaField label="Short Introduction" name="shortIntro" defaultValue={destination?.shortIntro || ""} />
         <TextAreaField label="Description" name="description" defaultValue={destination?.description || ""} />
         <Field label="Display Order" name="order" type="number" defaultValue={numberValue(destination?.order)} />
-        <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(destination?.featured)} />
+        <CheckboxField label="Featured" name="featured" defaultChecked={Boolean(destination?.featured)} />
         <div className="md:col-span-2">
           <ImageUploadField
             label="Cover Image"
@@ -478,8 +491,15 @@ function EssayForm({
         <Field label="Publish Date" name="publishedAt" type="datetime-local" defaultValue={dateValue(essay?.publishedAt)} />
         <Field label="Estimated Read Time" name="estimatedReadTime" defaultValue={essay?.estimatedReadTime || ""} />
         <TextAreaField label="Short Introduction" name="excerpt" defaultValue={essay?.excerpt || ""} className="md:col-span-2" />
-        <TextAreaField label="Story Body" name="bodyText" defaultValue={essay?.bodyText || ""} className="md:col-span-2" rows={8} />
-        <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(essay?.featured)} />
+        <TextAreaField
+          label="Story Body"
+          name="bodyText"
+          defaultValue={essay?.bodyText || ""}
+          className="md:col-span-2"
+          rows={8}
+          helpText="Write naturally. Short paragraphs are easier to read."
+        />
+        <CheckboxField label="Featured" name="featured" defaultChecked={Boolean(essay?.featured)} />
         <div className="md:col-span-2">
           <ImageUploadField
             label="Cover Image"
@@ -514,7 +534,7 @@ function PhotoJournalForm({
         <SelectField label="Category" name="categoryId" value={journal?.categoryId || ""} options={categories} />
         <Field label="Publish Date" name="publishedAt" type="datetime-local" defaultValue={dateValue(journal?.publishedAt)} />
         <TextAreaField label="Short Introduction" name="excerpt" defaultValue={journal?.excerpt || ""} className="md:col-span-2" />
-        <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(journal?.featured)} />
+        <CheckboxField label="Featured" name="featured" defaultChecked={Boolean(journal?.featured)} />
         <div className="md:col-span-2">
           <ImageUploadField
             label="Cover Image"
@@ -548,12 +568,18 @@ function VideoForm({
       <div className="grid gap-5 md:grid-cols-2">
         <Field label="Title" name="title" defaultValue={video?.title || ""} required />
         <Field label="Slug" name="slug" defaultValue={video?.slug || ""} />
-        <Field label="YouTube Link" name="youtubeUrl" defaultValue={video?.youtubeUrl || ""} className="md:col-span-2" />
+        <Field
+          label="YouTube URL"
+          name="youtubeUrl"
+          defaultValue={video?.youtubeUrl || ""}
+          className="md:col-span-2"
+          helpText="Use youtube.com/watch?v=, youtu.be/, or youtube.com/embed/ links."
+        />
         <SelectField label="Destination" name="destinationId" value={video?.destinationId || ""} options={destinations} />
         <SelectField label="Category" name="categoryId" value={video?.categoryId || ""} options={categories} />
         <Field label="Publish Date" name="publishedAt" type="datetime-local" defaultValue={dateValue(video?.publishedAt)} />
         <TextAreaField label="Description" name="description" defaultValue={video?.description || ""} className="md:col-span-2" />
-        <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(video?.featured)} />
+        <CheckboxField label="Featured" name="featured" defaultChecked={Boolean(video?.featured)} />
         <div className="md:col-span-2">
           <ImageUploadField
             label="Video Thumbnail"
@@ -682,6 +708,7 @@ function Field({
   required,
   className,
   type = "text",
+  helpText,
 }: {
   label: string;
   name: string;
@@ -689,6 +716,7 @@ function Field({
   required?: boolean;
   className?: string;
   type?: string;
+  helpText?: string;
 }) {
   return (
     <label className={className}>
@@ -700,6 +728,7 @@ function Field({
         required={required}
         className="mt-3 w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 outline-none transition-colors duration-300 placeholder:text-stone-400/50 focus:border-amber-100/50"
       />
+      {helpText ? <p className="mt-2 text-sm leading-6 text-stone-200/72">{helpText}</p> : null}
     </label>
   );
 }
@@ -710,12 +739,14 @@ function TextAreaField({
   defaultValue,
   className,
   rows = 4,
+  helpText,
 }: {
   label: string;
   name: string;
   defaultValue?: string;
   className?: string;
   rows?: number;
+  helpText?: string;
 }) {
   return (
     <label className={className}>
@@ -726,6 +757,7 @@ function TextAreaField({
         rows={rows}
         className="mt-3 w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm leading-7 text-stone-50 outline-none transition-colors duration-300 placeholder:text-stone-400/50 focus:border-amber-100/50"
       />
+      {helpText ? <p className="mt-2 text-sm leading-6 text-stone-200/72">{helpText}</p> : null}
     </label>
   );
 }
@@ -822,7 +854,7 @@ function GalleryUploadField({ gallery }: { gallery: GalleryImageRecord[] }) {
             Gallery Images
           </p>
           <p className="mt-2 text-sm leading-7 text-stone-200/72">
-            Upload multiple compressed JPG/WebP travel photos. Reorder and remove controls will be added next.
+            Upload multiple compressed JPG/WebP travel photos. Existing images stay in place; reorder and remove controls will be added next.
           </p>
           {gallery.length > 0 ? (
             <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">

@@ -14,13 +14,13 @@ Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
 
 The owner should use `/admin`. Sanity Studio at `/studio` is advanced developer CMS access and is usually not needed.
 
-## Edit site settings
+## Edit website settings
 
-Open the Site Settings section to update:
+Open Website Settings to update:
 
 - Website Name
-- Homepage Tagline
-- Short Homepage Introduction
+- Tagline
+- Short Description
 - YouTube feature title, description, and link
 
 Select Save after editing. The public site updates after revalidation or refresh.
@@ -33,27 +33,27 @@ Open the Hero section to update:
 - Hero Description
 - Hero Image
 
-Use a wide panorama image, ideally 2400px or wider. Avoid very large uncompressed files.
+Keep hero text short so the mountain image stays visible. Use a wide panorama image, ideally 2400px or wider. Avoid very large uncompressed files.
 
 ## Add social links
 
 Open Social Links and add:
 
-- Facebook Link
-- Instagram Link
-- YouTube Link
+- Facebook URL
+- Instagram URL
+- YouTube URL
 
 Leave a field empty to hide that social link on the public site.
 
-## Edit author profile
+## Edit about the traveler
 
-Open Author Profile to update:
+Open About the Traveler to update:
 
-- Traveler Display Name
-- About the Traveler
+- Display Name
+- About/Bio Text
 - Author Image
 
-Use a clear portrait or creator image owned by the creator.
+Write simply and naturally. Use a clear portrait or creator image owned by the creator.
 
 ## Add a category
 
@@ -62,8 +62,8 @@ Open Categories, then Add Category. Fill in:
 - Title
 - Slug, or leave empty to generate from the title
 - Description
-- Travel Region
-- Show on Homepage
+- Region Label
+- Featured
 - Display Order
 - Cover Image
 
@@ -79,7 +79,7 @@ Open Destinations, then Add Destination. Fill in:
 - Short Introduction
 - Description
 - Category
-- Show on Homepage
+- Featured
 - Display Order
 - Cover Image
 
@@ -97,10 +97,10 @@ Open Journal Stories, then Add Journal Story. Fill in:
 - Estimated Read Time
 - Short Introduction
 - Story Body
-- Show on Homepage
+- Featured
 - Cover Image
 
-Story Body is plain text in the admin panel and is saved as simple website paragraphs.
+Story Body is plain text in the admin panel and is saved as simple website paragraphs. Short paragraphs are easier to read.
 Use a real travel photo owned by the creator. The title is used as fallback image alt text.
 
 ## Add a photo journal
@@ -113,11 +113,11 @@ Open Photo Journals, then Add Photo Journal. Fill in:
 - Category
 - Publish Date
 - Short Introduction
-- Show on Homepage
+- Featured
 - Cover Image
 - Gallery Images
 
-Use compressed JPG/WebP travel photos. You can upload multiple gallery images at once. Shared alt text and caption apply to the new uploaded batch.
+Use compressed JPG/WebP travel photos. You can upload multiple gallery images at once. Shared alt text and caption apply to the new uploaded batch. Existing gallery images stay visible; reorder and remove controls are still pending.
 
 ## Add a video
 
@@ -125,12 +125,12 @@ Open Videos, then Add Video. Fill in:
 
 - Title
 - Slug, or leave empty to generate from the title
-- YouTube Link
+- YouTube URL
 - Destination
 - Category
 - Publish Date
 - Description
-- Show on Homepage
+- Featured
 - Video Thumbnail
 
 Accepted YouTube links include `youtube.com/watch?v=`, `youtu.be/`, and `youtube.com/embed/`.
@@ -143,6 +143,10 @@ If no thumbnail is uploaded, the public videos page shows a polished fallback.
 - Recommended cover image: 1600px+ width.
 - Recommended gallery images: compressed JPG/WebP, clear travel photos.
 - Avoid very large uncompressed files.
+
+## Preview changes
+
+Use the Home button to return to the site in the same tab. Use Preview Website to open the public homepage in a new tab. Most pages update after revalidation or refresh.
 
 ## Required Vercel environment variables
 

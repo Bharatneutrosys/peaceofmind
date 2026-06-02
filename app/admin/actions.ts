@@ -209,11 +209,21 @@ async function saveDocumentWithClient(
   type: string,
   formData: FormData,
   body: Record<string, unknown>,
+  options?: {
+    unset?: string[];
+    detailPaths?: string[];
+  },
 ) {
   const documentId = readOptionalString(formData, "_id");
 
   if (documentId) {
-    await client.patch(documentId).set(body).commit({ autoGenerateArrayKeys: true });
+    const patch = client.patch(documentId).set(body);
+
+    if (options?.unset?.length) {
+      patch.unset(options.unset);
+    }
+
+    await patch.commit({ autoGenerateArrayKeys: true });
   } else {
     await client.create({
       _type: type,
@@ -222,6 +232,7 @@ async function saveDocumentWithClient(
   }
 
   revalidatePublicPages();
+  options?.detailPaths?.forEach((path) => revalidatePath(path));
 
   return {
     ...SUCCESS,
@@ -394,7 +405,9 @@ export async function saveCategoryAction(
     ...(upload.image ? { coverImage: upload.image } : {}),
   };
 
-  return saveDocumentWithClient(client, "category", formData, body);
+  return saveDocumentWithClient(client, "category", formData, body, {
+    unset: order === null ? ["order"] : [],
+  });
 }
 
 export async function saveDestinationAction(
@@ -435,7 +448,13 @@ export async function saveDestinationAction(
     ...(upload.image ? { coverImage: upload.image } : {}),
   };
 
-  return saveDocumentWithClient(client, "destination", formData, body);
+  return saveDocumentWithClient(client, "destination", formData, body, {
+    unset: [
+      ...(category ? [] : ["category"]),
+      ...(order === null ? ["order"] : []),
+    ],
+    detailPaths: [`/destinations/${slug.current}`],
+  });
 }
 
 export async function saveEssayAction(
@@ -484,7 +503,10 @@ export async function saveEssayAction(
     ...(upload.image ? { coverImage: upload.image } : {}),
   };
 
-  return saveDocumentWithClient(client, "essay", formData, body);
+  return saveDocumentWithClient(client, "essay", formData, body, {
+    unset: category ? [] : ["category"],
+    detailPaths: [`/journal/${slug.current}`],
+  });
 }
 
 export async function savePhotoJournalAction(
@@ -536,6 +558,10 @@ export async function savePhotoJournalAction(
 
   if (documentId) {
     const patch = client.patch(documentId).set(body);
+
+    if (!category) {
+      patch.unset(["category"]);
+    }
 
     if (galleryUpload.images.length > 0) {
       patch.append("gallery", galleryUpload.images);
@@ -599,5 +625,10 @@ export async function saveVideoAction(
     ...(upload.image ? { thumbnail: upload.image } : {}),
   };
 
-  return saveDocumentWithClient(client, "video", formData, body);
+  return saveDocumentWithClient(client, "video", formData, body, {
+    unset: [
+      ...(destination ? [] : ["destination"]),
+      ...(category ? [] : ["category"]),
+    ],
+  });
 }
