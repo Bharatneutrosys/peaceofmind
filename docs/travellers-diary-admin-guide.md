@@ -64,3 +64,5 @@ If the panel does not load or the content is missing, check:
 - `NEXT_PUBLIC_SANITY_API_VERSION=`
 
 `SANITY_API_WRITE_TOKEN` must be created in Sanity Manage with write access. Keep it server-side only and never expose it in the browser.
+
+After adding or changing these environment variables in Vercel, redeploy the site so the admin panel can read them.

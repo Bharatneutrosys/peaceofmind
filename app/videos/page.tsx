@@ -193,8 +193,8 @@ export default async function VideosPage() {
             eyebrow="Videos"
             title="The video archive is ready."
             description="Once YouTube videos are added in Sanity, the page will display the embed or watch link without any redesign."
-            actionLabel="Open Site Settings"
-            actionHref="/about"
+            actionLabel="Open Admin"
+            actionHref="/admin"
           />
         )}
       </section>

@@ -114,6 +114,8 @@ export async function saveSiteSettingsAction(
     .fetch<{ _id?: string } | null>(getSiteSettingsQuery)
     .catch(() => null);
 
+  const settingsDocumentId = current?._id || "siteSettings";
+
   if (!current?._id) {
     await client.createIfNotExists({
       _id: "siteSettings",
@@ -122,7 +124,7 @@ export async function saveSiteSettingsAction(
     });
   }
 
-  const patch = client.patch("siteSettings").set(set);
+  const patch = client.patch(settingsDocumentId).set(set);
 
   if (unset.length > 0) {
     patch.unset(unset);

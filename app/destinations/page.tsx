@@ -286,8 +286,8 @@ export default async function DestinationsPage() {
             eyebrow="Destinations"
             title="The destination archive is ready."
             description="Nepal, South Asia, and Europe can be added from Sanity at any time, and the site will surface them without any redesign."
-            actionLabel="Open Site Settings"
-            actionHref="/studio"
+            actionLabel="Open Admin"
+            actionHref="/admin"
           />
         )}
       </section>

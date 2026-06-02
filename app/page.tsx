@@ -329,7 +329,7 @@ export default async function Home() {
     {
       _id: "more-coming-soon",
       title: "More coming soon",
-      description: "Ready to expand from the Sanity admin panel as the archive grows.",
+      description: "Ready to expand from the simple admin panel as the archive grows.",
     },
   ];
 
@@ -409,7 +409,7 @@ export default async function Home() {
           </div>
           <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
             Nepal, South Asia, Europe, and future categories can expand from the
-            Sanity admin as the brand grows.
+            admin panel as the brand grows.
           </p>
         </div>
 
@@ -594,7 +594,7 @@ export default async function Home() {
             <p className="mt-4 text-sm leading-7 text-stone-200/76">
               {featuredVideoSource?.description ||
                 siteFeaturedVideo?.description ||
-                "A YouTube URL can be connected here later from the Sanity admin or replaced with a live iframe when the channel is ready."}
+                "A YouTube URL can be connected here later from the admin panel or replaced with a live iframe when the channel is ready."}
             </p>
             {featuredVideoSource?.youtubeUrl ? (
               <a
