@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
@@ -16,7 +16,9 @@ import {
 } from "lucide-react";
 
 import {
+  archiveDocumentAction,
   logoutAction,
+  removeGalleryImageAction,
   saveCategoryAction,
   saveDestinationAction,
   saveEssayAction,
@@ -39,6 +41,9 @@ type SiteSettings = {
   youtubeUrl?: string | null;
   authorDisplayName?: string | null;
   authorBio?: string | null;
+  authorImageZoom?: number | null;
+  authorImagePositionX?: number | null;
+  authorImagePositionY?: number | null;
   youtubeFeatureTitle?: string | null;
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
@@ -56,6 +61,7 @@ type CategoryRecord = {
   featured?: boolean | null;
   order?: number | null;
   coverImageUrl?: string | null;
+  isArchived?: boolean | null;
 };
 
 type DestinationRecord = {
@@ -70,6 +76,7 @@ type DestinationRecord = {
   categoryId?: string | null;
   parentDestinationId?: string | null;
   coverImageUrl?: string | null;
+  isArchived?: boolean | null;
 };
 
 type EssayRecord = {
@@ -84,6 +91,7 @@ type EssayRecord = {
   estimatedReadTime?: string | null;
   bodyText?: string | null;
   coverImageUrl?: string | null;
+  isArchived?: boolean | null;
 };
 
 type GalleryImageRecord = {
@@ -104,6 +112,7 @@ type PhotoJournalRecord = {
   featured?: boolean | null;
   coverImageUrl?: string | null;
   gallery?: GalleryImageRecord[] | null;
+  isArchived?: boolean | null;
 };
 
 type VideoRecord = {
@@ -117,6 +126,7 @@ type VideoRecord = {
   destinationId?: string | null;
   categoryId?: string | null;
   thumbnailUrl?: string | null;
+  isArchived?: boolean | null;
 };
 
 type Action = (state: AdminState, formData: FormData) => Promise<AdminState>;
@@ -135,6 +145,95 @@ const tabs = [
   "Videos",
 ];
 
+const adminCards = [
+  {
+    title: "Website Settings",
+    href: "/admin/settings",
+    description: "Website name, tagline, and short homepage description.",
+  },
+  {
+    title: "Hero Section",
+    href: "/admin/hero",
+    description: "Homepage headline, hero image, quote, and hero author card.",
+  },
+  {
+    title: "Author Profile",
+    href: "/admin/author",
+    description: "Traveler bio and profile image crop.",
+  },
+  {
+    title: "Social Links",
+    href: "/admin/social",
+    description: "Facebook, Instagram, and YouTube links.",
+  },
+  {
+    title: "Categories",
+    href: "/admin/categories",
+    description: "Travel regions such as Nepal, South Asia, and Europe.",
+  },
+  {
+    title: "Destinations",
+    href: "/admin/destinations",
+    description: "Places, parent places, child locations, and cover images.",
+  },
+  {
+    title: "Journal Stories",
+    href: "/admin/journal",
+    description: "Create, edit, preview, or remove travel stories.",
+  },
+  {
+    title: "Photo Journals",
+    href: "/admin/photo-journals",
+    description: "Photo journals, gallery uploads, and image removal.",
+  },
+  {
+    title: "Videos",
+    href: "/admin/videos",
+    description: "YouTube videos, thumbnails, and featured video entries.",
+  },
+];
+
+type AdminView =
+  | "settings"
+  | "hero"
+  | "author"
+  | "social"
+  | "categories"
+  | "destinations"
+  | "journal"
+  | "photo-journals"
+  | "videos";
+
+function sectionForView(view?: AdminView) {
+  return {
+    settings: "website-settings",
+    hero: "hero",
+    author: "about-the-traveler",
+    social: "social-links",
+    categories: "categories",
+    destinations: "destinations",
+    journal: "journal-stories",
+    "photo-journals": "photo-journals",
+    videos: "videos",
+  }[view || "settings"];
+}
+
+function routeForSection(tab: string) {
+  return (
+    {
+      "Website Settings": "settings",
+      Hero: "hero",
+      "Social Links": "social",
+      "About the Traveler": "author",
+      Categories: "categories",
+      Destinations: "destinations",
+      "Journal Stories": "journal",
+      "Photo Journals": "photo-journals",
+      Videos: "videos",
+    }[tab] || "settings"
+  );
+}
+
 export default function AdminDashboard({
   initialSettings,
   brandName,
@@ -143,6 +242,7 @@ export default function AdminDashboard({
   essays,
   photoJournals,
   videos,
+  view,
 }: {
   initialSettings?: SiteSettings | null;
   brandName: string;
@@ -151,8 +251,11 @@ export default function AdminDashboard({
   essays: EssayRecord[];
   photoJournals: PhotoJournalRecord[];
   videos: VideoRecord[];
+  view?: AdminView;
 }) {
   const settings = initialSettings || {};
+  const activeSection = view ? sectionForView(view) : null;
+  const showSection = (id: string) => !activeSection || activeSection === id;
 
   return (
     <main className="admin-panel min-h-screen bg-[#f7f2ea] px-6 pb-16 pt-10 text-stone-900 sm:px-8 lg:px-12">
@@ -200,19 +303,52 @@ export default function AdminDashboard({
           </div>
         </div>
 
-        <nav className="mt-10 flex gap-3 overflow-x-auto pb-2">
-          {tabs.map((tab) => (
-            <a
-              key={tab}
-              href={`#${sectionId(tab)}`}
-              className="shrink-0 rounded-full border border-stone-300 bg-white px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-600 shadow-sm transition-colors hover:bg-stone-50"
+        {!view ? (
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {adminCards.map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="group rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:border-stone-300"
+              >
+                <p className="text-xs uppercase tracking-[0.28em] text-stone-500">
+                  Edit
+                </p>
+                <h2 className="mt-4 font-serif text-3xl text-stone-950">
+                  {card.title}
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-stone-600">
+                  {card.description}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-stone-950">
+                  Open section
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <nav className="mt-10 flex flex-wrap gap-3">
+            <Link
+              href="/admin"
+              className="rounded-full border border-stone-300 bg-white px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-600 shadow-sm transition-colors hover:bg-stone-50"
             >
-              {tab}
-            </a>
-          ))}
-        </nav>
+              Admin Dashboard
+            </Link>
+            {tabs.map((tab) => (
+              <Link
+                key={tab}
+                href={`/admin/${routeForSection(tab)}`}
+                className="shrink-0 rounded-full border border-stone-300 bg-white px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-600 shadow-sm transition-colors hover:bg-stone-50"
+              >
+                {tab}
+              </Link>
+            ))}
+          </nav>
+        )}
 
-        <div className="mt-8 space-y-8">
+        {view ? <div className="mt-8 space-y-8">
+          {showSection("website-settings") ? (
           <AdminSection
             title="Website Settings"
             description="Editing: Homepage Settings. Current website values are pre-filled below."
@@ -275,7 +411,9 @@ export default function AdminDashboard({
               </div>
             </ActionForm>
           </AdminSection>
+          ) : null}
 
+          {showSection("hero") ? (
           <AdminSection
             title="Hero"
             description="The first headline and description visitors see on the homepage."
@@ -323,7 +461,9 @@ export default function AdminDashboard({
               </div>
             </ActionForm>
           </AdminSection>
+          ) : null}
 
+          {showSection("social-links") ? (
           <AdminSection
             title="Social Links"
             description="Leave a link empty to hide it gracefully on the public site."
@@ -337,7 +477,9 @@ export default function AdminDashboard({
               </div>
             </ActionForm>
           </AdminSection>
+          ) : null}
 
+          {showSection("about-the-traveler") ? (
           <AdminSection
             title="About the Traveler"
             description="The traveler name and short profile used on the About page and homepage profile section."
@@ -354,17 +496,19 @@ export default function AdminDashboard({
                   helpText="Write simply and naturally, like a short introduction."
                 />
                 <div className="md:col-span-2">
-                  <ImageUploadField
-                    label="Author Image"
-                    name="authorImage"
+                  <ProfileImageCropper
                     currentUrl={settings.authorImageUrl}
-                    helpText="Use a clear portrait or creator image. Compressed JPG or WebP works best."
+                    zoom={settings.authorImageZoom}
+                    positionX={settings.authorImagePositionX}
+                    positionY={settings.authorImagePositionY}
                   />
                 </div>
               </div>
             </ActionForm>
           </AdminSection>
+          ) : null}
 
+          {showSection("categories") ? (
           <AdminSection
             title="Categories"
             description="Create and update the travel groupings shown across the site. Delete is skipped for now to avoid removing content that may be in use."
@@ -376,7 +520,9 @@ export default function AdminDashboard({
               ))}
             </RecordList>
           </AdminSection>
+          ) : null}
 
+          {showSection("destinations") ? (
           <AdminSection
             title="Destinations"
             description="Create and update the places connected to stories, photos, and videos."
@@ -394,7 +540,9 @@ export default function AdminDashboard({
               ))}
             </RecordList>
           </AdminSection>
+          ) : null}
 
+          {showSection("journal-stories") ? (
           <AdminSection
             title="Journal Stories"
             description="Write basic story text without raw JSON. Body text is saved as simple readable paragraphs."
@@ -412,7 +560,9 @@ export default function AdminDashboard({
               ))}
             </RecordList>
           </AdminSection>
+          ) : null}
 
+          {showSection("photo-journals") ? (
           <AdminSection
             title="Photo Journals"
             description="Create photo journal records and upload gallery images for the public gallery."
@@ -430,7 +580,9 @@ export default function AdminDashboard({
               ))}
             </RecordList>
           </AdminSection>
+          ) : null}
 
+          {showSection("videos") ? (
           <AdminSection
             title="Videos"
             description="Add YouTube watch, embed, or youtu.be links. No YouTube API connection is needed."
@@ -448,16 +600,9 @@ export default function AdminDashboard({
               ))}
             </RecordList>
           </AdminSection>
+          ) : null}
 
-          <AdminSection
-            title="Developer CMS"
-            description="The owner should use this admin panel. Sanity Studio remains available at /studio only for advanced developer CMS work."
-          >
-            <p className="text-sm leading-7 text-stone-200/72">
-              Gallery reorder/remove controls and advanced structured content can be added to this panel next.
-            </p>
-          </AdminSection>
-        </div>
+        </div> : null}
       </div>
     </main>
   );
@@ -465,6 +610,7 @@ export default function AdminDashboard({
 
 function CategoryForm({ title, category }: { title: string; category?: CategoryRecord }) {
   return (
+    <>
     <ContentForm title={title} action={saveCategoryAction}>
       <HiddenId id={category?._id} />
       <div className="grid gap-5 md:grid-cols-2">
@@ -484,6 +630,15 @@ function CategoryForm({ title, category }: { title: string; category?: CategoryR
         </div>
       </div>
     </ContentForm>
+    {category?._id ? (
+      <ItemActions
+        id={category._id}
+        type="category"
+        label={category.title || "this category"}
+        previewHref={`/destinations${category.slug ? `?category=${category.slug}` : ""}`}
+      />
+    ) : null}
+    </>
   );
 }
 
@@ -501,6 +656,7 @@ function DestinationForm({
   const parentOptions = destinations.filter((item) => item._id !== destination?._id);
 
   return (
+    <>
     <ContentForm title={title} action={saveDestinationAction}>
       <HiddenId id={destination?._id} />
       <div className="grid gap-5 md:grid-cols-2">
@@ -523,6 +679,15 @@ function DestinationForm({
         </div>
       </div>
     </ContentForm>
+    {destination?._id ? (
+      <ItemActions
+        id={destination._id}
+        type="destination"
+        label={destination.title || "this destination"}
+        previewHref={destination.slug ? `/destinations/${destination.slug}` : "/destinations"}
+      />
+    ) : null}
+    </>
   );
 }
 
@@ -538,6 +703,7 @@ function EssayForm({
   destinations: DestinationRecord[];
 }) {
   return (
+    <>
     <ContentForm title={title} action={saveEssayAction}>
       <HiddenId id={essay?._id} />
       <div className="grid gap-5 md:grid-cols-2">
@@ -567,6 +733,15 @@ function EssayForm({
         </div>
       </div>
     </ContentForm>
+    {essay?._id ? (
+      <ItemActions
+        id={essay._id}
+        type="essay"
+        label={essay.title || "this story"}
+        previewHref={essay.slug ? `/journal/${essay.slug}` : "/journal"}
+      />
+    ) : null}
+    </>
   );
 }
 
@@ -582,6 +757,7 @@ function PhotoJournalForm({
   destinations: DestinationRecord[];
 }) {
   return (
+    <>
     <ContentForm title={title} action={savePhotoJournalAction}>
       <HiddenId id={journal?._id} />
       <div className="grid gap-5 md:grid-cols-2">
@@ -605,6 +781,18 @@ function PhotoJournalForm({
         </div>
       </div>
     </ContentForm>
+    {journal?._id && journal.gallery?.length ? (
+      <GalleryRemovalGrid journalId={journal._id} gallery={journal.gallery} />
+    ) : null}
+    {journal?._id ? (
+      <ItemActions
+        id={journal._id}
+        type="photoJournal"
+        label={journal.title || "this photo journal"}
+        previewHref="/gallery"
+      />
+    ) : null}
+    </>
   );
 }
 
@@ -620,6 +808,7 @@ function VideoForm({
   destinations: DestinationRecord[];
 }) {
   return (
+    <>
     <ContentForm title={title} action={saveVideoAction}>
       <HiddenId id={video?._id} />
       <div className="grid gap-5 md:grid-cols-2">
@@ -647,6 +836,15 @@ function VideoForm({
         </div>
       </div>
     </ContentForm>
+    {video?._id ? (
+      <ItemActions
+        id={video._id}
+        type="video"
+        label={video.title || "this video"}
+        previewHref="/videos"
+      />
+    ) : null}
+    </>
   );
 }
 
@@ -902,6 +1100,269 @@ function ImageUploadField({
         </label>
       </div>
     </div>
+  );
+}
+
+function ProfileImageCropper({
+  currentUrl,
+  zoom,
+  positionX,
+  positionY,
+}: {
+  currentUrl?: string | null;
+  zoom?: number | null;
+  positionX?: number | null;
+  positionY?: number | null;
+}) {
+  const [previewUrl, setPreviewUrl] = useState(currentUrl || "");
+  const [imageZoom, setImageZoom] = useState(zoom || 1);
+  const [x, setX] = useState(positionX ?? 50);
+  const [y, setY] = useState(positionY ?? 50);
+  const dragStart = useRef<{ x: number; y: number; positionX: number; positionY: number } | null>(null);
+
+  function handleDrag(clientX: number, clientY: number) {
+    if (!dragStart.current) return;
+
+    const deltaX = clientX - dragStart.current.x;
+    const deltaY = clientY - dragStart.current.y;
+    setX(Math.min(100, Math.max(0, dragStart.current.positionX + deltaX / 2)));
+    setY(Math.min(100, Math.max(0, dragStart.current.positionY + deltaY / 2)));
+  }
+
+  return (
+    <div className="rounded-[1rem] border border-white/8 bg-white/[0.03] p-4">
+      <div className="grid gap-6 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] md:items-center">
+        <div>
+          <div
+            className="relative mx-auto aspect-square w-full max-w-[16rem] cursor-grab overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm active:cursor-grabbing"
+            onPointerDown={(event) => {
+              dragStart.current = {
+                x: event.clientX,
+                y: event.clientY,
+                positionX: x,
+                positionY: y,
+              };
+              event.currentTarget.setPointerCapture(event.pointerId);
+            }}
+            onPointerMove={(event) => handleDrag(event.clientX, event.clientY)}
+            onPointerUp={() => {
+              dragStart.current = null;
+            }}
+            onPointerCancel={() => {
+              dragStart.current = null;
+            }}
+          >
+            {previewUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={previewUrl}
+                alt="Author profile preview"
+                className="h-full w-full object-cover"
+                style={{
+                  objectPosition: `${x}% ${y}%`,
+                  transform: `scale(${imageZoom})`,
+                }}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center bg-stone-100 text-center text-xs uppercase tracking-[0.22em] text-stone-500">
+                No image
+              </div>
+            )}
+          </div>
+          <p className="mt-3 text-center text-xs uppercase tracking-[0.22em] text-stone-500">
+            Drag image to adjust
+          </p>
+        </div>
+
+        <div className="space-y-5">
+          <label>
+            <span className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+              Upload Profile Image
+            </span>
+            <input
+              name="authorImage"
+              type="file"
+              accept="image/*"
+              className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+              onChange={(event) => {
+                const file = event.currentTarget.files?.[0];
+                if (file) setPreviewUrl(URL.createObjectURL(file));
+              }}
+            />
+          </label>
+
+          <label>
+            <span className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+              Zoom
+            </span>
+            <input
+              type="range"
+              min="1"
+              max="2.4"
+              step="0.05"
+              value={imageZoom}
+              onChange={(event) => setImageZoom(Number(event.currentTarget.value))}
+              className="mt-3 w-full accent-stone-950"
+            />
+          </label>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label>
+              <span className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+                Left / Right
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={x}
+                onChange={(event) => setX(Number(event.currentTarget.value))}
+                className="mt-3 w-full accent-stone-950"
+              />
+            </label>
+            <label>
+              <span className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+                Up / Down
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={y}
+                onChange={(event) => setY(Number(event.currentTarget.value))}
+                className="mt-3 w-full accent-stone-950"
+              />
+            </label>
+          </div>
+
+          <input type="hidden" name="authorImageZoom" value={imageZoom} />
+          <input type="hidden" name="authorImagePositionX" value={x} />
+          <input type="hidden" name="authorImagePositionY" value={y} />
+          <p className="text-sm leading-7 text-stone-200/72">
+            Upload a profile image, drag it inside the circle, adjust zoom, then save changes at the bottom.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ItemActions({
+  id,
+  type,
+  label,
+  previewHref,
+}: {
+  id: string;
+  type: string;
+  label: string;
+  previewHref: string;
+}) {
+  const [state, formAction, pending] = useActionState(archiveDocumentAction, initialState);
+
+  return (
+    <div className="rounded-[1.25rem] border border-rose-200 bg-rose-50/70 p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="text-sm font-medium text-stone-950">Preview or remove</p>
+          <p className="mt-1 text-sm leading-6 text-stone-600">
+            Preview the public page, or hide this item without permanently deleting it.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href={previewHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-800"
+          >
+            Preview
+          </Link>
+          <form
+            action={formAction}
+            onSubmit={(event) => {
+              if (!window.confirm(`Are you sure you want to remove ${label} from the public website?`)) {
+                event.preventDefault();
+              }
+            }}
+          >
+            <input type="hidden" name="_id" value={id} />
+            <input type="hidden" name="_type" value={type} />
+            <button
+              type="submit"
+              disabled={pending}
+              className="rounded-full border border-rose-300 bg-white px-4 py-2 text-sm font-medium text-rose-700 disabled:opacity-60"
+            >
+              {pending ? "Removing..." : "Remove"}
+            </button>
+          </form>
+        </div>
+      </div>
+      <FormStatus state={state} />
+    </div>
+  );
+}
+
+function GalleryRemovalGrid({
+  journalId,
+  gallery,
+}: {
+  journalId: string;
+  gallery: GalleryImageRecord[];
+}) {
+  return (
+    <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
+      <p className="text-xs uppercase tracking-[0.28em] text-stone-500">
+        Remove Gallery Images
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {gallery.map((image, index) => (
+          <GalleryRemoveItem
+            key={image._key || image.url || index}
+            journalId={journalId}
+            image={image}
+            index={index}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GalleryRemoveItem({
+  journalId,
+  image,
+  index,
+}: {
+  journalId: string;
+  image: GalleryImageRecord;
+  index: number;
+}) {
+  const [state, formAction, pending] = useActionState(removeGalleryImageAction, initialState);
+
+  return (
+    <form
+      action={formAction}
+      className="rounded-[1rem] border border-stone-200 bg-stone-50 p-3"
+      onSubmit={(event) => {
+        if (!window.confirm(`Remove Image ${index + 1} from this gallery?`)) {
+          event.preventDefault();
+        }
+      }}
+    >
+      <input type="hidden" name="_id" value={journalId} />
+      <input type="hidden" name="galleryImageKey" value={image._key || ""} />
+      <ImagePreview url={image.url} label={image.caption || image.alt || `Image ${index + 1}`} />
+      <p className="mt-3 text-sm font-medium text-stone-950">Image {index + 1}</p>
+      <button
+        type="submit"
+        disabled={pending || !image._key}
+        className="mt-3 w-full rounded-full border border-rose-300 bg-white px-3 py-2 text-sm font-medium text-rose-700 disabled:opacity-60"
+      >
+        {pending ? "Removing..." : "Remove Image"}
+      </button>
+      <FormStatus state={state} />
+    </form>
   );
 }
 

@@ -124,5 +124,12 @@ export const destination = defineType({
       type: 'number',
       description: 'Lower numbers appear earlier in lists and sections.',
     }),
+    defineField({
+      name: 'isArchived',
+      title: 'Hidden from Website',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Hide this destination from the public website without deleting it.',
+    }),
   ],
 });

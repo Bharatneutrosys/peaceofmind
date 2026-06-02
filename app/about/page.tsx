@@ -28,6 +28,9 @@ type SiteSettings = {
   instagramUrl?: string | null;
   youtubeUrl?: string | null;
   authorBio?: string | null;
+  authorImageZoom?: number | null;
+  authorImagePositionX?: number | null;
+  authorImagePositionY?: number | null;
   authorImage?: ImageField | null;
 };
 
@@ -85,6 +88,11 @@ export default async function AboutPage() {
                 }
               : null
           }
+          authorImageCrop={{
+            zoom: siteSettings?.authorImageZoom,
+            positionX: siteSettings?.authorImagePositionX,
+            positionY: siteSettings?.authorImagePositionY,
+          }}
           socialLinks={{
             facebookUrl: siteSettings?.facebookUrl || null,
             instagramUrl: siteSettings?.instagramUrl || null,

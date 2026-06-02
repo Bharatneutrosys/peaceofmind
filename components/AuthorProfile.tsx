@@ -29,6 +29,7 @@ function socialItems(socialLinks?: SocialLinks) {
 export default function AuthorProfile({
   authorBio,
   authorImage,
+  authorImageCrop,
   socialLinks,
 }: {
   authorBio?: string | null;
@@ -36,9 +37,17 @@ export default function AuthorProfile({
     src?: string | null;
     alt?: string | null;
   } | null;
+  authorImageCrop?: {
+    zoom?: number | null;
+    positionX?: number | null;
+    positionY?: number | null;
+  } | null;
   socialLinks?: SocialLinks;
 }) {
   const socials = socialItems(socialLinks);
+  const zoom = authorImageCrop?.zoom || 1;
+  const positionX = authorImageCrop?.positionX ?? 50;
+  const positionY = authorImageCrop?.positionY ?? 50;
 
   return (
     <section
@@ -58,6 +67,10 @@ export default function AuthorProfile({
               fill
               sizes="(min-width: 1280px) 40vw, 100vw"
               className="object-cover object-center"
+              style={{
+                objectPosition: `${positionX}% ${positionY}%`,
+                transform: `scale(${zoom})`,
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-stone-950/10 to-transparent" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_30%)]" />
@@ -113,14 +126,14 @@ export default function AuthorProfile({
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
-              href="#journal"
+              href="/journal"
               className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
             >
               Read the journal
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="#videos"
+              href="/videos"
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
             >
               Watch featured video
@@ -134,6 +147,8 @@ export default function AuthorProfile({
                 <a
                   key={link.label}
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-stone-100/78 transition-colors duration-300 hover:bg-white/10"
                 >
                   {link.label}

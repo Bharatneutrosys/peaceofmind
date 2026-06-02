@@ -131,6 +131,13 @@ export const essay = defineType({
       description: 'Optional keywords for the story.',
     }),
     defineField({
+      name: 'isArchived',
+      title: 'Hidden from Website',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Hide this story from the public website without deleting it.',
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',

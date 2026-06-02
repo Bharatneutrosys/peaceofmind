@@ -97,14 +97,14 @@ export default function Navbar({
             className="group inline-flex items-center gap-3.5"
             onClick={() => setMenuOpen(false)}
           >
-            <span className="relative h-14 w-14 overflow-hidden rounded-full border border-amber-100/35 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.32)] ring-1 ring-black/10">
+            <span className="relative h-16 w-16 overflow-visible drop-shadow-[0_10px_24px_rgba(0,0,0,0.34)]">
               <Image
                 src="/logo/logo.png"
                 alt=""
                 fill
                 priority
-                sizes="56px"
-                className="scale-[1.08] object-cover object-center"
+                sizes="64px"
+                className="scale-[1.18] object-contain object-center"
               />
             </span>
             <span className="font-serif text-lg leading-none text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">

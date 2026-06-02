@@ -50,6 +50,11 @@ function readNumberOrNull(formData: FormData, key: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function readNumberWithFallback(formData: FormData, key: string, fallback: number) {
+  const value = readNumberOrNull(formData, key);
+  return value === null ? fallback : value;
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -340,6 +345,12 @@ export async function saveSiteSettingsAction(
 
   if (heroAuthorUpload.image) {
     set.heroAuthorImage = heroAuthorUpload.image;
+  }
+
+  if (formData.has("authorImageZoom")) {
+    set.authorImageZoom = readNumberWithFallback(formData, "authorImageZoom", 1);
+    set.authorImagePositionX = readNumberWithFallback(formData, "authorImagePositionX", 50);
+    set.authorImagePositionY = readNumberWithFallback(formData, "authorImagePositionY", 50);
   }
 
   const authorUpload = await uploadOptionalImage(client, formData, "authorImage", {
@@ -655,4 +666,60 @@ export async function saveVideoAction(
       ...(category ? [] : ["category"]),
     ],
   });
+}
+
+export async function archiveDocumentAction(
+  _prevState: AdminState,
+  formData: FormData,
+): Promise<AdminState> {
+  const { error, client } = await requireWriteClient();
+
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const documentId = readOptionalString(formData, "_id");
+  const type = readOptionalString(formData, "_type");
+
+  if (!documentId || !type) {
+    return { error: "Choose an item to remove.", message: null };
+  }
+
+  await client.patch(documentId).set({ isArchived: true }).commit();
+  revalidatePublicPages();
+
+  return {
+    ...SUCCESS,
+    message: "Removed from the public website",
+  };
+}
+
+export async function removeGalleryImageAction(
+  _prevState: AdminState,
+  formData: FormData,
+): Promise<AdminState> {
+  const { error, client } = await requireWriteClient();
+
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const documentId = readOptionalString(formData, "_id");
+  const imageKey = readOptionalString(formData, "galleryImageKey");
+
+  if (!documentId || !imageKey) {
+    return { error: "Choose a gallery image to remove.", message: null };
+  }
+
+  await client
+    .patch(documentId)
+    .unset([`gallery[_key=="${imageKey}"]`])
+    .commit({ autoGenerateArrayKeys: true });
+
+  revalidatePublicPages();
+
+  return {
+    ...SUCCESS,
+    message: "Gallery image removed",
+  };
 }

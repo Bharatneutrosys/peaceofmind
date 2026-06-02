@@ -112,5 +112,12 @@ export const video = defineType({
       type: 'datetime',
       description: 'Optional publish date used for sorting.',
     }),
+    defineField({
+      name: 'isArchived',
+      title: 'Hidden from Website',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Hide this video from the public website without deleting it.',
+    }),
   ],
 });

@@ -271,7 +271,7 @@ function DestinationNode({
   );
 
   return (
-    <div className={level > 0 ? "ml-4 border-l border-white/10 pl-4" : ""}>
+    <div>
       {href ? (
         <Link
           href={href}
@@ -286,7 +286,7 @@ function DestinationNode({
       )}
 
       {children.length > 0 ? (
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 grid gap-4">
           {children.map((child) => (
             <DestinationNode
               key={child._id}

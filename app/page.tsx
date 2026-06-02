@@ -46,6 +46,9 @@ type SiteSettings = {
   contactEmail?: string | null;
   authorDisplayName?: string | null;
   authorBio?: string | null;
+  authorImageZoom?: number | null;
+  authorImagePositionX?: number | null;
+  authorImagePositionY?: number | null;
   authorImage?: ImageField | null;
   heroImage?: ImageField | null;
   heroHeadline?: string | null;
@@ -522,6 +525,11 @@ export default async function Home() {
               }
             : null
         }
+        authorImageCrop={{
+          zoom: siteSettings?.authorImageZoom,
+          positionX: siteSettings?.authorImagePositionX,
+          positionY: siteSettings?.authorImagePositionY,
+        }}
         socialLinks={{
           facebookUrl: siteSettings?.facebookUrl || null,
           instagramUrl: siteSettings?.instagramUrl || null,

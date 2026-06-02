@@ -22,6 +22,9 @@ export const getSiteSettingsQuery = groq`
     authorBio,
     authorImage { ${imageFields} },
     "authorImageUrl": authorImage.asset->url,
+    authorImageZoom,
+    authorImagePositionX,
+    authorImagePositionY,
     heroImage { ${imageFields} },
     "heroImageUrl": heroImage.asset->url,
     heroHeadline,
@@ -37,7 +40,7 @@ export const getSiteSettingsQuery = groq`
 `;
 
 export const getCategoriesQuery = groq`
-  *[_type == "category"] | order(featured desc, coalesce(order, 9999) asc, title asc) {
+  *[_type == "category" && isArchived != true] | order(featured desc, coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -52,7 +55,7 @@ export const getCategoriesQuery = groq`
 export const getAllCategoriesQuery = getCategoriesQuery;
 
 export const getFeaturedCategoriesQuery = groq`
-  *[_type == "category" && featured == true] | order(coalesce(order, 9999) asc, title asc) {
+  *[_type == "category" && featured == true && isArchived != true] | order(coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -65,7 +68,7 @@ export const getFeaturedCategoriesQuery = groq`
 `;
 
 export const getDestinationsQuery = groq`
-  *[_type == "destination"] | order(featured desc, coalesce(order, 9999) asc, title asc) {
+  *[_type == "destination" && isArchived != true] | order(featured desc, coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -98,7 +101,7 @@ export const getDestinationsQuery = groq`
 export const getAllDestinationsQuery = getDestinationsQuery;
 
 export const getDestinationBySlugQuery = groq`
-  *[_type == "destination" && slug.current == $slug][0] {
+  *[_type == "destination" && slug.current == $slug && isArchived != true][0] {
     _id,
     title,
     "slug": slug.current,
@@ -125,7 +128,7 @@ export const getDestinationBySlugQuery = groq`
       coverImage { ${imageFields} }
     },
     coverImage { ${imageFields} },
-    "children": *[_type == "destination" && parentDestination._ref == ^._id] | order(coalesce(order, 9999) asc, title asc) {
+    "children": *[_type == "destination" && parentDestination._ref == ^._id && isArchived != true] | order(coalesce(order, 9999) asc, title asc) {
       _id,
       title,
       "slug": slug.current,
@@ -151,7 +154,7 @@ export const getDestinationBySlugQuery = groq`
 `;
 
 export const getFeaturedDestinationsQuery = groq`
-  *[_type == "destination" && featured == true] | order(coalesce(order, 9999) asc, title asc) {
+  *[_type == "destination" && featured == true && isArchived != true] | order(coalesce(order, 9999) asc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -182,7 +185,7 @@ export const getFeaturedDestinationsQuery = groq`
 `;
 
 export const getLatestEssaysQuery = groq`
-  *[_type == "essay"] | order(featured desc, coalesce(publishedAt, date) desc, title asc) [0...3] {
+  *[_type == "essay" && isArchived != true] | order(featured desc, coalesce(publishedAt, date) desc, title asc) [0...3] {
     _id,
     title,
     "slug": slug.current,
@@ -209,7 +212,7 @@ export const getLatestEssaysQuery = groq`
 `;
 
 export const getFeaturedEssaysQuery = groq`
-  *[_type == "essay" && featured == true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
+  *[_type == "essay" && featured == true && isArchived != true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -235,7 +238,7 @@ export const getFeaturedEssaysQuery = groq`
 `;
 
 export const getEssaysQuery = groq`
-  *[_type == "essay"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
+  *[_type == "essay" && isArchived != true] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, date) desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -263,7 +266,7 @@ export const getEssaysQuery = groq`
 export const getAllEssaysQuery = getEssaysQuery;
 
 export const getEssayBySlugQuery = groq`
-  *[_type == "essay" && slug.current == $slug][0] {
+  *[_type == "essay" && slug.current == $slug && isArchived != true][0] {
     _id,
     title,
     "slug": slug.current,
@@ -294,7 +297,7 @@ export const getEssayBySlugQuery = groq`
 `;
 
 export const getRelatedEssaysByDestinationQuery = groq`
-  *[_type == "essay" && destination._ref == $destinationId] | order(featured desc, coalesce(publishedAt, date) desc, title asc) {
+  *[_type == "essay" && destination._ref == $destinationId && isArchived != true] | order(featured desc, coalesce(publishedAt, date) desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -324,7 +327,7 @@ export const getRelatedEssaysByDestinationQuery = groq`
 `;
 
 export const getLatestPhotoJournalsQuery = groq`
-  *[_type == "photoJournal"] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) [0...4] {
+  *[_type == "photoJournal" && isArchived != true] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) [0...4] {
     _id,
     title,
     excerpt,
@@ -356,7 +359,7 @@ export const getLatestPhotoJournalsQuery = groq`
 `;
 
 export const getFeaturedPhotoJournalsQuery = groq`
-  *[_type == "photoJournal" && featured == true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
+  *[_type == "photoJournal" && featured == true && isArchived != true] | order(coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     excerpt,
@@ -388,7 +391,7 @@ export const getFeaturedPhotoJournalsQuery = groq`
 `;
 
 export const getPhotoJournalsQuery = groq`
-  *[_type == "photoJournal"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
+  *[_type == "photoJournal" && isArchived != true] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     excerpt,
@@ -422,7 +425,7 @@ export const getPhotoJournalsQuery = groq`
 export const getAllPhotoJournalsQuery = getPhotoJournalsQuery;
 
 export const getRelatedPhotoJournalsByDestinationQuery = groq`
-  *[_type == "photoJournal" && destination._ref == $destinationId] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
+  *[_type == "photoJournal" && destination._ref == $destinationId && isArchived != true] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     excerpt,
@@ -459,7 +462,7 @@ export const getRelatedPhotoJournalsByDestinationQuery = groq`
 `;
 
 export const getGalleryImagesQuery = groq`
-  *[_type == "photoJournal"] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
+  *[_type == "photoJournal" && isArchived != true] | order(featured desc, coalesce(order, 9999) asc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     gallery[] {
@@ -476,7 +479,7 @@ export const getGalleryImagesQuery = groq`
 `;
 
 export const getFeaturedVideoQuery = groq`
-  *[_type == "video" && featured == true] | order(coalesce(publishedAt, _createdAt) desc, title asc) [0] {
+  *[_type == "video" && featured == true && isArchived != true] | order(coalesce(publishedAt, _createdAt) desc, title asc) [0] {
     _id,
     title,
     description,
@@ -499,7 +502,7 @@ export const getFeaturedVideoQuery = groq`
 `;
 
 export const getAllVideosQuery = groq`
-  *[_type == "video"] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
+  *[_type == "video" && isArchived != true] | order(featured desc, coalesce(publishedAt, _createdAt) desc, title asc) {
     _id,
     title,
     description,
@@ -530,6 +533,7 @@ export const getAdminCategoriesQuery = groq`
     regionLabel,
     featured,
     order,
+    isArchived,
     coverImage { ${imageFields} },
     "coverImageUrl": coverImage.asset->url
   }
@@ -545,6 +549,7 @@ export const getAdminDestinationsQuery = groq`
     description,
     featured,
     order,
+    isArchived,
     "categoryId": category._ref,
     "parentDestinationId": parentDestination._ref,
     coverImage { ${imageFields} },
@@ -562,6 +567,7 @@ export const getAdminEssaysQuery = groq`
     "categoryId": category._ref,
     publishedAt,
     featured,
+    isArchived,
     estimatedReadTime,
     coverImage { ${imageFields} },
     "coverImageUrl": coverImage.asset->url,
@@ -579,6 +585,7 @@ export const getAdminPhotoJournalsQuery = groq`
     "categoryId": category._ref,
     publishedAt,
     featured,
+    isArchived,
     coverImage { ${imageFields} },
     "coverImageUrl": coverImage.asset->url,
     gallery[] {
@@ -600,6 +607,7 @@ export const getAdminVideosQuery = groq`
     youtubeUrl,
     publishedAt,
     featured,
+    isArchived,
     "destinationId": destination._ref,
     "categoryId": category._ref,
     thumbnail { ${imageFields} },

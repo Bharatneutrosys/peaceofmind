@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
 
-import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import AdminDashboard from "@/components/admin/AdminDashboard";
+import { isAdminAuthenticated } from "@/lib/admin";
 import { adminReadClient } from "@/sanity/lib/adminReadClient";
 import {
   getAdminCategoriesQuery,
@@ -11,18 +12,31 @@ import {
   getAdminVideosQuery,
   getSiteSettingsQuery,
 } from "@/sanity/lib/queries";
-import { isAdminAuthenticated } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin | Traveller's Diary",
-  description: "Owner panel for updating Traveller's Diary website settings and links.",
+  description: "Focused owner editing page for Traveller's Diary.",
   robots: {
     index: false,
     follow: false,
   },
 };
+
+const validSections = [
+  "settings",
+  "hero",
+  "author",
+  "social",
+  "categories",
+  "destinations",
+  "journal",
+  "photo-journals",
+  "videos",
+] as const;
+
+type AdminView = (typeof validSections)[number];
 
 type SiteSettings = {
   brandName?: string | null;
@@ -125,11 +139,19 @@ type VideoRecord = {
   isArchived?: boolean | null;
 };
 
-export default async function AdminPage() {
-  const authed = await isAdminAuthenticated();
+export default async function AdminSectionPage({
+  params,
+}: {
+  params: Promise<{ section: string }>;
+}) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin");
+  }
 
-  if (!authed) {
-    return <AdminLoginForm />;
+  const { section } = await params;
+
+  if (!validSections.includes(section as AdminView)) {
+    notFound();
   }
 
   const [settings, categories, destinations, essays, photoJournals, videos] =
@@ -151,6 +173,7 @@ export default async function AdminPage() {
       essays={essays}
       photoJournals={photoJournals}
       videos={videos}
+      view={section as AdminView}
     />
   );
 }

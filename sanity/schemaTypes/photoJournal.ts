@@ -147,5 +147,12 @@ export const photoJournal = defineType({
       of: [{ type: 'string' }],
       description: 'Optional keywords for the photo journal.',
     }),
+    defineField({
+      name: 'isArchived',
+      title: 'Hidden from Website',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Hide this photo journal from the public website without deleting it.',
+    }),
   ],
 });

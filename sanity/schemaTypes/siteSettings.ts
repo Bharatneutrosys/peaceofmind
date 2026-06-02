@@ -98,6 +98,27 @@ export const siteSettings = defineType({
       description: 'Portrait image shown in the philosophy section.',
     }),
     defineField({
+      name: 'authorImageZoom',
+      title: 'Author Image Zoom',
+      type: 'number',
+      initialValue: 1,
+      description: 'Profile image zoom used by the simple admin crop editor.',
+    }),
+    defineField({
+      name: 'authorImagePositionX',
+      title: 'Author Image Horizontal Position',
+      type: 'number',
+      initialValue: 50,
+      description: 'Profile image horizontal crop position from 0 to 100.',
+    }),
+    defineField({
+      name: 'authorImagePositionY',
+      title: 'Author Image Vertical Position',
+      type: 'number',
+      initialValue: 50,
+      description: 'Profile image vertical crop position from 0 to 100.',
+    }),
+    defineField({
       name: 'heroImage',
       title: 'Hero Image',
       type: 'image',

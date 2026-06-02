@@ -6,8 +6,9 @@ Use this guide when updating the website from the simple owner panel.
 
 1. Open `/admin`.
 2. Enter the admin passcode.
-3. Use Home or Preview Website to check the public site.
-4. Use Logout when finished.
+3. Choose the card for the area you want to edit.
+4. Use Home or Preview Website to check the public site.
+5. Use Logout when finished.
 
 Local URL: `http://localhost:3000/admin`
 Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
@@ -19,6 +20,20 @@ The owner should use `/admin`. Sanity Studio at `/studio` is advanced developer 
 Existing website content is pre-filled in the admin forms. If a form says `Editing: Nepal`, saving updates that existing item. If a form says `Add New Category`, saving creates a new item.
 
 Edit only the fields you want to change. Unchanged text and images stay in place. Image fields are only replaced when you choose a new image file.
+
+The admin dashboard is now organized into separate pages:
+
+- `/admin/settings`
+- `/admin/hero`
+- `/admin/author`
+- `/admin/social`
+- `/admin/categories`
+- `/admin/destinations`
+- `/admin/journal`
+- `/admin/photo-journals`
+- `/admin/videos`
+
+Each page has its own Save Changes button at the bottom of the form.
 
 ## Edit website settings
 
@@ -38,6 +53,9 @@ Open the Hero section to update:
 - Hero Heading
 - Hero Description
 - Hero Image
+- Hero Quote
+- Hero Author Intro
+- Hero Author Image
 
 Keep hero text short so the mountain image stays visible. Use a wide panorama image, ideally 2400px or wider. Avoid very large uncompressed files.
 
@@ -58,8 +76,10 @@ Open About the Traveler to update:
 - Display Name
 - About/Bio Text
 - Author Image
+- Author Image Zoom
+- Author Image Position
 
-Write simply and naturally. Use a clear portrait or creator image owned by the creator.
+Write simply and naturally. Use a clear portrait or creator image owned by the creator. Upload the profile image, drag it inside the circular preview, adjust the zoom slider, and save.
 
 ## Add a category
 
@@ -82,6 +102,8 @@ Open Destinations, then Add New Destination. Fill in:
 - Title
 - Slug, or leave empty to generate from the title
 - Country
+- Travel Region
+- Parent Place
 - Short Introduction
 - Description
 - Category
@@ -90,6 +112,8 @@ Open Destinations, then Add New Destination. Fill in:
 - Cover Image
 
 Recommended cover image size: 1600px or wider.
+
+Use Parent Place to make nested locations. Example: create Nepal, then create Pokhara with Nepal as the parent, then create Annapurna Base Camp with Pokhara as the parent.
 
 ## Add a journal story
 
@@ -109,6 +133,8 @@ Open Journal Stories, then Add New Journal Story. Fill in:
 Story Body is plain text in the admin panel and is saved as simple website paragraphs. Short paragraphs are easier to read.
 Use a real travel photo owned by the creator. The title is used as fallback image alt text.
 
+Use Preview beside an existing story to open the public story page. Use Remove only when you want to hide it from the public website. Remove does not permanently delete the document.
+
 ## Add a photo journal
 
 Open Photo Journals, then Add New Photo Journal. Fill in:
@@ -123,7 +149,9 @@ Open Photo Journals, then Add New Photo Journal. Fill in:
 - Cover Image
 - Gallery Images
 
-Use compressed JPG/WebP travel photos. Existing gallery images are shown in the edit form. You can upload multiple new gallery images at once. Shared alt text and caption apply to the new uploaded batch. Reorder and remove controls are still pending.
+Use compressed JPG/WebP travel photos. Existing gallery images are shown in the edit form. You can upload multiple new gallery images at once. Shared alt text and caption apply to the new uploaded batch.
+
+To remove one gallery image, open the existing photo journal and use the Remove Image button under that image number. Confirm the action when asked. This removes only that one image from the gallery.
 
 ## Add a video
 
@@ -141,6 +169,10 @@ Open Videos, then Add New Video. Fill in:
 
 Accepted YouTube links include `youtube.com/watch?v=`, `youtu.be/`, and `youtube.com/embed/`.
 If no thumbnail is uploaded, the public videos page shows a polished fallback.
+
+## Remove content safely
+
+Existing categories, destinations, stories, photo journals, and videos have a Remove action. Remove hides the item from the public website by archiving it. It does not permanently delete the Sanity document.
 
 ## Image quality tips
 
@@ -169,5 +201,4 @@ After adding or changing these environment variables in Vercel, redeploy the sit
 ## Not finished yet
 
 - Gallery reorder controls
-- Gallery remove controls
-- Safe delete controls
+- Restore/unarchive controls for hidden content
