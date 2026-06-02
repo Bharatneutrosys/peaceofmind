@@ -8,6 +8,11 @@ import { getSiteSettingsQuery } from "@/sanity/lib/queries";
 import { adminReadClient } from "@/sanity/lib/adminReadClient";
 import { getWriteClient } from "@/sanity/lib/writeClient";
 import {
+  isUsableImageFile,
+  uploadImageAsset,
+  type UploadedImage,
+} from "@/sanity/lib/uploadImage";
+import {
   ADMIN_COOKIE_NAME,
   getAdminCookieOptions,
   getAdminSessionToken,
@@ -31,6 +36,10 @@ function readOptionalString(formData: FormData, key: string) {
 
 function readBoolean(formData: FormData, key: string) {
   return formData.get(key) === "on";
+}
+
+function readFile(formData: FormData, key: string) {
+  return formData.get(key);
 }
 
 function readNumberOrNull(formData: FormData, key: string) {
@@ -112,6 +121,62 @@ function portableTextFromPlainText(text: string) {
     }));
 }
 
+async function uploadOptionalImage(
+  client: ReturnType<typeof getWriteClient>,
+  formData: FormData,
+  key: string,
+  options?: { alt?: string; caption?: string },
+) {
+  const file = readFile(formData, key);
+
+  if (!file || (file instanceof File && file.size === 0)) {
+    return { image: null as UploadedImage | null, error: null as string | null };
+  }
+
+  if (!isUsableImageFile(file)) {
+    return {
+      image: null,
+      error: "Please choose a valid image file.",
+    };
+  }
+
+  return {
+    image: await uploadImageAsset(client, file, options),
+    error: null,
+  };
+}
+
+async function uploadGalleryImages(
+  client: ReturnType<typeof getWriteClient>,
+  formData: FormData,
+  fallbackAlt: string,
+) {
+  const files = formData.getAll("galleryImages");
+  const alt = readOptionalString(formData, "galleryAlt") || fallbackAlt;
+  const caption = readOptionalString(formData, "galleryCaption");
+  const images: UploadedImage[] = [];
+
+  for (const file of files) {
+    if (!file || (file instanceof File && file.size === 0)) continue;
+
+    if (!isUsableImageFile(file)) {
+      return {
+        images: [],
+        error: "Please choose valid image files for the gallery.",
+      };
+    }
+
+    images.push(
+      await uploadImageAsset(client, file, {
+        alt,
+        caption,
+      }),
+    );
+  }
+
+  return { images, error: null };
+}
+
 function revalidatePublicPages() {
   revalidatePath("/");
   revalidatePath("/about");
@@ -139,17 +204,12 @@ async function requireWriteClient() {
   }
 }
 
-async function upsertDocument(
+async function saveDocumentWithClient(
+  client: ReturnType<typeof getWriteClient>,
   type: string,
   formData: FormData,
   body: Record<string, unknown>,
 ) {
-  const { error, client } = await requireWriteClient();
-
-  if (error || !client) {
-    return { error, message: null };
-  }
-
   const documentId = readOptionalString(formData, "_id");
 
   if (documentId) {
@@ -224,7 +284,7 @@ export async function saveSiteSettingsAction(
     "youtubeFeatureUrl",
   ] as const;
 
-  const set: Record<string, string> = {
+  const set: Record<string, unknown> = {
     brandName,
   };
   const unset: string[] = [];
@@ -239,15 +299,34 @@ export async function saveSiteSettingsAction(
     }
   }
 
-  let client: ReturnType<typeof getWriteClient>;
+  const { error, client } = await requireWriteClient();
 
-  try {
-    client = getWriteClient();
-  } catch {
-    return {
-      error: "Sanity write access is not configured yet.",
-      message: null,
-    };
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const heroUpload = await uploadOptionalImage(client, formData, "heroImage", {
+    alt: readOptionalString(formData, "heroHeadline") || brandName,
+  });
+
+  if (heroUpload.error) {
+    return { error: heroUpload.error, message: null };
+  }
+
+  if (heroUpload.image) {
+    set.heroImage = heroUpload.image;
+  }
+
+  const authorUpload = await uploadOptionalImage(client, formData, "authorImage", {
+    alt: readOptionalString(formData, "authorDisplayName") || "Traveller's Diary author portrait",
+  });
+
+  if (authorUpload.error) {
+    return { error: authorUpload.error, message: null };
+  }
+
+  if (authorUpload.image) {
+    set.authorImage = authorUpload.image;
   }
 
   const current = await adminReadClient
@@ -291,15 +370,31 @@ export async function saveCategoryAction(
   if (!slug) return { error: "Category slug is required.", message: null };
 
   const order = readNumberOrNull(formData, "order");
+  const { error, client } = await requireWriteClient();
 
-  return upsertDocument("category", formData, {
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const upload = await uploadOptionalImage(client, formData, "coverImage", {
+    alt: title,
+  });
+
+  if (upload.error) {
+    return { error: upload.error, message: null };
+  }
+
+  const body = {
     title,
     slug,
     description: readOptionalString(formData, "description"),
     regionLabel: readOptionalString(formData, "regionLabel"),
     featured: readBoolean(formData, "featured"),
     ...(order === null ? {} : { order }),
-  });
+    ...(upload.image ? { coverImage: upload.image } : {}),
+  };
+
+  return saveDocumentWithClient(client, "category", formData, body);
 }
 
 export async function saveDestinationAction(
@@ -314,8 +409,21 @@ export async function saveDestinationAction(
 
   const category = referenceField(readOptionalString(formData, "categoryId"));
   const order = readNumberOrNull(formData, "order");
+  const { error, client } = await requireWriteClient();
 
-  return upsertDocument("destination", formData, {
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const upload = await uploadOptionalImage(client, formData, "coverImage", {
+    alt: title,
+  });
+
+  if (upload.error) {
+    return { error: upload.error, message: null };
+  }
+
+  const body = {
     title,
     slug,
     country: readOptionalString(formData, "country"),
@@ -324,7 +432,10 @@ export async function saveDestinationAction(
     featured: readBoolean(formData, "featured"),
     ...(category ? { category } : {}),
     ...(order === null ? {} : { order }),
-  });
+    ...(upload.image ? { coverImage: upload.image } : {}),
+  };
+
+  return saveDocumentWithClient(client, "destination", formData, body);
 }
 
 export async function saveEssayAction(
@@ -345,8 +456,21 @@ export async function saveEssayAction(
   const publishedAt = isoDateTime(readOptionalString(formData, "publishedAt"));
   const category = referenceField(readOptionalString(formData, "categoryId"));
   const bodyText = readOptionalString(formData, "bodyText");
+  const { error, client } = await requireWriteClient();
 
-  return upsertDocument("essay", formData, {
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const upload = await uploadOptionalImage(client, formData, "coverImage", {
+    alt: title,
+  });
+
+  if (upload.error) {
+    return { error: upload.error, message: null };
+  }
+
+  const body = {
     title,
     slug,
     excerpt: readOptionalString(formData, "excerpt"),
@@ -357,7 +481,10 @@ export async function saveEssayAction(
     featured: readBoolean(formData, "featured"),
     estimatedReadTime: readOptionalString(formData, "estimatedReadTime"),
     body: portableTextFromPlainText(bodyText),
-  });
+    ...(upload.image ? { coverImage: upload.image } : {}),
+  };
+
+  return saveDocumentWithClient(client, "essay", formData, body);
 }
 
 export async function savePhotoJournalAction(
@@ -374,8 +501,27 @@ export async function savePhotoJournalAction(
 
   const slug = slugField(readOptionalString(formData, "slug"), title);
   const category = referenceField(readOptionalString(formData, "categoryId"));
+  const { error, client } = await requireWriteClient();
 
-  return upsertDocument("photoJournal", formData, {
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const coverUpload = await uploadOptionalImage(client, formData, "coverImage", {
+    alt: title,
+  });
+
+  if (coverUpload.error) {
+    return { error: coverUpload.error, message: null };
+  }
+
+  const galleryUpload = await uploadGalleryImages(client, formData, title);
+
+  if (galleryUpload.error) {
+    return { error: galleryUpload.error, message: null };
+  }
+
+  const body = {
     title,
     ...(slug ? { slug } : {}),
     excerpt: readOptionalString(formData, "excerpt"),
@@ -383,7 +529,33 @@ export async function savePhotoJournalAction(
     ...(category ? { category } : {}),
     publishedAt: isoDateTime(readOptionalString(formData, "publishedAt")),
     featured: readBoolean(formData, "featured"),
-  });
+    ...(coverUpload.image ? { coverImage: coverUpload.image } : {}),
+  };
+
+  const documentId = readOptionalString(formData, "_id");
+
+  if (documentId) {
+    const patch = client.patch(documentId).set(body);
+
+    if (galleryUpload.images.length > 0) {
+      patch.append("gallery", galleryUpload.images);
+    }
+
+    await patch.commit({ autoGenerateArrayKeys: true });
+  } else {
+    await client.create({
+      _type: "photoJournal",
+      ...body,
+      ...(galleryUpload.images.length > 0 ? { gallery: galleryUpload.images } : {}),
+    });
+  }
+
+  revalidatePublicPages();
+
+  return {
+    ...SUCCESS,
+    message: "Saved. The public site will update after revalidation or refresh.",
+  };
 }
 
 export async function saveVideoAction(
@@ -401,8 +573,21 @@ export async function saveVideoAction(
 
   const destination = referenceField(readOptionalString(formData, "destinationId"));
   const category = referenceField(readOptionalString(formData, "categoryId"));
+  const { error, client } = await requireWriteClient();
 
-  return upsertDocument("video", formData, {
+  if (error || !client) {
+    return { error, message: null };
+  }
+
+  const upload = await uploadOptionalImage(client, formData, "thumbnail", {
+    alt: title,
+  });
+
+  if (upload.error) {
+    return { error: upload.error, message: null };
+  }
+
+  const body = {
     title,
     slug,
     description: readOptionalString(formData, "description"),
@@ -411,5 +596,8 @@ export async function saveVideoAction(
     featured: readBoolean(formData, "featured"),
     ...(destination ? { destination } : {}),
     ...(category ? { category } : {}),
-  });
+    ...(upload.image ? { thumbnail: upload.image } : {}),
+  };
+
+  return saveDocumentWithClient(client, "video", formData, body);
 }

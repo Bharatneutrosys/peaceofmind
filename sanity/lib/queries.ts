@@ -21,7 +21,9 @@ export const getSiteSettingsQuery = groq`
     authorDisplayName,
     authorBio,
     authorImage { ${imageFields} },
+    "authorImageUrl": authorImage.asset->url,
     heroImage { ${imageFields} },
+    "heroImageUrl": heroImage.asset->url,
     heroHeadline,
     heroSubheading,
     youtubeFeatureTitle,
@@ -480,7 +482,9 @@ export const getAdminCategoriesQuery = groq`
     description,
     regionLabel,
     featured,
-    order
+    order,
+    coverImage { ${imageFields} },
+    "coverImageUrl": coverImage.asset->url
   }
 `;
 
@@ -494,7 +498,9 @@ export const getAdminDestinationsQuery = groq`
     description,
     featured,
     order,
-    "categoryId": category._ref
+    "categoryId": category._ref,
+    coverImage { ${imageFields} },
+    "coverImageUrl": coverImage.asset->url
   }
 `;
 
@@ -509,6 +515,8 @@ export const getAdminEssaysQuery = groq`
     publishedAt,
     featured,
     estimatedReadTime,
+    coverImage { ${imageFields} },
+    "coverImageUrl": coverImage.asset->url,
     "bodyText": array::join(body[_type == "block"].children[].text, "\n\n")
   }
 `;
@@ -522,7 +530,16 @@ export const getAdminPhotoJournalsQuery = groq`
     "destinationId": destination._ref,
     "categoryId": category._ref,
     publishedAt,
-    featured
+    featured,
+    coverImage { ${imageFields} },
+    "coverImageUrl": coverImage.asset->url,
+    gallery[] {
+      _key,
+      asset,
+      "url": asset->url,
+      alt,
+      caption
+    }
   }
 `;
 
@@ -536,6 +553,8 @@ export const getAdminVideosQuery = groq`
     publishedAt,
     featured,
     "destinationId": destination._ref,
-    "categoryId": category._ref
+    "categoryId": category._ref,
+    thumbnail { ${imageFields} },
+    "thumbnailUrl": thumbnail.asset->url
   }
 `;

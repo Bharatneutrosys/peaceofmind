@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useActionState } from "react";
 import type { ReactNode } from "react";
 import {
@@ -36,6 +37,8 @@ type SiteSettings = {
   youtubeFeatureTitle?: string | null;
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
+  heroImageUrl?: string | null;
+  authorImageUrl?: string | null;
 };
 
 type CategoryRecord = {
@@ -46,6 +49,7 @@ type CategoryRecord = {
   regionLabel?: string | null;
   featured?: boolean | null;
   order?: number | null;
+  coverImageUrl?: string | null;
 };
 
 type DestinationRecord = {
@@ -58,6 +62,7 @@ type DestinationRecord = {
   featured?: boolean | null;
   order?: number | null;
   categoryId?: string | null;
+  coverImageUrl?: string | null;
 };
 
 type EssayRecord = {
@@ -71,6 +76,14 @@ type EssayRecord = {
   featured?: boolean | null;
   estimatedReadTime?: string | null;
   bodyText?: string | null;
+  coverImageUrl?: string | null;
+};
+
+type GalleryImageRecord = {
+  _key?: string;
+  url?: string | null;
+  alt?: string | null;
+  caption?: string | null;
 };
 
 type PhotoJournalRecord = {
@@ -82,6 +95,8 @@ type PhotoJournalRecord = {
   categoryId?: string | null;
   publishedAt?: string | null;
   featured?: boolean | null;
+  coverImageUrl?: string | null;
+  gallery?: GalleryImageRecord[] | null;
 };
 
 type VideoRecord = {
@@ -94,6 +109,7 @@ type VideoRecord = {
   featured?: boolean | null;
   destinationId?: string | null;
   categoryId?: string | null;
+  thumbnailUrl?: string | null;
 };
 
 type Action = (state: AdminState, formData: FormData) => Promise<AdminState>;
@@ -209,14 +225,17 @@ export default function AdminDashboard({
             title="Hero"
             description="The first headline and description visitors see on the homepage."
           >
-            <ActionForm action={saveSiteSettingsAction} submitLabel="Save hero text">
+            <ActionForm action={saveSiteSettingsAction} submitLabel="Save hero">
               <div className="grid gap-5">
                 <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading"]} />
                 <Field label="Hero Headline" name="heroHeadline" defaultValue={settings.heroHeadline || ""} required />
                 <TextAreaField label="Hero Description" name="heroSubheading" defaultValue={settings.heroSubheading || ""} />
-                <ImageNote>
-                  Image upload will be added next. For now, hero image can be managed by developer or Sanity Studio.
-                </ImageNote>
+                <ImageUploadField
+                  label="Hero Image"
+                  name="heroImage"
+                  currentUrl={settings.heroImageUrl}
+                  helpText="Recommended hero image: wide panorama, 2400px+ width. Avoid very large uncompressed files."
+                />
               </div>
             </ActionForm>
           </AdminSection>
@@ -250,9 +269,12 @@ export default function AdminDashboard({
                   className="md:col-span-2"
                 />
                 <div className="md:col-span-2">
-                  <ImageNote>
-                    Image upload will be added next. For now, author image can be managed by developer or Sanity Studio.
-                  </ImageNote>
+                  <ImageUploadField
+                    label="Author Image"
+                    name="authorImage"
+                    currentUrl={settings.authorImageUrl}
+                    helpText="Use a clear portrait or creator image. Compressed JPG or WebP works best."
+                  />
                 </div>
               </div>
             </ActionForm>
@@ -307,7 +329,7 @@ export default function AdminDashboard({
 
           <AdminSection
             title="Photo Journals"
-            description="Create simple photo journal records now; gallery image upload is reserved for the next phase."
+            description="Create photo journal records and upload gallery images for the public gallery."
           >
             <PhotoJournalForm title="Add Photo Journal" categories={categories} destinations={destinations} />
             <RecordList emptyText="No photo journals yet.">
@@ -346,7 +368,7 @@ export default function AdminDashboard({
             description="The owner should use this admin panel. Sanity Studio remains available at /studio only for advanced developer CMS work."
           >
             <p className="text-sm leading-7 text-stone-200/72">
-              Image uploads, gallery management, and advanced structured content can be added to this panel next.
+              Gallery reorder/remove controls and advanced structured content can be added to this panel next.
             </p>
           </AdminSection>
         </div>
@@ -366,6 +388,14 @@ function CategoryForm({ title, category }: { title: string; category?: CategoryR
         <Field label="Travel Region" name="regionLabel" defaultValue={category?.regionLabel || ""} />
         <Field label="Display Order" name="order" type="number" defaultValue={numberValue(category?.order)} />
         <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(category?.featured)} />
+        <div className="md:col-span-2">
+          <ImageUploadField
+            label="Cover Image"
+            name="coverImage"
+            currentUrl={category?.coverImageUrl}
+            helpText="Recommended cover image: 1600px+ width. Use a real travel photo owned by the creator."
+          />
+        </div>
       </div>
     </ContentForm>
   );
@@ -393,7 +423,12 @@ function DestinationForm({
         <Field label="Display Order" name="order" type="number" defaultValue={numberValue(destination?.order)} />
         <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(destination?.featured)} />
         <div className="md:col-span-2">
-          <ImageNote>Cover Image upload will be added next.</ImageNote>
+          <ImageUploadField
+            label="Cover Image"
+            name="coverImage"
+            currentUrl={destination?.coverImageUrl}
+            helpText="Recommended cover image: 1600px+ width. Use clear destination photos."
+          />
         </div>
       </div>
     </ContentForm>
@@ -425,7 +460,12 @@ function EssayForm({
         <TextAreaField label="Story Body" name="bodyText" defaultValue={essay?.bodyText || ""} className="md:col-span-2" rows={8} />
         <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(essay?.featured)} />
         <div className="md:col-span-2">
-          <ImageNote>Cover Image upload will be added next.</ImageNote>
+          <ImageUploadField
+            label="Cover Image"
+            name="coverImage"
+            currentUrl={essay?.coverImageUrl}
+            helpText="Recommended story cover: 1600px+ width. The story title is used as fallback alt text."
+          />
         </div>
       </div>
     </ContentForm>
@@ -455,7 +495,15 @@ function PhotoJournalForm({
         <TextAreaField label="Short Introduction" name="excerpt" defaultValue={journal?.excerpt || ""} className="md:col-span-2" />
         <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(journal?.featured)} />
         <div className="md:col-span-2">
-          <ImageNote>Gallery image upload will be added next.</ImageNote>
+          <ImageUploadField
+            label="Cover Image"
+            name="coverImage"
+            currentUrl={journal?.coverImageUrl}
+            helpText="Recommended cover image: 1600px+ width."
+          />
+        </div>
+        <div className="md:col-span-2">
+          <GalleryUploadField gallery={journal?.gallery || []} />
         </div>
       </div>
     </ContentForm>
@@ -486,7 +534,12 @@ function VideoForm({
         <TextAreaField label="Description" name="description" defaultValue={video?.description || ""} className="md:col-span-2" />
         <CheckboxField label="Show on Homepage" name="featured" defaultChecked={Boolean(video?.featured)} />
         <div className="md:col-span-2">
-          <ImageNote>Cover Image upload will be added next.</ImageNote>
+          <ImageUploadField
+            label="Video Thumbnail"
+            name="thumbnail"
+            currentUrl={video?.thumbnailUrl}
+            helpText="Recommended thumbnail: 1600px+ width. If empty, the public site shows a polished fallback."
+          />
         </div>
       </div>
     </ContentForm>
@@ -528,7 +581,7 @@ function ActionForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} encType="multipart/form-data" className="space-y-6">
       {children}
       <FormStatus state={state} />
       <SubmitButton pending={pending} label={submitLabel} />
@@ -556,7 +609,7 @@ function ContentForm({
         </span>
         <span className="text-xs uppercase tracking-[0.22em] text-stone-300/55">Open</span>
       </summary>
-      <form action={formAction} className="mt-6 space-y-6">
+      <form action={formAction} encType="multipart/form-data" className="mt-6 space-y-6">
         {children}
         <FormStatus state={state} />
         <SubmitButton pending={pending} label="Save" />
@@ -706,13 +759,102 @@ function CheckboxField({
   );
 }
 
-function ImageNote({ children }: { children: ReactNode }) {
+function ImageUploadField({
+  label,
+  name,
+  currentUrl,
+  helpText,
+}: {
+  label: string;
+  name: string;
+  currentUrl?: string | null;
+  helpText: string;
+}) {
+  return (
+    <div className="rounded-[1rem] border border-white/8 bg-white/[0.03] p-4">
+      <div className="grid gap-4 md:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] md:items-center">
+        <ImagePreview url={currentUrl} label={label} />
+        <label>
+          <span className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+            {label}
+          </span>
+          <input
+            name={name}
+            type="file"
+            accept="image/*"
+            className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+          />
+          <p className="mt-3 text-sm leading-7 text-stone-200/72">{helpText}</p>
+        </label>
+      </div>
+    </div>
+  );
+}
+
+function GalleryUploadField({ gallery }: { gallery: GalleryImageRecord[] }) {
   return (
     <div className="rounded-[1rem] border border-white/8 bg-white/[0.03] p-4">
       <div className="flex items-start gap-3">
         <ImagePlus className="mt-0.5 h-5 w-5 shrink-0 text-stone-200/70" />
-        <p className="text-sm leading-7 text-stone-200/72">{children}</p>
+        <div className="w-full">
+          <p className="text-xs uppercase tracking-[0.28em] text-stone-300/55">
+            Gallery Images
+          </p>
+          <p className="mt-2 text-sm leading-7 text-stone-200/72">
+            Upload multiple compressed JPG/WebP travel photos. Reorder and remove controls will be added next.
+          </p>
+          {gallery.length > 0 ? (
+            <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+              {gallery.map((image, index) => (
+                <ImagePreview
+                  key={image._key || image.url || index}
+                  url={image.url}
+                  label={image.caption || image.alt || `Gallery image ${index + 1}`}
+                />
+              ))}
+            </div>
+          ) : null}
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            <Field label="Shared Image Alt Text" name="galleryAlt" defaultValue="" />
+            <Field label="Shared Caption" name="galleryCaption" defaultValue="" />
+          </div>
+          <input
+            name="galleryImages"
+            type="file"
+            accept="image/*"
+            multiple
+            className="mt-5 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+          />
+        </div>
       </div>
+    </div>
+  );
+}
+
+function ImagePreview({
+  url,
+  label,
+}: {
+  url?: string | null;
+  label: string;
+}) {
+  if (!url) {
+    return (
+      <div className="flex aspect-[4/3] items-center justify-center rounded-[1rem] border border-white/10 bg-stone-950/40 text-center text-xs uppercase tracking-[0.22em] text-stone-400/70">
+        No image
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] border border-white/10 bg-stone-950/40">
+      <Image
+        src={url}
+        alt={label}
+        fill
+        sizes="(min-width: 768px) 12rem, 100vw"
+        className="object-cover"
+      />
     </div>
   );
 }

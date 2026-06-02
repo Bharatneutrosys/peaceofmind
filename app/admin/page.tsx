@@ -38,6 +38,8 @@ type SiteSettings = {
   youtubeFeatureTitle?: string | null;
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
+  heroImageUrl?: string | null;
+  authorImageUrl?: string | null;
 };
 
 type CategoryRecord = {
@@ -48,6 +50,7 @@ type CategoryRecord = {
   regionLabel?: string | null;
   featured?: boolean | null;
   order?: number | null;
+  coverImageUrl?: string | null;
 };
 
 type DestinationRecord = {
@@ -60,6 +63,7 @@ type DestinationRecord = {
   featured?: boolean | null;
   order?: number | null;
   categoryId?: string | null;
+  coverImageUrl?: string | null;
 };
 
 type EssayRecord = {
@@ -73,6 +77,14 @@ type EssayRecord = {
   featured?: boolean | null;
   estimatedReadTime?: string | null;
   bodyText?: string | null;
+  coverImageUrl?: string | null;
+};
+
+type GalleryImageRecord = {
+  _key?: string;
+  url?: string | null;
+  alt?: string | null;
+  caption?: string | null;
 };
 
 type PhotoJournalRecord = {
@@ -84,6 +96,8 @@ type PhotoJournalRecord = {
   categoryId?: string | null;
   publishedAt?: string | null;
   featured?: boolean | null;
+  coverImageUrl?: string | null;
+  gallery?: GalleryImageRecord[] | null;
 };
 
 type VideoRecord = {
@@ -96,6 +110,7 @@ type VideoRecord = {
   featured?: boolean | null;
   destinationId?: string | null;
   categoryId?: string | null;
+  thumbnailUrl?: string | null;
 };
 
 export default async function AdminPage() {

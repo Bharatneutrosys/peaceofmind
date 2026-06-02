@@ -498,8 +498,8 @@ export default async function Home() {
               No live destinations yet
             </p>
             <p className="mt-4 max-w-2xl text-base leading-8 text-stone-200/76">
-              The category system is ready for future routes from the Sanity
-              admin, and the homepage still reads as a finished editorial page
+              The category system is ready for future routes from the admin
+              panel, and the homepage still reads as a finished editorial page
               even before the archive fills out.
             </p>
           </div>

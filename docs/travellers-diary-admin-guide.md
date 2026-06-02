@@ -30,8 +30,9 @@ Open the Hero section to update:
 
 - Hero Headline
 - Hero Description
+- Hero Image
 
-Hero image upload is not part of this version. For now, hero image can be managed by a developer or in Sanity Studio.
+Use a wide panorama image, ideally 2400px or wider. Avoid very large uncompressed files.
 
 ## Add social links
 
@@ -49,8 +50,9 @@ Open Author Profile to update:
 
 - Author Display Name
 - About the Author
+- Author Image
 
-Author image upload is not part of this version.
+Use a clear portrait or creator image owned by the creator.
 
 ## Add a category
 
@@ -62,6 +64,7 @@ Open Categories, then Add Category. Fill in:
 - Travel Region
 - Show on Homepage
 - Display Order
+- Cover Image
 
 Delete is intentionally not available yet so existing content is not removed accidentally.
 
@@ -77,8 +80,9 @@ Open Destinations, then Add Destination. Fill in:
 - Category
 - Show on Homepage
 - Display Order
+- Cover Image
 
-Cover Image upload will be added next.
+Recommended cover image size: 1600px or wider.
 
 ## Add a journal story
 
@@ -93,9 +97,10 @@ Open Journal Stories, then Add Journal Story. Fill in:
 - Short Introduction
 - Story Body
 - Show on Homepage
+- Cover Image
 
 Story Body is plain text in the admin panel and is saved as simple website paragraphs.
-Cover Image upload will be added next.
+Use a real travel photo owned by the creator. The title is used as fallback image alt text.
 
 ## Add a photo journal
 
@@ -108,8 +113,10 @@ Open Photo Journals, then Add Photo Journal. Fill in:
 - Publish Date
 - Short Introduction
 - Show on Homepage
+- Cover Image
+- Gallery Images
 
-Gallery image upload will be added next.
+Use compressed JPG/WebP travel photos. You can upload multiple gallery images at once. Shared alt text and caption apply to the new uploaded batch.
 
 ## Add a video
 
@@ -123,8 +130,18 @@ Open Videos, then Add Video. Fill in:
 - Publish Date
 - Description
 - Show on Homepage
+- Video Thumbnail
 
 Accepted YouTube links include `youtube.com/watch?v=`, `youtu.be/`, and `youtube.com/embed/`.
+If no thumbnail is uploaded, the public videos page shows a polished fallback.
+
+## Image quality tips
+
+- Use real travel photos owned by the creator.
+- Recommended hero image: wide panorama, 2400px+ width.
+- Recommended cover image: 1600px+ width.
+- Recommended gallery images: compressed JPG/WebP, clear travel photos.
+- Avoid very large uncompressed files.
 
 ## Required Vercel environment variables
 
@@ -140,10 +157,6 @@ After adding or changing these environment variables in Vercel, redeploy the sit
 
 ## Not finished yet
 
-- Hero image upload
-- Author image upload
-- Destination cover image upload
-- Journal cover image upload
-- Photo journal gallery upload
-- Video thumbnail upload
+- Gallery reorder controls
+- Gallery remove controls
 - Safe delete controls
