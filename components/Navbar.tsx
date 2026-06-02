@@ -91,23 +91,23 @@ export default function Navbar({
             : "border-transparent bg-transparent")
         }
       >
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-8 lg:px-12">
           <Link
             href="/"
-            className="group inline-flex items-center gap-3.5"
+            className="group inline-flex min-w-0 items-center gap-2.5 sm:gap-3.5"
             onClick={() => setMenuOpen(false)}
           >
-            <span className="relative h-16 w-16 overflow-visible drop-shadow-[0_10px_24px_rgba(0,0,0,0.34)]">
+            <span className="relative h-12 w-12 shrink-0 overflow-visible drop-shadow-[0_10px_24px_rgba(0,0,0,0.34)] sm:h-16 sm:w-16">
               <Image
                 src="/logo/logo.png"
                 alt=""
                 fill
                 priority
-                sizes="64px"
-                className="scale-[1.18] object-contain object-center"
+                sizes="(max-width: 640px) 48px, 64px"
+                className="scale-[1.12] object-contain object-center sm:scale-[1.18]"
               />
             </span>
-            <span className="font-serif text-lg leading-none text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">
+            <span className="max-w-[10rem] truncate font-serif text-base leading-none text-stone-50 transition-colors group-hover:text-amber-100 sm:max-w-none sm:text-xl">
               {brandName}
             </span>
           </Link>
@@ -168,26 +168,26 @@ export default function Navbar({
       <div
         id="mobile-navigation"
         className={
-          "fixed inset-0 z-[190] flex flex-col justify-end bg-stone-950/92 px-6 pb-8 pt-24 backdrop-blur-2xl transition-opacity duration-300 md:hidden " +
+          "fixed inset-0 z-[190] flex flex-col overflow-y-auto bg-stone-950/92 px-4 pb-6 pt-20 backdrop-blur-2xl transition-opacity duration-300 sm:px-6 sm:pt-24 md:hidden " +
           (menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0")
         }
         aria-hidden={!menuOpen}
       >
-        <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/6 p-5">
+        <div className="mb-5 rounded-[1.35rem] border border-white/10 bg-white/6 p-4 sm:mb-8 sm:rounded-[1.75rem] sm:p-5">
           <p className="text-xs uppercase tracking-[0.3em] text-stone-200/55">
             {brandName}
           </p>
-          <p className="mt-3 max-w-sm text-sm leading-7 text-stone-200/82">
+          <p className="mt-2 max-w-sm text-sm leading-6 text-stone-200/82 sm:mt-3 sm:leading-7">
             Travel notes, photos, and videos from places worth remembering.
           </p>
         </div>
 
-        <nav className="space-y-3">
+        <nav className="space-y-2 sm:space-y-3">
           {navItems.map((item, index) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between rounded-[1.25rem] border border-white/10 bg-white/6 px-4 py-4 text-xl font-light tracking-[0.06em] text-stone-50 transition-colors duration-300 hover:bg-white/12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-100/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:text-2xl"
+              className="flex items-center justify-between rounded-[1rem] border border-white/10 bg-white/6 px-4 py-3 text-lg font-light tracking-[0.06em] text-stone-50 transition-colors duration-300 hover:bg-white/12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-100/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:rounded-[1.25rem] sm:py-4 sm:text-2xl"
               onClick={() => setMenuOpen(false)}
             >
               {item.label}
@@ -197,7 +197,7 @@ export default function Navbar({
         </nav>
 
         {socials.length > 0 ? (
-          <div className="mt-6 grid grid-cols-3 gap-3">
+          <div className="mt-5 grid grid-cols-1 gap-3 min-[390px]:grid-cols-3 sm:mt-6">
             {socials.map((item) => (
               <a
                 key={item.label}

@@ -172,12 +172,16 @@ export default async function VideosPage() {
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.14),_transparent_35%)]" />
                     )}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/8 text-stone-50 backdrop-blur-md">
-                        <Play className="h-5 w-5 fill-stone-50" />
-                      </span>
-                    </div>
+                    {!embedUrl ? (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/8 text-stone-50 backdrop-blur-md">
+                            <Play className="h-5 w-5 fill-stone-50" />
+                          </span>
+                        </div>
+                      </>
+                    ) : null}
                   </div>
 
                   <div className="p-5">

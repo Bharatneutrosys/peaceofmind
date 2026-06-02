@@ -77,29 +77,27 @@ export default async function AboutPage() {
         }
       />
 
-      <div className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
-        <AuthorProfile
-          authorBio={siteSettings?.authorBio || null}
-          authorImage={
-            siteSettings?.authorImage?.asset
-              ? {
-                  src: resolveImageUrl(siteSettings.authorImage, 1200),
-                  alt: "Traveller's Diary author portrait",
-                }
-              : null
-          }
-          authorImageCrop={{
-            zoom: siteSettings?.authorImageZoom,
-            positionX: siteSettings?.authorImagePositionX,
-            positionY: siteSettings?.authorImagePositionY,
-          }}
-          socialLinks={{
-            facebookUrl: siteSettings?.facebookUrl || null,
-            instagramUrl: siteSettings?.instagramUrl || null,
-            youtubeUrl: siteSettings?.youtubeUrl || null,
-          }}
-        />
-      </div>
+      <AuthorProfile
+        authorBio={siteSettings?.authorBio || null}
+        authorImage={
+          siteSettings?.authorImage?.asset
+            ? {
+                src: resolveImageUrl(siteSettings.authorImage, 1200),
+                alt: "Traveller's Diary author portrait",
+              }
+            : null
+        }
+        authorImageCrop={{
+          zoom: siteSettings?.authorImageZoom,
+          positionX: siteSettings?.authorImagePositionX,
+          positionY: siteSettings?.authorImagePositionY,
+        }}
+        socialLinks={{
+          facebookUrl: siteSettings?.facebookUrl || null,
+          instagramUrl: siteSettings?.instagramUrl || null,
+          youtubeUrl: siteSettings?.youtubeUrl || null,
+        }}
+      />
     </main>
   );
 }

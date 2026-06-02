@@ -232,9 +232,10 @@ function DestinationNode({
   const children = childMap.get(destination._id) || [];
   const href = destination.slug ? `/destinations/${destination.slug}` : null;
   const image = resolveImageUrl(destination.coverImage, 1400);
+  const compact = level > 0;
   const content = (
     <>
-      <div className="relative aspect-[16/10] bg-stone-950/40">
+      <div className={`relative bg-stone-950/40 ${compact ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
         {image ? (
           <Image
             src={image}
@@ -247,17 +248,17 @@ function DestinationNode({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.14),_transparent_35%)]" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/18 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className={compact ? "absolute bottom-3 left-3 right-3" : "absolute bottom-4 left-4 right-4"}>
           <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/55">
             {groupLabel(destination)}
           </p>
-          <h3 className="mt-2 font-serif text-2xl text-stone-50">
+          <h3 className={`mt-2 font-serif text-stone-50 ${compact ? "text-xl" : "text-2xl"}`}>
             {destination.title}
           </h3>
         </div>
       </div>
-      <div className="p-5">
-        <p className="text-sm leading-7 text-stone-200/76">
+      <div className={compact ? "p-4" : "p-5"}>
+        <p className={`text-sm text-stone-200/76 ${compact ? "line-clamp-3 leading-6" : "leading-7"}`}>
           {destination.shortIntro ||
             destination.description ||
             "A destination note ready for future stories."}
@@ -275,18 +276,18 @@ function DestinationNode({
       {href ? (
         <Link
           href={href}
-          className="group block overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] shadow-[0_16px_40px_rgba(0,0,0,0.16)] transition-transform duration-300 hover:-translate-y-1"
+          className={`group block overflow-hidden border border-white/10 bg-white/[0.04] shadow-[0_16px_40px_rgba(0,0,0,0.16)] transition-transform duration-300 hover:-translate-y-1 ${compact ? "rounded-[1.2rem]" : "rounded-[1.5rem]"}`}
         >
           {content}
         </Link>
       ) : (
-        <article className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] shadow-[0_16px_40px_rgba(0,0,0,0.16)]">
+        <article className={`overflow-hidden border border-white/10 bg-white/[0.04] shadow-[0_16px_40px_rgba(0,0,0,0.16)] ${compact ? "rounded-[1.2rem]" : "rounded-[1.5rem]"}`}>
           {content}
         </article>
       )}
 
       {children.length > 0 ? (
-        <div className="mt-4 grid gap-4">
+        <div className="mt-4 grid gap-4 min-[430px]:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           {children.map((child) => (
             <DestinationNode
               key={child._id}

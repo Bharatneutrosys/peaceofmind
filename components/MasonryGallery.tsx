@@ -66,8 +66,8 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
 
   if (!photos.length) {
     return (
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm sm:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-12">
+        <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-8 backdrop-blur-sm sm:rounded-[2rem] sm:px-8 sm:py-10">
           <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
             Gallery
           </p>
@@ -84,7 +84,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
   }
 
   return (
-    <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
+    <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-12">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
@@ -163,7 +163,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
             role="dialog"
             aria-modal="true"
             aria-label={selectedImage.caption || selectedImage.alt || "Gallery image"}
-            className="fixed inset-0 z-[250] flex items-center justify-center bg-stone-950/96 px-4 py-6 backdrop-blur-2xl sm:px-6"
+            className="fixed inset-0 z-[250] flex items-center justify-center bg-stone-950/96 px-3 py-5 backdrop-blur-2xl sm:px-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -173,7 +173,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
             <button
               type="button"
               onClick={() => setSelectedImage(null)}
-              className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/6 text-stone-100 transition-colors duration-300 hover:bg-white/12 sm:right-6 sm:top-6"
+              className="absolute right-3 top-3 z-10 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/10 text-stone-100 transition-colors duration-300 hover:bg-white/12 sm:right-6 sm:top-6"
               aria-label="Close image viewer"
             >
               <X className="h-5 w-5" />
@@ -193,7 +193,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
                 width={2400}
                 height={1600}
                 sizes="100vw"
-                className="max-h-[82svh] w-auto max-w-full rounded-[1.5rem] border border-white/10 object-contain shadow-[0_24px_90px_rgba(0,0,0,0.48)]"
+                className="max-h-[76svh] w-auto max-w-full rounded-[1rem] border border-white/10 object-contain shadow-[0_24px_90px_rgba(0,0,0,0.48)] sm:max-h-[82svh] sm:rounded-[1.5rem]"
               />
 
               {(selectedImage.caption || selectedImage.alt) && (
@@ -201,7 +201,7 @@ export default function MasonryGallery({ photos = [] }: { photos: SanityPhoto[] 
                   <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
                     Gallery note
                   </p>
-                  <p className="mt-3 text-pretty font-serif text-2xl leading-tight text-stone-50 md:text-3xl">
+                  <p className="mt-3 text-pretty font-serif text-xl leading-tight text-stone-50 sm:text-2xl md:text-3xl">
                     {selectedImage.caption || selectedImage.alt}
                   </p>
                 </div>

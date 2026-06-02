@@ -258,14 +258,14 @@ export default function AdminDashboard({
   const showSection = (id: string) => !activeSection || activeSection === id;
 
   return (
-    <main className="admin-panel min-h-screen bg-[#f7f2ea] px-6 pb-16 pt-10 text-stone-900 sm:px-8 lg:px-12">
+    <main className="admin-panel min-h-screen bg-[#f7f2ea] px-4 pb-12 pt-6 text-stone-900 sm:px-8 sm:pb-16 sm:pt-10 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.32em] text-stone-500">
               Traveller&apos;s Diary Admin
             </p>
-            <h1 className="mt-4 font-serif text-4xl leading-tight text-stone-950 md:text-6xl">
+            <h1 className="mt-3 font-serif text-3xl leading-tight text-stone-950 sm:mt-4 sm:text-4xl md:text-6xl">
               Simple website editing.
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-stone-600">
@@ -274,10 +274,10 @@ export default function AdminDashboard({
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex w-full flex-wrap gap-3 lg:w-auto">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50 sm:flex-none"
             >
               <Home className="h-4 w-4" />
               Home
@@ -286,15 +286,15 @@ export default function AdminDashboard({
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50 sm:flex-none"
             >
               <ExternalLink className="h-4 w-4" />
               Preview Website
             </Link>
-            <form action={logoutAction}>
+            <form action={logoutAction} className="flex-1 sm:flex-none">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-stone-700"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-stone-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-stone-700"
               >
                 <LogOut className="h-4 w-4" />
                 Logout
@@ -304,17 +304,17 @@ export default function AdminDashboard({
         </div>
 
         {!view ? (
-          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {adminCards.map((card) => (
               <Link
                 key={card.href}
                 href={card.href}
-                className="group rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:border-stone-300"
+                className="group rounded-[1.35rem] border border-stone-200 bg-white p-5 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:border-stone-300 sm:rounded-[1.5rem] sm:p-6"
               >
                 <p className="text-xs uppercase tracking-[0.28em] text-stone-500">
                   Edit
                 </p>
-                <h2 className="mt-4 font-serif text-3xl text-stone-950">
+                <h2 className="mt-4 font-serif text-2xl text-stone-950 sm:text-3xl">
                   {card.title}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-stone-600">
@@ -328,7 +328,7 @@ export default function AdminDashboard({
             ))}
           </div>
         ) : (
-          <nav className="mt-10 flex flex-wrap gap-3">
+          <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:pb-0">
             <Link
               href="/admin"
               className="rounded-full border border-stone-300 bg-white px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] text-stone-600 shadow-sm transition-colors hover:bg-stone-50"
@@ -347,7 +347,7 @@ export default function AdminDashboard({
           </nav>
         )}
 
-        {view ? <div className="mt-8 space-y-8">
+        {view ? <div className="mt-6 space-y-6 sm:mt-8 sm:space-y-8">
           {showSection("website-settings") ? (
           <AdminSection
             title="Website Settings"
@@ -858,11 +858,11 @@ function AdminSection({
   children: ReactNode;
 }) {
   return (
-    <section id={sectionId(title)} className="scroll-mt-24 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.24)] backdrop-blur-sm md:p-8">
-      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <section id={sectionId(title)} className="scroll-mt-24 rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.24)] backdrop-blur-sm sm:rounded-[2rem] sm:p-6 md:p-8">
+      <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">{title}</p>
-          <h2 className="mt-3 font-serif text-3xl text-stone-50">{title}</h2>
+          <h2 className="mt-3 font-serif text-2xl text-stone-50 sm:text-3xl">{title}</h2>
         </div>
         <p className="max-w-2xl text-sm leading-7 text-stone-200/68">{description}</p>
       </div>
@@ -903,9 +903,9 @@ function ContentForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <details className="rounded-[1.5rem] border border-white/10 bg-stone-950/25 p-5" open={title.startsWith("Add New")}>
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-stone-50">
-        <span className="inline-flex items-center gap-2 font-serif text-2xl">
+    <details className="rounded-[1.25rem] border border-white/10 bg-stone-950/25 p-4 sm:rounded-[1.5rem] sm:p-5" open={title.startsWith("Add New")}>
+      <summary className="flex cursor-pointer list-none flex-col gap-3 text-stone-50 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <span className="inline-flex items-start gap-2 font-serif text-xl leading-tight sm:items-center sm:text-2xl">
           {title.startsWith("Add") ? <Plus className="h-5 w-5" /> : <PencilLine className="h-5 w-5" />}
           {title}
         </span>
@@ -913,7 +913,7 @@ function ContentForm({
           {title.startsWith("Add") ? "Creating new content" : "Edit existing content"}
         </span>
       </summary>
-      <form action={formAction} encType="multipart/form-data" className="mt-6 space-y-6">
+      <form action={formAction} encType="multipart/form-data" className="mt-5 space-y-5 sm:mt-6 sm:space-y-6">
         {children}
         <FormStatus state={state} />
         <SubmitButton pending={pending} label="Save Changes" />
@@ -1094,7 +1094,7 @@ function ImageUploadField({
             name={name}
             type="file"
             accept="image/*"
-            className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+            className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-3 py-3 text-sm text-stone-50 file:mb-2 file:mr-3 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950 min-[430px]:px-4 min-[430px]:file:mb-0"
           />
           <p className="mt-3 text-sm leading-7 text-stone-200/72">{helpText}</p>
         </label>
@@ -1134,7 +1134,7 @@ function ProfileImageCropper({
       <div className="grid gap-6 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] md:items-center">
         <div>
           <div
-            className="relative mx-auto aspect-square w-full max-w-[16rem] cursor-grab overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm active:cursor-grabbing"
+            className="relative mx-auto aspect-square w-full max-w-[14rem] touch-none cursor-grab overflow-hidden rounded-full border border-stone-300 bg-white shadow-sm active:cursor-grabbing sm:max-w-[16rem]"
             onPointerDown={(event) => {
               dragStart.current = {
                 x: event.clientX,
@@ -1183,7 +1183,7 @@ function ProfileImageCropper({
               name="authorImage"
               type="file"
               accept="image/*"
-              className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+              className="mt-3 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-3 py-3 text-sm text-stone-50 file:mb-2 file:mr-3 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950 min-[430px]:px-4 min-[430px]:file:mb-0"
               onChange={(event) => {
                 const file = event.currentTarget.files?.[0];
                 if (file) setPreviewUrl(URL.createObjectURL(file));
@@ -1269,17 +1269,18 @@ function ItemActions({
             Preview the public page, or hide this item without permanently deleting it.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex w-full flex-wrap gap-3 lg:w-auto">
           <Link
             href={previewHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-800"
+            className="flex-1 rounded-full border border-stone-300 bg-white px-4 py-2 text-center text-sm font-medium text-stone-800 sm:flex-none"
           >
             Preview
           </Link>
           <form
             action={formAction}
+            className="flex-1 sm:flex-none"
             onSubmit={(event) => {
               if (!window.confirm(`Are you sure you want to remove ${label} from the public website?`)) {
                 event.preventDefault();
@@ -1291,7 +1292,7 @@ function ItemActions({
             <button
               type="submit"
               disabled={pending}
-              className="rounded-full border border-rose-300 bg-white px-4 py-2 text-sm font-medium text-rose-700 disabled:opacity-60"
+              className="w-full rounded-full border border-rose-300 bg-white px-4 py-2 text-sm font-medium text-rose-700 disabled:opacity-60"
             >
               {pending ? "Removing..." : "Remove"}
             </button>
@@ -1315,7 +1316,7 @@ function GalleryRemovalGrid({
       <p className="text-xs uppercase tracking-[0.28em] text-stone-500">
         Remove Gallery Images
       </p>
-      <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="mt-4 grid grid-cols-1 gap-4 min-[390px]:grid-cols-2 md:grid-cols-4">
         {gallery.map((image, index) => (
           <GalleryRemoveItem
             key={image._key || image.url || index}
@@ -1379,7 +1380,7 @@ function GalleryUploadField({ gallery }: { gallery: GalleryImageRecord[] }) {
             Upload multiple compressed JPG/WebP travel photos. Existing images stay in place; reorder and remove controls will be added next.
           </p>
           {gallery.length > 0 ? (
-            <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mt-4 grid grid-cols-1 gap-3 min-[390px]:grid-cols-2 md:grid-cols-4">
               {gallery.map((image, index) => (
                 <ImagePreview
                   key={image._key || image.url || index}
@@ -1398,7 +1399,7 @@ function GalleryUploadField({ gallery }: { gallery: GalleryImageRecord[] }) {
             type="file"
             accept="image/*"
             multiple
-            className="mt-5 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-4 py-3 text-sm text-stone-50 file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950"
+            className="mt-5 block w-full rounded-[1rem] border border-white/10 bg-stone-950/40 px-3 py-3 text-sm text-stone-50 file:mb-2 file:mr-3 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-950 min-[430px]:px-4 min-[430px]:file:mb-0"
           />
         </div>
       </div>
@@ -1449,7 +1450,7 @@ function FormStatus({ state }: { state: AdminState }) {
     }).format(new Date());
 
     return (
-      <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100">
+      <div className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-[1rem] border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100 sm:rounded-full">
         <span className="inline-flex items-center gap-2">
           <Check className="h-4 w-4" />
           {state.message}
@@ -1467,7 +1468,7 @@ function SubmitButton({ pending, label }: { pending: boolean; label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-6 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-stone-50 px-6 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
     >
       {pending ? "Saving..." : label}
       <ArrowRight className="h-4 w-4" />

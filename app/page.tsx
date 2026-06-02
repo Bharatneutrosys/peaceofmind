@@ -371,7 +371,7 @@ export default async function Home() {
         }}
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
         <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] px-5 py-7 backdrop-blur-sm md:px-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -401,7 +401,7 @@ export default async function Home() {
 
       <section
         id="videos"
-        className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12"
+        className="mx-auto max-w-7xl px-4 py-14 sm:px-8 sm:py-20 lg:px-12"
       >
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
@@ -464,7 +464,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <aside className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+          <aside className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-6">
             <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
               Future embed
             </p>
@@ -537,8 +537,8 @@ export default async function Home() {
         }}
       />
 
-      <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
-        <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] px-6 py-10 backdrop-blur-sm md:px-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-8 sm:pb-24 lg:px-12">
+        <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] px-5 py-8 backdrop-blur-sm sm:rounded-[2rem] sm:px-6 sm:py-10 md:px-8 md:py-12">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(16rem,0.7fr)] lg:items-center">
             <div>
               <p className="flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-stone-300/55">

@@ -44,11 +44,11 @@ export default function Hero({
   return (
     <section
       id="top"
-      className="relative isolate min-h-[66svh] overflow-hidden bg-stone-950 text-stone-50 md:min-h-[74svh]"
+      className="relative isolate min-h-[62svh] overflow-hidden bg-stone-950 text-stone-50 sm:min-h-[66svh] md:min-h-[74svh]"
     >
       <div className="absolute inset-0">
         <motion.div
-          className="absolute left-1/2 top-0 h-full w-[260vw] -translate-x-1/2 will-change-transform md:w-[170vw]"
+          className="absolute left-1/2 top-0 h-full w-[220vw] -translate-x-1/2 will-change-transform sm:w-[240vw] md:w-[170vw]"
           animate={
             reduceMotion
               ? undefined
@@ -58,7 +58,7 @@ export default function Hero({
                 }
           }
           transition={{
-            duration: 29,
+            duration: 34,
             ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "mirror",
@@ -69,7 +69,7 @@ export default function Hero({
             alt={heroImage.alt}
             fill
             priority
-            sizes="(min-width: 768px) 170vw, 260vw"
+            sizes="(min-width: 768px) 170vw, (min-width: 640px) 240vw, 220vw"
             className="object-cover object-center"
             style={{ objectPosition: "center 50%" }}
           />
@@ -80,7 +80,7 @@ export default function Hero({
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-stone-950 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[66svh] max-w-7xl flex-col justify-end px-6 pb-6 pt-24 sm:px-8 md:min-h-[74svh] lg:px-12 lg:pb-8">
+      <div className="relative z-10 mx-auto flex min-h-[62svh] max-w-7xl flex-col justify-end px-4 pb-5 pt-20 sm:min-h-[66svh] sm:px-8 sm:pt-24 md:min-h-[74svh] lg:px-12 lg:pb-8">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,0.38fr)] lg:items-end">
           <div className="max-w-2xl">
             <p className="mb-4 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-stone-100/78">
@@ -88,7 +88,7 @@ export default function Hero({
               {eyebrow || brandName}
             </p>
 
-            <h1 className="max-w-2xl text-balance font-serif text-[clamp(1.9rem,3.6vw,3.4rem)] leading-[1.02] text-stone-50 drop-shadow-[0_10px_34px_rgba(0,0,0,0.52)]">
+            <h1 className="max-w-2xl text-balance font-serif text-[clamp(1.75rem,3.6vw,3.4rem)] leading-[1.04] text-stone-50 drop-shadow-[0_10px_34px_rgba(0,0,0,0.52)]">
               {headline}
             </h1>
 
@@ -96,17 +96,17 @@ export default function Hero({
               {subheading}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-col gap-3 min-[390px]:flex-row min-[390px]:flex-wrap">
               <Link
                 href="/journal"
-                className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
               >
                 Explore Journal
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/gallery"
-                className="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/8 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/14"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/16 bg-white/8 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/14"
               >
                 View Gallery
               </Link>
