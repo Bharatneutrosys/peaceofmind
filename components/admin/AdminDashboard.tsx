@@ -32,6 +32,8 @@ type SiteSettings = {
   shortDescription?: string | null;
   heroHeadline?: string | null;
   heroSubheading?: string | null;
+  heroQuote?: string | null;
+  heroIntroShort?: string | null;
   facebookUrl?: string | null;
   instagramUrl?: string | null;
   youtubeUrl?: string | null;
@@ -41,6 +43,7 @@ type SiteSettings = {
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
   heroImageUrl?: string | null;
+  heroAuthorImageUrl?: string | null;
   authorImageUrl?: string | null;
 };
 
@@ -179,7 +182,7 @@ export default function AdminDashboard({
             <Link
               href="/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 shadow-sm transition-colors duration-300 hover:bg-stone-50"
             >
               <ExternalLink className="h-4 w-4" />
@@ -237,6 +240,20 @@ export default function AdminDashboard({
                   defaultValue={settings.heroSubheading || ""}
                   className="md:col-span-2"
                 />
+                <TextAreaField
+                  label="Hero Quote"
+                  name="heroQuote"
+                  defaultValue={settings.heroQuote || ""}
+                  className="md:col-span-2"
+                  helpText="A short personal line for the hero author card."
+                />
+                <TextAreaField
+                  label="Hero Short Intro"
+                  name="heroIntroShort"
+                  defaultValue={settings.heroIntroShort || ""}
+                  className="md:col-span-2"
+                  helpText="A simple one-sentence intro for the hero author card."
+                />
                 <Field label="Facebook URL" name="facebookUrl" defaultValue={settings.facebookUrl || ""} />
                 <Field label="Instagram URL" name="instagramUrl" defaultValue={settings.instagramUrl || ""} />
                 <Field label="YouTube URL" name="youtubeUrl" defaultValue={settings.youtubeUrl || ""} />
@@ -265,7 +282,7 @@ export default function AdminDashboard({
           >
             <ActionForm action={saveSiteSettingsAction} submitLabel="Save Changes">
               <div className="grid gap-5">
-                <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading"]} />
+                <HiddenSettings settings={settings} brandName={brandName} except={["heroHeadline", "heroSubheading", "heroQuote", "heroIntroShort"]} />
                 <Field
                   label="Hero Heading"
                   name="heroHeadline"
@@ -284,6 +301,24 @@ export default function AdminDashboard({
                   name="heroImage"
                   currentUrl={settings.heroImageUrl}
                   helpText="Edit only the fields you want to change. Existing values and image will remain if left unchanged. Recommended hero image: wide panorama, 2400px+ width."
+                />
+                <TextAreaField
+                  label="Hero Quote"
+                  name="heroQuote"
+                  defaultValue={settings.heroQuote || ""}
+                  helpText="Keep it warm and short. Example: We travel far to look for joy, and often return home to find it waiting."
+                />
+                <TextAreaField
+                  label="Hero Author Intro"
+                  name="heroIntroShort"
+                  defaultValue={settings.heroIntroShort || ""}
+                  helpText="One short sentence about the traveler."
+                />
+                <ImageUploadField
+                  label="Hero Author Image"
+                  name="heroAuthorImage"
+                  currentUrl={settings.heroAuthorImageUrl}
+                  helpText="Use a clear portrait or travel profile image for the hero card."
                 />
               </div>
             </ActionForm>
@@ -704,6 +739,8 @@ function HiddenSettings({
     ["shortDescription", settings.shortDescription || ""],
     ["heroHeadline", settings.heroHeadline || ""],
     ["heroSubheading", settings.heroSubheading || ""],
+    ["heroQuote", settings.heroQuote || ""],
+    ["heroIntroShort", settings.heroIntroShort || ""],
     ["facebookUrl", settings.facebookUrl || ""],
     ["instagramUrl", settings.instagramUrl || ""],
     ["youtubeUrl", settings.youtubeUrl || ""],

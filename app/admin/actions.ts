@@ -285,6 +285,8 @@ export async function saveSiteSettingsAction(
     "shortDescription",
     "heroHeadline",
     "heroSubheading",
+    "heroQuote",
+    "heroIntroShort",
     "facebookUrl",
     "instagramUrl",
     "youtubeUrl",
@@ -326,6 +328,18 @@ export async function saveSiteSettingsAction(
 
   if (heroUpload.image) {
     set.heroImage = heroUpload.image;
+  }
+
+  const heroAuthorUpload = await uploadOptionalImage(client, formData, "heroAuthorImage", {
+    alt: readOptionalString(formData, "authorDisplayName") || "Traveller's Diary traveler portrait",
+  });
+
+  if (heroAuthorUpload.error) {
+    return { error: heroAuthorUpload.error, message: null };
+  }
+
+  if (heroAuthorUpload.image) {
+    set.heroAuthorImage = heroAuthorUpload.image;
   }
 
   const authorUpload = await uploadOptionalImage(client, formData, "authorImage", {

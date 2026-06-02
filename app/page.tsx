@@ -14,7 +14,6 @@ import AuthorProfile from "@/components/AuthorProfile";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import {
-  getDestinationsQuery,
   getEssaysQuery,
   getFeaturedVideoQuery,
   getFeaturedEssaysQuery,
@@ -51,6 +50,9 @@ type SiteSettings = {
   heroImage?: ImageField | null;
   heroHeadline?: string | null;
   heroSubheading?: string | null;
+  heroAuthorImage?: ImageField | null;
+  heroQuote?: string | null;
+  heroIntroShort?: string | null;
   youtubeFeatureTitle?: string | null;
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
@@ -90,20 +92,6 @@ type PhotoJournalRecord = {
   featured?: boolean | null;
   tags?: string[] | null;
   publishedAt?: string | null;
-  category?: CategoryRecord | null;
-};
-
-type DestinationRecord = {
-  _id: string;
-  title: string;
-  slug?: string | null;
-  region?: string | null;
-  description?: string | null;
-  shortIntro?: string | null;
-  country?: string | null;
-  featured?: boolean | null;
-  order?: number | null;
-  coverImage?: ImageField | null;
   category?: CategoryRecord | null;
 };
 
@@ -218,19 +206,6 @@ function buildGalleryPhotos(journals: PhotoJournalRecord[]): SanityPhoto[] {
   });
 }
 
-function formatMonth(date?: string | null) {
-  if (!date) return "Recent";
-
-  try {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      year: "numeric",
-    }).format(new Date(date));
-  } catch {
-    return "Recent";
-  }
-}
-
 function socialItems(settings?: SiteSettings | null) {
   return [
     settings?.facebookUrl
@@ -276,14 +251,13 @@ function toYoutubeEmbedUrl(raw?: string | null) {
 }
 
 export default async function Home() {
-  const [siteSettings, allEssays, featuredEssays, allJournals, featuredJournals, destinations, featuredVideo] =
+  const [siteSettings, allEssays, featuredEssays, allJournals, featuredJournals, featuredVideo] =
     await Promise.all([
       safeFetch("siteSettings", () => client.fetch<SiteSettings | null>(getSiteSettingsQuery), null),
       safeFetch("essays", () => client.fetch<EssayRecord[]>(getEssaysQuery), []),
       safeFetch("featuredEssays", () => client.fetch<EssayRecord[]>(getFeaturedEssaysQuery), []),
       safeFetch("photoJournals", () => client.fetch<PhotoJournalRecord[]>(getPhotoJournalsQuery), []),
       safeFetch("featuredJournals", () => client.fetch<PhotoJournalRecord[]>(getFeaturedPhotoJournalsQuery), []),
-      safeFetch("destinations", () => client.fetch<DestinationRecord[]>(getDestinationsQuery), []),
       safeFetch("featuredVideo", () => client.fetch<VideoRecord | null>(getFeaturedVideoQuery), null),
     ]);
 
@@ -297,14 +271,7 @@ export default async function Home() {
   const latestEssay = featuredEssays[0] ?? allEssays[0] ?? null;
   const latestJournal = featuredJournals[0] ?? allJournals[0] ?? null;
   const galleryPhotos = buildGalleryPhotos(allJournals);
-  const heroLocation =
-    latestJournal?.destination ||
-    latestEssay?.destination ||
-    destinations[0]?.title ||
-    "Far Western Nepal";
-
   const storyCount = allEssays.length + allJournals.length;
-  const featuredMonth = formatMonth(latestEssay?.date);
   const socialLinks = socialItems(siteSettings);
   const siteFeaturedVideo = siteSettings?.youtubeFeatureUrl
     ? {
@@ -380,13 +347,25 @@ export default async function Home() {
           siteSettings?.shortDescription ||
           "Travel notes, photos, and videos from places worth remembering."
         }
-        location={heroLocation}
-        season={latestEssay?.date ? featuredMonth : "Nepal / South Asia / Beyond"}
-        metrics={[
-          { label: "Stories", value: String(allEssays.length).padStart(2, "0") },
-          { label: "Frames", value: String(galleryPhotos.length).padStart(2, "0") },
-          { label: "Routes", value: String(destinations.length).padStart(2, "0") },
-        ]}
+        authorCard={{
+          name: siteSettings?.authorDisplayName || brandName,
+          intro:
+            siteSettings?.heroIntroShort ||
+            siteSettings?.authorBio ||
+            "A traveler collecting simple notes, photos, and videos from places worth remembering.",
+          quote: siteSettings?.heroQuote || null,
+          image:
+            siteSettings?.heroAuthorImage?.asset || siteSettings?.authorImage?.asset
+              ? {
+                  src:
+                    resolveImageUrl(siteSettings?.heroAuthorImage, 900) ||
+                    resolveImageUrl(siteSettings?.authorImage, 900),
+                  alt:
+                    siteSettings?.authorDisplayName ||
+                    "Traveller's Diary traveler portrait",
+                }
+              : null,
+        }}
       />
 
       <section className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">

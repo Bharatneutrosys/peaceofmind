@@ -26,6 +26,10 @@ export const getSiteSettingsQuery = groq`
     "heroImageUrl": heroImage.asset->url,
     heroHeadline,
     heroSubheading,
+    heroAuthorImage { ${imageFields} },
+    "heroAuthorImageUrl": heroAuthorImage.asset->url,
+    heroQuote,
+    heroIntroShort,
     youtubeFeatureTitle,
     youtubeFeatureDescription,
     youtubeFeatureUrl

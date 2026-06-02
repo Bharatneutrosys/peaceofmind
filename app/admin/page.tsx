@@ -30,6 +30,8 @@ type SiteSettings = {
   shortDescription?: string | null;
   heroHeadline?: string | null;
   heroSubheading?: string | null;
+  heroQuote?: string | null;
+  heroIntroShort?: string | null;
   facebookUrl?: string | null;
   instagramUrl?: string | null;
   youtubeUrl?: string | null;
@@ -39,6 +41,7 @@ type SiteSettings = {
   youtubeFeatureDescription?: string | null;
   youtubeFeatureUrl?: string | null;
   heroImageUrl?: string | null;
+  heroAuthorImageUrl?: string | null;
   authorImageUrl?: string | null;
 };
 

@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronDown, MapPin } from "lucide-react";
+import { ArrowRight, ChevronDown, Quote } from "lucide-react";
 
-type HeroMetric = {
-  label: string;
-  value: string;
+type HeroAuthorCard = {
+  image?: { src: string; alt: string } | null;
+  name?: string | null;
+  intro?: string | null;
+  quote?: string | null;
 };
 
 export default function Hero({
@@ -16,18 +18,14 @@ export default function Hero({
   eyebrow = "Travel diary",
   headline = "Stories from the mountains and beyond.",
   subheading = "Travel notes, photos, and videos from places worth remembering.",
-  location = "Far Western Nepal",
-  season = "Nepal / South Asia / Beyond",
-  metrics = [],
+  authorCard,
 }: {
   image?: { src: string; alt: string } | null;
   brandName?: string;
   eyebrow?: string;
   headline?: string;
   subheading?: string;
-  location?: string;
-  season?: string;
-  metrics?: HeroMetric[];
+  authorCard?: HeroAuthorCard | null;
 }) {
   const reduceMotion = useReducedMotion();
   const heroImage =
@@ -35,15 +33,13 @@ export default function Hero({
       src: "/images/hero-panorama.png",
       alt: "A long Himalayan mountain panorama",
     };
-
-  const displayMetrics =
-    metrics.length > 0
-      ? metrics
-      : [
-          { label: "Tempo", value: "Unhurried" },
-          { label: "Mood", value: "Cinematic" },
-          { label: "Lens", value: "Quiet luxury" },
-        ];
+  const cardName = authorCard?.name || brandName;
+  const cardIntro =
+    authorCard?.intro ||
+    "A traveler collecting simple notes, photos, and videos from places worth remembering.";
+  const cardQuote =
+    authorCard?.quote ||
+    "We travel far looking for joy, then come home and find it was waiting there.";
 
   return (
     <section
@@ -117,33 +113,40 @@ export default function Hero({
             </div>
           </div>
 
-          <div className="hidden rounded-[1.25rem] border border-white/10 bg-stone-950/32 p-4 backdrop-blur-xl sm:block">
-            <div className="space-y-3">
-              <div>
-                <div className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/64">
-                  <MapPin className="h-3.5 w-3.5 text-amber-100" />
-                  Current route
-                </div>
-                <p className="mt-2 font-serif text-xl text-stone-50">{location}</p>
-                <p className="mt-2 text-sm leading-6 text-stone-100/72">
-                  {season}
+          <div className="hidden rounded-[1.35rem] border border-white/10 bg-stone-950/34 p-4 shadow-[0_18px_54px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:block">
+            <div className="grid gap-4">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] border border-white/10 bg-stone-950/55">
+                {authorCard?.image?.src ? (
+                  <Image
+                    src={authorCard.image.src}
+                    alt={authorCard.image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 22vw, 45vw"
+                    className="object-cover object-center"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.18),transparent_28%),linear-gradient(135deg,rgba(200,154,87,0.28),rgba(135,182,201,0.14)_48%,rgba(0,0,0,0.22))]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/74 via-transparent to-transparent" />
+                <p className="absolute bottom-3 left-3 right-3 text-[0.68rem] uppercase tracking-[0.26em] text-stone-100/76">
+                  About the traveler
                 </p>
               </div>
 
-              <div className="grid gap-2">
-                {displayMetrics.map((metric) => (
-                  <div
-                    key={metric.label}
-                    className="flex items-center justify-between border-t border-white/10 pt-2"
-                  >
-                    <p className="text-[0.64rem] uppercase tracking-[0.24em] text-stone-200/55">
-                      {metric.label}
-                    </p>
-                    <p className="text-sm font-medium text-stone-50">
-                      {metric.value}
-                    </p>
-                  </div>
-                ))}
+              <div>
+                <p className="font-serif text-xl leading-tight text-stone-50">
+                  {cardName}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-stone-100/72">
+                  {cardIntro}
+                </p>
+              </div>
+
+              <div className="border-t border-white/10 pt-3">
+                <Quote className="h-4 w-4 text-amber-100" />
+                <p className="mt-2 text-pretty font-serif text-lg leading-7 text-stone-50/92">
+                  {cardQuote}
+                </p>
               </div>
             </div>
           </div>

@@ -120,6 +120,29 @@ export const siteSettings = defineType({
       description: 'Short supporting copy under the hero headline.',
     }),
     defineField({
+      name: 'heroAuthorImage',
+      title: 'Hero Author Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      description: 'Optional portrait or creator image shown in the hero author card.',
+    }),
+    defineField({
+      name: 'heroQuote',
+      title: 'Hero Quote',
+      type: 'text',
+      rows: 3,
+      description: 'A short personal quote shown in the hero author card.',
+    }),
+    defineField({
+      name: 'heroIntroShort',
+      title: 'Hero Short Intro',
+      type: 'text',
+      rows: 3,
+      description: 'A short author intro shown in the hero author card.',
+    }),
+    defineField({
       name: 'youtubeFeatureTitle',
       title: 'YouTube Feature Title',
       type: 'string',
