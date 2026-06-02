@@ -63,6 +63,7 @@ type DestinationRecord = {
   featured?: boolean | null;
   order?: number | null;
   categoryId?: string | null;
+  parentDestinationId?: string | null;
   coverImageUrl?: string | null;
 };
 

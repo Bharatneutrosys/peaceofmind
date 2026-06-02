@@ -62,7 +62,7 @@ export default function Hero({
                 }
           }
           transition={{
-            duration: 24,
+            duration: 29,
             ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "mirror",
@@ -102,14 +102,14 @@ export default function Hero({
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="#journal"
+                href="/journal"
                 className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
               >
                 Explore Journal
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="#gallery"
+                href="/gallery"
                 className="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/8 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/14"
               >
                 View Gallery

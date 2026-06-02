@@ -82,6 +82,8 @@ export default function Footer({
                   <a
                     key={link.label}
                     href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-between border-b border-white/8 pb-3 text-sm text-stone-200/78 transition-colors duration-300 hover:text-stone-50"
                   >
                     {link.label}

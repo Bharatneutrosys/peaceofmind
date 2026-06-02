@@ -13,6 +13,7 @@ const navItems = [
   { label: "Gallery", href: "/gallery" },
   { label: "Videos", href: "/videos" },
   { label: "About", href: "/about" },
+  { label: "Admin", href: "/admin" },
 ];
 
 type SocialLinks = {
@@ -93,17 +94,17 @@ export default function Navbar({
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
           <Link
             href="/"
-            className="group inline-flex items-center gap-3"
+            className="group inline-flex items-center gap-3.5"
             onClick={() => setMenuOpen(false)}
           >
-            <span className="relative h-12 w-12 overflow-hidden rounded-full border border-amber-100/30 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.3)] ring-1 ring-black/10">
+            <span className="relative h-14 w-14 overflow-hidden rounded-full border border-amber-100/35 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.32)] ring-1 ring-black/10">
               <Image
                 src="/logo/logo.png"
                 alt=""
                 fill
                 priority
-                sizes="48px"
-                className="object-cover"
+                sizes="56px"
+                className="scale-[1.08] object-cover object-center"
               />
             </span>
             <span className="font-serif text-lg leading-none text-stone-50 transition-colors group-hover:text-amber-100 sm:text-xl">
@@ -142,6 +143,8 @@ export default function Navbar({
               <a
                 key={item.label}
                 href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full border border-white/10 bg-white/6 px-3 py-2 text-[0.68rem] uppercase tracking-[0.2em] text-stone-100/72 transition-colors duration-300 hover:bg-white/12"
               >
                 {item.label}
@@ -199,6 +202,8 @@ export default function Navbar({
               <a
                 key={item.label}
                 href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full border border-white/10 bg-white/6 px-3 py-3 text-center text-[0.7rem] uppercase tracking-[0.2em] text-stone-100/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-100/70 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
                 onClick={() => setMenuOpen(false)}
               >

@@ -71,11 +71,18 @@ export const getDestinationsQuery = groq`
     country,
     featured,
     order,
+    parentDestination->{
+      _id,
+      title,
+      "slug": slug.current,
+      country
+    },
     category->{
       _id,
       title,
       "slug": slug.current,
       description,
+      regionLabel,
       featured,
       order,
       coverImage { ${imageFields} }
@@ -97,6 +104,12 @@ export const getDestinationBySlugQuery = groq`
     country,
     featured,
     order,
+    parentDestination->{
+      _id,
+      title,
+      "slug": slug.current,
+      country
+    },
     category->{
       _id,
       title,
@@ -107,7 +120,29 @@ export const getDestinationBySlugQuery = groq`
       order,
       coverImage { ${imageFields} }
     },
-    coverImage { ${imageFields} }
+    coverImage { ${imageFields} },
+    "children": *[_type == "destination" && parentDestination._ref == ^._id] | order(coalesce(order, 9999) asc, title asc) {
+      _id,
+      title,
+      "slug": slug.current,
+      region,
+      description,
+      shortIntro,
+      country,
+      featured,
+      order,
+      coverImage { ${imageFields} },
+      category->{
+        _id,
+        title,
+        "slug": slug.current,
+        description,
+        regionLabel,
+        featured,
+        order,
+        coverImage { ${imageFields} }
+      }
+    }
   }
 `;
 
@@ -122,11 +157,18 @@ export const getFeaturedDestinationsQuery = groq`
     country,
     featured,
     order,
+    parentDestination->{
+      _id,
+      title,
+      "slug": slug.current,
+      country
+    },
     category->{
       _id,
       title,
       "slug": slug.current,
       description,
+      regionLabel,
       featured,
       order,
       coverImage { ${imageFields} }
@@ -153,6 +195,7 @@ export const getLatestEssaysQuery = groq`
       title,
       "slug": slug.current,
       description,
+      regionLabel,
       featured,
       order,
       coverImage { ${imageFields} }
@@ -499,6 +542,7 @@ export const getAdminDestinationsQuery = groq`
     featured,
     order,
     "categoryId": category._ref,
+    "parentDestinationId": parentDestination._ref,
     coverImage { ${imageFields} },
     "coverImageUrl": coverImage.asset->url
   }

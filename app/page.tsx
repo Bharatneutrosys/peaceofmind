@@ -243,6 +243,38 @@ function socialItems(settings?: SiteSettings | null) {
   ].filter(Boolean) as Array<{ label: string; href: string }>;
 }
 
+function toYoutubeEmbedUrl(raw?: string | null) {
+  if (!raw) return null;
+
+  try {
+    const url = new URL(raw);
+
+    if (url.hostname.includes("youtu.be")) {
+      const id = url.pathname.replace("/", "");
+      return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+    }
+
+    const videoId = url.searchParams.get("v");
+    if (videoId) {
+      return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    }
+
+    const embedMatch = url.pathname.match(/\/embed\/([^/?]+)/);
+    if (embedMatch?.[1]) {
+      return `https://www.youtube-nocookie.com/embed/${embedMatch[1]}`;
+    }
+
+    const shortsMatch = url.pathname.match(/\/shorts\/([^/?]+)/);
+    if (shortsMatch?.[1]) {
+      return `https://www.youtube-nocookie.com/embed/${shortsMatch[1]}`;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 export default async function Home() {
   const [siteSettings, allEssays, featuredEssays, allJournals, featuredJournals, destinations, featuredVideo] =
     await Promise.all([
@@ -320,6 +352,7 @@ export default async function Home() {
     destination: null,
     category: null,
   };
+  const sampleVideoEmbedUrl = toYoutubeEmbedUrl(sampleVideoSource.youtubeUrl);
 
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden bg-transparent">
@@ -408,7 +441,15 @@ export default async function Home() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)]">
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] shadow-[0_24px_90px_rgba(0,0,0,0.22)]">
             <div className="relative aspect-video bg-stone-950/50">
-              {sampleVideoSource?.thumbnail ? (
+              {sampleVideoEmbedUrl ? (
+                <iframe
+                  src={sampleVideoEmbedUrl}
+                  title={sampleVideoSource.title}
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : sampleVideoSource?.thumbnail ? (
                 <div
                   className="absolute inset-0 bg-cover bg-center"
                   style={{
@@ -416,24 +457,28 @@ export default async function Home() {
                   }}
                 />
               ) : null}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.14),_transparent_28%)]" />
-              <div className="absolute inset-0 bg-gradient-to-br from-stone-950/30 via-transparent to-stone-950/70" />
-              <div className="absolute inset-4 rounded-[1.5rem] border border-white/10 bg-white/[0.03] backdrop-blur-sm">
-                <div className="flex h-full items-center justify-center">
-                  <div className="text-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/12 bg-white/8 text-stone-50">
-                      <Play className="h-6 w-6 fill-stone-50" />
-                    </span>
-                    <p className="mt-5 text-xs uppercase tracking-[0.32em] text-stone-200/55">
-                      YouTube ready
-                    </p>
-                    <p className="mt-3 font-serif text-2xl text-stone-50">
-                      {featuredVideoSource?.title ||
-                        sampleVideoSource.title}
-                    </p>
+              {!sampleVideoEmbedUrl ? (
+                <>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.14),_transparent_28%)]" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-stone-950/30 via-transparent to-stone-950/70" />
+                  <div className="absolute inset-4 rounded-[1.5rem] border border-white/10 bg-white/[0.03] backdrop-blur-sm">
+                    <div className="flex h-full items-center justify-center">
+                      <div className="text-center">
+                        <span className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/12 bg-white/8 text-stone-50">
+                          <Play className="h-6 w-6 fill-stone-50" />
+                        </span>
+                        <p className="mt-5 text-xs uppercase tracking-[0.32em] text-stone-200/55">
+                          Video coming soon
+                        </p>
+                        <p className="mt-3 font-serif text-2xl text-stone-50">
+                          {featuredVideoSource?.title ||
+                            sampleVideoSource.title}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              ) : null}
             </div>
           </div>
 
@@ -449,7 +494,7 @@ export default async function Home() {
                 href={sampleVideoSource.youtubeUrl}
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Watch on YouTube
                 <ArrowRight className="h-4 w-4" />
@@ -469,7 +514,7 @@ export default async function Home() {
                     href={item.href}
                     className="flex items-center justify-between rounded-[1rem] border border-white/8 bg-stone-950/25 px-4 py-3 text-sm text-stone-200/82 transition-colors duration-300 hover:bg-white/6"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     <span className="inline-flex items-center gap-2">
                       {item.label}
@@ -529,7 +574,7 @@ export default async function Home() {
                     href={item.href}
                     className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-stone-50 backdrop-blur-md transition-colors duration-300 hover:bg-white/12"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     {item.label}
                   </a>

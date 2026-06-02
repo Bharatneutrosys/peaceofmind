@@ -51,6 +51,28 @@ type DestinationDetail = {
     description?: string | null;
     regionLabel?: string | null;
   } | null;
+  parentDestination?: {
+    _id: string;
+    title?: string | null;
+    slug?: string | null;
+    country?: string | null;
+  } | null;
+  children?: DestinationChild[] | null;
+};
+
+type DestinationChild = {
+  _id: string;
+  title: string;
+  slug?: string | null;
+  description?: string | null;
+  shortIntro?: string | null;
+  country?: string | null;
+  coverImage?: ImageField | null;
+  category?: {
+    _id: string;
+    title?: string | null;
+    regionLabel?: string | null;
+  } | null;
 };
 
 type RelatedEssay = {
@@ -222,6 +244,19 @@ export default async function DestinationDetailPage({
                       {destination.category.regionLabel || destination.category.title}
                     </span>
                   ) : null}
+                  {destination.parentDestination?.title ? (
+                    <Link
+                      href={
+                        destination.parentDestination.slug
+                          ? `/destinations/${destination.parentDestination.slug}`
+                          : "/destinations"
+                      }
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 transition-colors hover:bg-white/10"
+                    >
+                      <MapPin className="h-3.5 w-3.5 text-emerald-100" />
+                      Under {destination.parentDestination.title}
+                    </Link>
+                  ) : null}
                 </div>
 
                 <p className="max-w-3xl text-pretty text-base leading-8 text-stone-200/80 md:text-lg">
@@ -270,8 +305,71 @@ export default async function DestinationDetailPage({
         </div>
       </section>
 
+      {destination.children?.length ? (
+        <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-8 backdrop-blur-sm md:px-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
+                  Child places
+                </p>
+                <h2 className="mt-3 font-serif text-3xl text-stone-50">
+                  Places under {destination.title}
+                </h2>
+              </div>
+              <p className="max-w-2xl text-sm leading-7 text-stone-200/68">
+                Smaller routes and related places connected to this destination.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {destination.children.map((child) => (
+                <Link
+                  key={child._id}
+                  href={child.slug ? `/destinations/${child.slug}` : "/destinations"}
+                  className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-950/25 transition-transform duration-300 hover:-translate-y-1"
+                >
+                  <div className="relative aspect-[16/10] bg-stone-950/40">
+                    {child.coverImage ? (
+                      <Image
+                        src={resolveImageUrl(child.coverImage, 1200)}
+                        alt={child.coverImage.alt || child.title}
+                        fill
+                        sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.14),_transparent_35%)]" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/18 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/55">
+                        {child.category?.regionLabel ||
+                          child.category?.title ||
+                          child.country ||
+                          "Child place"}
+                      </p>
+                      <h3 className="mt-2 font-serif text-2xl text-stone-50">
+                        {child.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-sm leading-7 text-stone-200/76">
+                      {child.shortIntro ||
+                        child.description ||
+                        "A nested place ready for future stories."}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="mx-auto max-w-7xl px-6 pb-24 sm:px-8 lg:px-12">
-        {relatedEssays.length === 0 && relatedJournals.length === 0 ? (
+        {relatedEssays.length === 0 && relatedJournals.length === 0 && !destination.children?.length ? (
           <div className="mb-8 rounded-[1.75rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm">
             <p className="text-xs uppercase tracking-[0.32em] text-stone-300/55">
               Related content

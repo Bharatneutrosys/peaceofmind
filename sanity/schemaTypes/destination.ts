@@ -76,6 +76,13 @@ export const destination = defineType({
       description: 'Optional reusable category reference for site-wide grouping.',
     }),
     defineField({
+      name: 'parentDestination',
+      title: 'Parent Place',
+      type: 'reference',
+      to: [{ type: 'destination' }],
+      description: 'Optional larger place this destination belongs under, such as Pokhara under Nepal.',
+    }),
+    defineField({
       name: 'description',
       title: 'Short Description',
       type: 'text',

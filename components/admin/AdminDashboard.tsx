@@ -65,6 +65,7 @@ type DestinationRecord = {
   featured?: boolean | null;
   order?: number | null;
   categoryId?: string | null;
+  parentDestinationId?: string | null;
   coverImageUrl?: string | null;
 };
 
@@ -345,7 +346,7 @@ export default function AdminDashboard({
             title="Destinations"
             description="Create and update the places connected to stories, photos, and videos."
           >
-            <DestinationForm title="Add New Destination" categories={categories} />
+            <DestinationForm title="Add New Destination" categories={categories} destinations={destinations} />
             <RecordList emptyText="No destinations yet.">
               {destinations.map((destination) => (
                 <DestinationForm
@@ -353,6 +354,7 @@ export default function AdminDashboard({
                   title={`Editing: ${destination.title || "Untitled Destination"}`}
                   destination={destination}
                   categories={categories}
+                  destinations={destinations}
                 />
               ))}
             </RecordList>
@@ -454,19 +456,24 @@ function DestinationForm({
   title,
   destination,
   categories,
+  destinations,
 }: {
   title: string;
   destination?: DestinationRecord;
   categories: CategoryRecord[];
+  destinations: DestinationRecord[];
 }) {
+  const parentOptions = destinations.filter((item) => item._id !== destination?._id);
+
   return (
     <ContentForm title={title} action={saveDestinationAction}>
       <HiddenId id={destination?._id} />
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Title" name="title" defaultValue={destination?.title || ""} required />
+        <Field label="Place Name" name="title" defaultValue={destination?.title || ""} required />
         <Field label="Slug" name="slug" defaultValue={destination?.slug || ""} />
         <Field label="Country" name="country" defaultValue={destination?.country || ""} />
-        <SelectField label="Category" name="categoryId" value={destination?.categoryId || ""} options={categories} />
+        <SelectField label="Travel Region" name="categoryId" value={destination?.categoryId || ""} options={categories} />
+        <SelectField label="Parent Place" name="parentDestinationId" value={destination?.parentDestinationId || ""} options={parentOptions} />
         <TextAreaField label="Short Introduction" name="shortIntro" defaultValue={destination?.shortIntro || ""} />
         <TextAreaField label="Description" name="description" defaultValue={destination?.description || ""} />
         <Field label="Display Order" name="order" type="number" defaultValue={numberValue(destination?.order)} />

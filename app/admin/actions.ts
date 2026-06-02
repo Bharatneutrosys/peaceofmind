@@ -421,6 +421,14 @@ export async function saveDestinationAction(
   if (!slug) return { error: "Destination slug is required.", message: null };
 
   const category = referenceField(readOptionalString(formData, "categoryId"));
+  const parentDestinationId = readOptionalString(formData, "parentDestinationId");
+  const documentId = readOptionalString(formData, "_id");
+
+  if (documentId && parentDestinationId === documentId) {
+    return { error: "Choose a different parent place for this destination.", message: null };
+  }
+
+  const parentDestination = referenceField(parentDestinationId);
   const order = readNumberOrNull(formData, "order");
   const { error, client } = await requireWriteClient();
 
@@ -444,6 +452,7 @@ export async function saveDestinationAction(
     description: readOptionalString(formData, "description"),
     featured: readBoolean(formData, "featured"),
     ...(category ? { category } : {}),
+    ...(parentDestination ? { parentDestination } : {}),
     ...(order === null ? {} : { order }),
     ...(upload.image ? { coverImage: upload.image } : {}),
   };
@@ -451,6 +460,7 @@ export async function saveDestinationAction(
   return saveDocumentWithClient(client, "destination", formData, body, {
     unset: [
       ...(category ? [] : ["category"]),
+      ...(parentDestination ? [] : ["parentDestination"]),
       ...(order === null ? ["order"] : []),
     ],
     detailPaths: [`/destinations/${slug.current}`],

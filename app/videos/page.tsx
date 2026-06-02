@@ -196,7 +196,7 @@ export default async function VideosPage() {
                         href={watchUrl}
                         className="mt-5 inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
                         target={watchUrl.startsWith("http") ? "_blank" : undefined}
-                        rel={watchUrl.startsWith("http") ? "noreferrer" : undefined}
+                        rel={watchUrl.startsWith("http") ? "noopener noreferrer" : undefined}
                       >
                         Watch on YouTube
                         <ArrowRight className="h-4 w-4" />
