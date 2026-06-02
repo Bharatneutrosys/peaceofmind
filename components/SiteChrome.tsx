@@ -26,7 +26,7 @@ export default function SiteChrome({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  const isStudio = pathname?.startsWith("/studio");
+  const isStudio = pathname?.startsWith("/studio") || pathname?.startsWith("/admin");
 
   if (isStudio) {
     return <>{children}</>;

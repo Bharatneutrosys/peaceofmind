@@ -1,180 +1,66 @@
 # Traveller's Diary Admin Guide
 
-Use this guide when updating the website in Sanity Studio.
+Use this guide when updating the website.
 
 ## Open the admin panel
 
-You can also open **Admin** from the main website navbar, which takes you to the Studio.
+- Local URL: `http://localhost:3000/admin`
+- Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
+- Later custom domain: `https://yourdomain.com/admin`
 
-Visit `/studio` in the browser and sign in with the authorized Sanity account.
-The sidebar is organized so the owner can update content without touching code.
+Open the page and enter the admin passcode. The owner panel uses a simple secure session cookie after login.
 
-Local admin URL: `http://localhost:3000/studio`
+## What the owner can update
 
-On Vercel, the direct URL is `https://peaceofmind-steel.vercel.app/studio`.
-
-## 1. Start with Site Settings
-
-Open **Site Settings** first. This controls the brand and homepage.
-
-Update:
-- Brand Name
-- Secondary Brand Line
-- Tagline
+- Website Name
+- Homepage Tagline
 - Short Homepage Introduction
-- Hero Image
 - Hero Headline
-- Hero Subheading
-- Author Bio
-- Author Image
-- Facebook Page URL
-- Instagram Profile URL
-- YouTube Channel URL
-- Featured Video Link
+- Hero Description
+- Facebook Link
+- Instagram Link
+- YouTube Link
+- About the Author
+- YouTube feature title, description, and link
 
-Leave optional fields empty if you do not need them yet.
+Save changes after editing. The public site updates after revalidation or refresh.
 
-## 2. Add a Category
+## Image fields
 
-Use **Category** when you want to group travel content.
+Hero image and author image are coming in a later phase. The current admin focuses on the text and links the owner changes most often.
 
-Recommended categories:
-- Nepal
-- South Asia
-- Europe
+## Simple workflow
 
-Fill in:
-- Title
-- Slug
-- Short Description
-- Cover Image
-- Travel Region
-- Show on Homepage
-- Display Order
+1. Open `/admin`
+2. Enter the admin passcode
+3. Update the text and links
+4. Save changes
+5. Refresh the public site if needed
 
-## 3. Add a Destination
+## Deployment checklist
 
-Use **Destination** for a place page or future archive section.
+- Add the Vercel environment variables
+- Add the Vercel domain to Sanity CORS origins
+- Redeploy after environment updates
+- Use the `/admin` route for the owner workflow
+- Keep `/studio` available only for advanced developer CMS work
 
-Fill in:
-- Title
-- Slug
-- Related Category
-- Travel Region
-- Short Description
-- Short Introduction
-- Country
-- Cover Image
-- Show on Homepage
-- Display Order
+If the panel does not load or the content is missing, check:
 
-## 4. Add a Journal Story
+- Sanity project access
+- CORS origins
+- `ADMIN_PASSCODE`
+- `SANITY_API_WRITE_TOKEN`
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- `NEXT_PUBLIC_SANITY_DATASET`
+- `NEXT_PUBLIC_SANITY_API_VERSION`
 
-Use **Essay** for long-form travel writing.
+## Required Vercel environment variables
 
-Fill in:
-- Title
-- Slug
-- Cover Image
-- Short Introduction
-- Travel Region
-- Story Date
-- Published Date
-- Destination
-- Show on Homepage
-- Estimated Read Time
-- Tags / Keywords
-- Body
-
-Tip: the body can start with a few short paragraphs. You do not need to fill every section right away.
-
-## 5. Add a Photo Journal
-
-Use **Photo Journal** for visual stories and gallery sets.
-
-Fill in:
-- Title
-- Related Destination
-- Travel Region
-- Cover Image
-- Gallery Images
-- Short Introduction
-- Featured Video Link
-- Published Date
-- Show on Homepage
-- Tags / Keywords
-
-Tip: each gallery image can include alternative text and an optional caption.
-
-## 6. Add a Video
-
-Use **Video** for YouTube or other travel video links.
-
-Fill in:
-- Title
-- Slug
-- Short Description
-- YouTube Video URL
-- Thumbnail Image
-- Related Destination
-- Travel Region
-- Show on Homepage
-- Published Date
-
-Supported YouTube links:
-- `youtube.com/watch?v=...`
-- `youtu.be/...`
-- `youtube.com/embed/...`
-
-## 7. Featured content rules
-
-Turn on **Show on Homepage** for items you want to appear first.
-
-The homepage will still work if nothing is featured. It will fall back to the latest content or polished empty states.
-
-## 8. Recommended publishing order
-
-1. Site Settings
-2. Categories
-3. Destinations
-4. Journal Stories
-5. Photo Journals
-6. Videos
-
-## 9. Image guidance
-
-Recommended image shapes:
-- Hero Image: wide landscape
-- Cover Image: wide 16:9 or near 16:10
-- Author Image: portrait
-- Gallery Images: any strong frame, but keep the subject clear
-
-Good practice:
-- Use clear, high-resolution images
-- Add alt text for accessibility
-- Add captions when they help the story
-
-## 10. Writing tips
-
-- Keep titles short and clear
-- Use the first paragraph to set the mood
-- Avoid fake claims or over-promising language
-- Write in a calm, premium voice
-- Keep social URLs empty until the official pages are ready
-
-## 11. Deployment checklist
-
-- Add the Sanity environment variables in Vercel Project Settings
-- Add your Vercel domain to Sanity CORS origins
-- Redeploy after changing environment variables
-- Visit `/studio` and sign in with the authorized Sanity account
-
-If the Studio opens but content does not load, check the dataset, project ID, and CORS settings first.
-
-Required environment variables:
-
+- `ADMIN_PASSCODE=`
+- `SANITY_API_WRITE_TOKEN=`
 - `NEXT_PUBLIC_SANITY_PROJECT_ID=`
 - `NEXT_PUBLIC_SANITY_DATASET=`
 - `NEXT_PUBLIC_SANITY_API_VERSION=`
 
-If the dataset is private or preview access is needed, a Sanity token may also be required in the server environment. Do not expose it in the public frontend.
+`SANITY_API_WRITE_TOKEN` must be created in Sanity Manage with write access. Keep it server-side only and never expose it in the browser.

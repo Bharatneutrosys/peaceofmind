@@ -12,7 +12,7 @@ const navItems = [
   { label: "Gallery", href: "/gallery" },
   { label: "Videos", href: "/videos" },
   { label: "About", href: "/about" },
-  { label: "Admin", href: "/studio" },
+  { label: "Admin", href: "/admin" },
 ];
 
 type SocialLinks = {

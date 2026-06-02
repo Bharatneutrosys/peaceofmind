@@ -103,10 +103,10 @@ export default function Footer({
           <div className="flex flex-wrap items-center gap-4">
             <span>Built for journeys that deserve their own light.</span>
             <Link
-              href="/studio"
+              href="/admin"
               className="text-[0.62rem] uppercase tracking-[0.34em] text-stone-300/35 transition-colors duration-300 hover:text-stone-100/70"
             >
-              Studio
+              Admin
             </Link>
           </div>
         </div>
