@@ -143,7 +143,7 @@ export async function generateMetadata() {
     resolveImageUrl(siteSettings?.heroImage) ||
     resolveImageUrl(featuredJournals[0]?.coverImage) ||
     resolveImageUrl(featuredEssays[0]?.coverImage) ||
-    undefined;
+    "/images/hero-panorama.jpg";
 
   return buildMetadata({
     title: brandName,
@@ -256,11 +256,11 @@ export default async function Home() {
     ]);
 
   const brandName = siteSettings?.brandName || "Traveller's Diary";
-  const heroImage =
-    resolveImageUrl(siteSettings?.heroImage) ||
-    resolveImageUrl(featuredJournals[0]?.coverImage) ||
-    resolveImageUrl(featuredEssays[0]?.coverImage) ||
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3200&auto=format&fit=crop";
+  const heroImage = "/images/hero-panorama.jpg";
+  const localHeroImage: ImageField = {
+    asset: { url: heroImage },
+    alt: "A long Himalayan mountain panorama",
+  };
 
   const latestEssay = featuredEssays[0] ?? allEssays[0] ?? null;
   const latestJournal = featuredJournals[0] ?? allJournals[0] ?? null;
@@ -288,7 +288,7 @@ export default async function Home() {
           siteSettings.heroImage ||
           featuredJournals[0]?.coverImage ||
           latestJournal?.coverImage ||
-          null,
+          localHeroImage,
         destination: null,
         category: null,
       }
@@ -316,7 +316,7 @@ export default async function Home() {
       siteSettings?.heroImage ||
       featuredJournals[0]?.coverImage ||
       latestJournal?.coverImage ||
-      null,
+      localHeroImage,
     destination: null,
     category: null,
   };
@@ -340,7 +340,7 @@ export default async function Home() {
         }
         headline={
           siteSettings?.heroHeadline ||
-          "Stories from the road, the mountains, and beyond."
+          "Stories from the mountains and beyond."
         }
         subheading={
           siteSettings?.heroSubheading ||
@@ -348,7 +348,7 @@ export default async function Home() {
           "Travel notes, photos, and videos from places worth remembering."
         }
         location={heroLocation}
-        season={latestEssay?.date ? featuredMonth : "Nepal • South Asia • Beyond"}
+        season={latestEssay?.date ? featuredMonth : "Nepal / South Asia / Beyond"}
         metrics={[
           { label: "Stories", value: String(allEssays.length).padStart(2, "0") },
           { label: "Frames", value: String(galleryPhotos.length).padStart(2, "0") },

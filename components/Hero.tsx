@@ -14,10 +14,10 @@ export default function Hero({
   image,
   brandName = "Traveller's Diary",
   eyebrow = "Travel diary",
-  headline = "Stories from the road, the mountains, and beyond.",
+  headline = "Stories from the mountains and beyond.",
   subheading = "Travel notes, photos, and videos from places worth remembering.",
   location = "Far Western Nepal",
-  season = "Nepal • South Asia • Beyond",
+  season = "Nepal / South Asia / Beyond",
   metrics = [],
 }: {
   image?: { src: string; alt: string } | null;
@@ -32,8 +32,8 @@ export default function Hero({
   const reduceMotion = useReducedMotion();
   const heroImage =
     image ?? {
-      src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3200&auto=format&fit=crop",
-      alt: "A panoramic mountain range at dusk",
+      src: "/images/hero-panorama.jpg",
+      alt: "A long Himalayan mountain panorama",
     };
 
   const displayMetrics =
@@ -48,21 +48,21 @@ export default function Hero({
   return (
     <section
       id="top"
-      className="relative isolate min-h-[82svh] overflow-hidden bg-stone-950 text-stone-50 md:min-h-[88svh]"
+      className="relative isolate min-h-[66svh] overflow-hidden bg-stone-950 text-stone-50 md:min-h-[74svh]"
     >
       <div className="absolute inset-0">
         <motion.div
-          className="absolute left-1/2 top-0 h-full w-[138vw] -translate-x-1/2 will-change-transform"
+          className="absolute left-1/2 top-0 h-full w-[260vw] -translate-x-1/2 will-change-transform md:w-[170vw]"
           animate={
             reduceMotion
               ? undefined
               : {
-                  x: ["-9%", "9%", "-9%"],
-                  scale: [1.02, 1.06, 1.02],
+                  x: ["-14%", "14%", "-14%"],
+                  scale: [1.01, 1.035, 1.01],
                 }
           }
           transition={{
-            duration: 28,
+            duration: 20,
             ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "mirror",
@@ -73,34 +73,34 @@ export default function Hero({
             alt={heroImage.alt}
             fill
             priority
-            sizes="138vw"
+            sizes="(min-width: 768px) 170vw, 260vw"
             className="object-cover object-center"
-            style={{ objectPosition: "center 46%" }}
+            style={{ objectPosition: "center 50%" }}
           />
         </motion.div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/82 via-stone-950/36 to-stone-950/18" />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/28 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-stone-950 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/78 via-stone-950/34 to-stone-950/12" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/88 via-stone-950/18 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-stone-950 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[82svh] max-w-7xl flex-col justify-end px-6 pb-7 pt-28 sm:px-8 md:min-h-[88svh] lg:px-12 lg:pb-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.42fr)] lg:items-end">
-          <div className="max-w-3xl">
+      <div className="relative z-10 mx-auto flex min-h-[66svh] max-w-7xl flex-col justify-end px-6 pb-6 pt-24 sm:px-8 md:min-h-[74svh] lg:px-12 lg:pb-8">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,0.38fr)] lg:items-end">
+          <div className="max-w-2xl">
             <p className="mb-4 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-stone-100/78">
               <span className="h-px w-8 bg-white/30" />
               {eyebrow || brandName}
             </p>
 
-            <h1 className="max-w-3xl text-balance font-serif text-[clamp(2.2rem,4.6vw,4.5rem)] leading-[0.98] text-stone-50 drop-shadow-[0_10px_34px_rgba(0,0,0,0.48)]">
+            <h1 className="max-w-2xl text-balance font-serif text-[clamp(1.9rem,3.6vw,3.4rem)] leading-[1.02] text-stone-50 drop-shadow-[0_10px_34px_rgba(0,0,0,0.52)]">
               {headline}
             </h1>
 
-            <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-stone-100/88 sm:text-lg">
+            <p className="mt-4 max-w-lg text-pretty text-sm leading-7 text-stone-100/88 sm:text-base">
               {subheading}
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="#journal"
                 className="inline-flex items-center gap-2 rounded-full bg-stone-50 px-5 py-3 text-sm font-medium text-stone-950 transition-transform duration-300 hover:-translate-y-0.5"
@@ -117,7 +117,7 @@ export default function Hero({
             </div>
           </div>
 
-          <div className="rounded-[1.25rem] border border-white/10 bg-stone-950/32 p-4 backdrop-blur-xl">
+          <div className="hidden rounded-[1.25rem] border border-white/10 bg-stone-950/32 p-4 backdrop-blur-xl sm:block">
             <div className="space-y-3">
               <div>
                 <div className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.28em] text-stone-200/64">
@@ -149,7 +149,7 @@ export default function Hero({
           </div>
         </div>
 
-        <div className="mt-7 flex items-center justify-between border-t border-white/10 pt-4 text-[0.65rem] uppercase tracking-[0.24em] text-stone-200/58">
+        <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 text-[0.65rem] uppercase tracking-[0.24em] text-stone-200/58">
           <span className="hidden sm:inline">Scroll for stories</span>
           <span className="sm:hidden">Scroll</span>
           <span className="inline-flex items-center gap-2">

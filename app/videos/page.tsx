@@ -111,7 +111,11 @@ export default async function VideosPage() {
               "Sample content for testing the video section. Replace it from the admin panel when the first real video is ready.",
             youtubeUrl: "https://www.youtube.com/watch?v=ZZIwr_gUvc0",
             slug: "sample-nepal-video",
-            thumbnail: siteSettings?.heroImage || null,
+            thumbnail:
+              siteSettings?.heroImage || {
+                asset: { url: "/images/hero-panorama.jpg" },
+                alt: "A long Himalayan mountain panorama",
+              },
             destination: null,
             category: null,
             publishedAt: null,
