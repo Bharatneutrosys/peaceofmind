@@ -3,7 +3,14 @@ import type { Metadata } from "next";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 import { adminReadClient } from "@/sanity/lib/adminReadClient";
-import { getSiteSettingsQuery } from "@/sanity/lib/queries";
+import {
+  getAdminCategoriesQuery,
+  getAdminDestinationsQuery,
+  getAdminEssaysQuery,
+  getAdminPhotoJournalsQuery,
+  getAdminVideosQuery,
+  getSiteSettingsQuery,
+} from "@/sanity/lib/queries";
 import { isAdminAuthenticated } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +40,64 @@ type SiteSettings = {
   youtubeFeatureUrl?: string | null;
 };
 
+type CategoryRecord = {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  description?: string | null;
+  regionLabel?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+};
+
+type DestinationRecord = {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  country?: string | null;
+  shortIntro?: string | null;
+  description?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+  categoryId?: string | null;
+};
+
+type EssayRecord = {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  excerpt?: string | null;
+  destinationId?: string | null;
+  categoryId?: string | null;
+  publishedAt?: string | null;
+  featured?: boolean | null;
+  estimatedReadTime?: string | null;
+  bodyText?: string | null;
+};
+
+type PhotoJournalRecord = {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  excerpt?: string | null;
+  destinationId?: string | null;
+  categoryId?: string | null;
+  publishedAt?: string | null;
+  featured?: boolean | null;
+};
+
+type VideoRecord = {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  description?: string | null;
+  youtubeUrl?: string | null;
+  publishedAt?: string | null;
+  featured?: boolean | null;
+  destinationId?: string | null;
+  categoryId?: string | null;
+};
+
 export default async function AdminPage() {
   const authed = await isAdminAuthenticated();
 
@@ -40,14 +105,25 @@ export default async function AdminPage() {
     return <AdminLoginForm />;
   }
 
-  const settings = await adminReadClient
-    .fetch<SiteSettings | null>(getSiteSettingsQuery)
-    .catch(() => null);
+  const [settings, categories, destinations, essays, photoJournals, videos] =
+    await Promise.all([
+      adminReadClient.fetch<SiteSettings | null>(getSiteSettingsQuery).catch(() => null),
+      adminReadClient.fetch<CategoryRecord[]>(getAdminCategoriesQuery).catch(() => []),
+      adminReadClient.fetch<DestinationRecord[]>(getAdminDestinationsQuery).catch(() => []),
+      adminReadClient.fetch<EssayRecord[]>(getAdminEssaysQuery).catch(() => []),
+      adminReadClient.fetch<PhotoJournalRecord[]>(getAdminPhotoJournalsQuery).catch(() => []),
+      adminReadClient.fetch<VideoRecord[]>(getAdminVideosQuery).catch(() => []),
+    ]);
 
   return (
     <AdminDashboard
       initialSettings={settings}
       brandName={settings?.brandName || "Traveller's Diary"}
+      categories={categories}
+      destinations={destinations}
+      essays={essays}
+      photoJournals={photoJournals}
+      videos={videos}
     />
   );
 }

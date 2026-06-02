@@ -471,3 +471,71 @@ export const getAllVideosQuery = groq`
     }
   }
 `;
+
+export const getAdminCategoriesQuery = groq`
+  *[_type == "category"] | order(coalesce(order, 9999) asc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    description,
+    regionLabel,
+    featured,
+    order
+  }
+`;
+
+export const getAdminDestinationsQuery = groq`
+  *[_type == "destination"] | order(coalesce(order, 9999) asc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    country,
+    shortIntro,
+    description,
+    featured,
+    order,
+    "categoryId": category._ref
+  }
+`;
+
+export const getAdminEssaysQuery = groq`
+  *[_type == "essay"] | order(coalesce(publishedAt, date, _createdAt) desc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    "destinationId": destination._ref,
+    "categoryId": category._ref,
+    publishedAt,
+    featured,
+    estimatedReadTime,
+    "bodyText": array::join(body[_type == "block"].children[].text, "\n\n")
+  }
+`;
+
+export const getAdminPhotoJournalsQuery = groq`
+  *[_type == "photoJournal"] | order(coalesce(publishedAt, _createdAt) desc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    "destinationId": destination._ref,
+    "categoryId": category._ref,
+    publishedAt,
+    featured
+  }
+`;
+
+export const getAdminVideosQuery = groq`
+  *[_type == "video"] | order(coalesce(publishedAt, _createdAt) desc, title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    description,
+    youtubeUrl,
+    publishedAt,
+    featured,
+    "destinationId": destination._ref,
+    "categoryId": category._ref
+  }
+`;

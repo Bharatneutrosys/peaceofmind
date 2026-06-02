@@ -52,6 +52,16 @@ export const photoJournal = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      description: 'Auto-generated URL identifier for the photo journal.',
+    }),
+    defineField({
       name: 'destination',
       title: 'Related Destination',
       type: 'reference',

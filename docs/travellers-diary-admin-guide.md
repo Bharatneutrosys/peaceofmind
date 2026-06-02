@@ -1,59 +1,130 @@
 # Traveller's Diary Admin Guide
 
-Use this guide when updating the website.
+Use this guide when updating the website from the simple owner panel.
 
-## Open the admin panel
+## Open and log in
 
-- Local URL: `http://localhost:3000/admin`
-- Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
-- Later custom domain: `https://yourdomain.com/admin`
+1. Open `/admin`.
+2. Enter the admin passcode.
+3. Use Logout when finished.
 
-Open the page and enter the admin passcode. The owner panel uses a simple secure session cookie after login.
+Local URL: `http://localhost:3000/admin`
+Vercel URL: `https://peaceofmind-steel.vercel.app/admin`
 
-## What the owner can update
+The owner should use `/admin`. Sanity Studio at `/studio` is advanced developer CMS access and is usually not needed.
+
+## Edit site settings
+
+Open the Site Settings section to update:
 
 - Website Name
 - Homepage Tagline
 - Short Homepage Introduction
+- YouTube feature title, description, and link
+
+Select Save after editing. The public site updates after revalidation or refresh.
+
+## Edit hero text
+
+Open the Hero section to update:
+
 - Hero Headline
 - Hero Description
+
+Hero image upload is not part of this version. For now, hero image can be managed by a developer or in Sanity Studio.
+
+## Add social links
+
+Open Social Links and add:
+
 - Facebook Link
 - Instagram Link
 - YouTube Link
+
+Leave a field empty to hide that social link on the public site.
+
+## Edit author profile
+
+Open Author Profile to update:
+
+- Author Display Name
 - About the Author
-- YouTube feature title, description, and link
 
-Save changes after editing. The public site updates after revalidation or refresh.
+Author image upload is not part of this version.
 
-## Image fields
+## Add a category
 
-Hero image and author image are coming in a later phase. The current admin focuses on the text and links the owner changes most often.
+Open Categories, then Add Category. Fill in:
 
-## Simple workflow
+- Title
+- Slug, or leave empty to generate from the title
+- Description
+- Travel Region
+- Show on Homepage
+- Display Order
 
-1. Open `/admin`
-2. Enter the admin passcode
-3. Update the text and links
-4. Save changes
-5. Refresh the public site if needed
+Delete is intentionally not available yet so existing content is not removed accidentally.
 
-## Deployment checklist
+## Add a destination
 
-- Add the Vercel environment variables
-- Add the Vercel domain to Sanity CORS origins
-- Redeploy after environment updates
-- Use the `/admin` route for the owner workflow
-- Keep `/studio` available only for advanced developer CMS work
+Open Destinations, then Add Destination. Fill in:
 
-If the panel does not load or the content is missing, check:
+- Title
+- Slug, or leave empty to generate from the title
+- Country
+- Short Introduction
+- Description
+- Category
+- Show on Homepage
+- Display Order
 
-- Sanity project access
-- CORS origins
-- `ADMIN_PASSCODE`
-- `SANITY_API_WRITE_TOKEN`
-- `NEXT_PUBLIC_SANITY_PROJECT_ID`
-- `NEXT_PUBLIC_SANITY_DATASET`
-- `NEXT_PUBLIC_SANITY_API_VERSION`
+Cover Image upload will be added next.
+
+## Add a journal story
+
+Open Journal Stories, then Add Journal Story. Fill in:
+
+- Title
+- Slug, or leave empty to generate from the title
+- Destination
+- Category
+- Publish Date
+- Estimated Read Time
+- Short Introduction
+- Story Body
+- Show on Homepage
+
+Story Body is plain text in the admin panel and is saved as simple website paragraphs.
+Cover Image upload will be added next.
+
+## Add a photo journal
+
+Open Photo Journals, then Add Photo Journal. Fill in:
+
+- Title
+- Slug, or leave empty to generate from the title
+- Destination
+- Category
+- Publish Date
+- Short Introduction
+- Show on Homepage
+
+Gallery image upload will be added next.
+
+## Add a video
+
+Open Videos, then Add Video. Fill in:
+
+- Title
+- Slug, or leave empty to generate from the title
+- YouTube Link
+- Destination
+- Category
+- Publish Date
+- Description
+- Show on Homepage
+
+Accepted YouTube links include `youtube.com/watch?v=`, `youtu.be/`, and `youtube.com/embed/`.
 
 ## Required Vercel environment variables
 
@@ -66,3 +137,13 @@ If the panel does not load or the content is missing, check:
 `SANITY_API_WRITE_TOKEN` must be created in Sanity Manage with write access. Keep it server-side only and never expose it in the browser.
 
 After adding or changing these environment variables in Vercel, redeploy the site so the admin panel can read them.
+
+## Not finished yet
+
+- Hero image upload
+- Author image upload
+- Destination cover image upload
+- Journal cover image upload
+- Photo journal gallery upload
+- Video thumbnail upload
+- Safe delete controls
